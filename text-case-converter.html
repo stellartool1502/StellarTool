@@ -1,86 +1,141 @@
-  
-  
-  <div style="text-align:center;">
-  <h2>Text Case Converter</h2>
-  <input type="text" id="inputArea" style="width:90%;max-width:500px;height:120px;padding:10px;font-size:16px;border-radius:8px;border:1px solid #ccc;" placeholder="Enter text here..."><br>
-
-  <button onclick="toUpper()" style="margin:5px;padding:10px 15px;background:#007bff;color:#fff;border:none;border-radius:8px;">UPPERCASE</button>
-  <button onclick="toLower()" style="margin:5px;padding:10px 15px;background:#007bff;color:#fff;border:none;border-radius:8px;">lowercase</button>
-  <button onclick="toSentence()" style="margin:5px;padding:10px 15px;background:#007bff;color:#fff;border:none;border-radius:8px;">Sentence case</button>
-  <button onclick="toCapital()" style="margin:5px;padding:10px 15px;background:#007bff;color:#fff;border:none;border-radius:8px;">Capitalized Case</button>
-  <button onclick="clearText()" style="margin:5px;padding:10px 15px;background:#007bff;color:#fff;border:none;border-radius:8px;">Clear</button>
-</div>
-
-<script type="text/javascript">
-//<![CDATA[
-function toUpper() {
-  var t = document.getElementById("inputArea");
-  t.value = t.value.toUpperCase();
-}
-
-function toLower() {
-  var t = document.getElementById("inputArea");
-  t.value = t.value.toLowerCase();
-}
-
-function toSentence() {
-  var t = document.getElementById("inputArea");
-  let txt = t.value.toLowerCase();
-  t.value = txt.charAt(0).toUpperCase() + txt.slice(1);
-}
-
-function toCapital() {
-  var t = document.getElementById("inputArea");
-  let words = t.value.toLowerCase().split(" ");
-  for (let i = 0; i < words.length; i++) {
-    if (words[i]) {
-      words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Case Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fbff;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-  }
-  t.value = words.join(" ");
-}
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 500px;
+      width: 95%;
+    }
+    h2 {
+      text-align: center;
+      color: #007BFF;
+      margin-bottom: 15px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      border: 2px solid #007BFF;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 1rem;
+      resize: none;
+      margin-bottom: 15px;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    button {
+      flex: 1;
+      min-width: 45%;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .output {
+      border: 2px solid #007BFF;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 100px;
+      background: #f1f8ff;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 480px) {
+      button {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Text Case Converter</h2>
+    <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+    
+    <div class="buttons">
+      <button onclick="convertText('upper')">UPPERCASE</button>
+      <button onclick="convertText('lower')">lowercase</button>
+      <button onclick="convertText('title')">Title Case</button>
+      <button onclick="convertText('sentence')">Sentence case</button>
+      <button onclick="convertText('toggle')">Toggle Case</button>
+      <button onclick="clearText()">Clear</button>
+    </div>
+    
+    <div id="output" class="output"></div>
+    
+    <button onclick="copyText()">Copy Output</button>
+  </div>
 
-function clearText() {
-  var t = document.getElementById("inputArea");
-  t.value = "";
-}
-//]]>
-</script>
+  <script>
+    function convertText(type) {
+      let text = document.getElementById("inputText").value;
+      let result = "";
 
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f0f8ff;
-    padding: 20px;
-    text-align: center;
-  }
+      switch(type) {
+        case 'upper':
+          result = text.toUpperCase();
+          break;
+        case 'lower':
+          result = text.toLowerCase();
+          break;
+        case 'title':
+          result = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+          break;
+        case 'sentence':
+          result = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, char => char.toUpperCase());
+          break;
+        case 'toggle':
+          result = text.split("").map(char => 
+            char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+          ).join("");
+          break;
+      }
 
-  input[type="text"] {
-    width: 90%;
-    max-width: 500px;
-    height: 120px;
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
+      document.getElementById("output").textContent = result;
+    }
 
-  button {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    border: none;
-    background: #007bff;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+    function clearText() {
+      document.getElementById("inputText").value = "";
+      document.getElementById("output").textContent = "";
+    }
 
-  button:hover {
-    background: #0056b3;
-  }
-</style>
-
-  
-  
+    function copyText() {
+      let output = document.getElementById("output").textContent;
+      if (!output) return;
+      navigator.clipboard.writeText(output).then(() => {
+        alert("Output copied to clipboard!");
+      });
+    }
+  </script>
+</body>
+</html>
