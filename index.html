@@ -463,362 +463,223 @@
     </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">Stellar <span>Tools</span></a>
-                
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <nav id="main-nav">
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#tools">Tools</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </nav>
-                
-                <div class="contact-info">
-                    <i class="fas fa-envelope"></i>
-                    <span>stellartool.ai@gmail.com</span>
-                </div>
-            </div>
-        </div>
-    </header>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Tools - Dark Theme</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-blue: #1a73e8;
+      --accent-blue: #64b5f6;
+      --bg-dark: #121212;
+      --bg-card: #1e1e1e;
+      --bg-header: #1a1a1a;
+      --bg-footer: #0d0d0d;
+      --text-light: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      --hover-shadow: 0 8px 24px rgba(26, 115, 232, 0.4);
+    }
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Your Daily Tools, All in One Place</h1>
-                <p>Convert, calculate, compress, and simplify your everyday tasks — fast and free.</p>
-                <a href="#tools" class="btn">Explore Tools</a>
-                
-                <div class="tools-illustration">
-                    <div class="tool-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <div class="tool-icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="tool-icon">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <div class="tool-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="tool-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.6;
+    }
 
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search a tool...">
-                <button class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </div>
-    </section>
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; padding: 0; margin: 0; }
 
-    <!-- Tools Sections -->
-    <section id="tools" class="tools-section">
-        <div class="container">
-            <!-- Image Tools -->
-            <div class="section-header">
-                <h2>🖼 Image Tools</h2>
-                <p>Enhance, convert, and optimize your images with our comprehensive image toolkit</p>
-            </div>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-                    <h3>Image Converter</h3>
-                    <p>Convert images between various formats like JPG, PNG, WEBP, and more.</p>
-                    <a href="image-converter.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-compress-alt"></i>
-                    </div>
-                    <h3>Image Compressor</h3>
-                    <p>Reduce image file size without significant quality loss.</p>
-                    <a href="image-compressor.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-expand-alt"></i>
-                    </div>
-                    <h3>Image Resizer</h3>
-                    <p>Resize images to specific dimensions while maintaining aspect ratio.</p>
-                    <a href="image-resizer.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-crop-alt"></i>
-                    </div>
-                    <h3>Image Cropper</h3>
-                    <p>Crop images to remove unwanted areas or focus on specific parts.</p>
-                    <a href="image-crop.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-font"></i>
-                    </div>
-                    <h3>Image to Text (OCR)</h3>
-                    <p>Extract text from images using advanced OCR technology.</p>
-                    <a href="image-to-text(ocr).html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3>Image Rotator/Flipper</h3>
-                    <p>Rotate or flip images horizontally or vertically.</p>
-                    <a href="image-rotator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-cut"></i>
-                    </div>
-                    <h3>Background Remover</h3>
-                    <p>Remove backgrounds from images automatically.</p>
-                    <a href="background-remover.html" class="btn">Use Tool</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    /* Header */
+    header {
+      background: var(--bg-header);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary-blue); }
+    .logo span { color: var(--accent-blue); }
+    nav ul { display: flex; gap: 25px; }
+    nav a { transition: var(--transition); }
+    nav a:hover { color: var(--primary-blue); }
+    .mobile-menu-btn { display: none; color: var(--primary-blue); font-size: 1.5rem; background: none; border: none; }
 
-    <!-- Document Tools Section -->
-    <section class="tools-section" style="background-color: #f5f7fa;">
-        <div class="container">
-            <div class="section-header">
-                <h2>📄 Document Tools</h2>
-                <p>Manage, convert, and optimize your documents with ease</p>
-            </div>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>PDF to Word / Word to PDF</h3>
-                    <p>Convert between PDF and Word documents seamlessly.</p>
-                    <a href="pdf-to-word.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-file-archive"></i>
-                    </div>
-                    <h3>PDF Compressor</h3>
-                    <p>Reduce PDF file size while maintaining quality.</p>
-                    <a href="pdf-compressor.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-object-group"></i>
-                    </div>
-                    <h3>PDF Merger & Splitter</h3>
-                    <p>Combine multiple PDFs or split large PDFs into smaller ones.</p>
-                    <a href="pdf-merger & splitter.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-                    <h3>Document Converter</h3>
-                    <p>Convert between various document formats.</p>
-                    <a href="document-converter.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>PDF Lock/Unlock</h3>
-                    <p>Add or remove password protection from PDF files.</p>
-                    <a href="pdf-to-lock.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-signature"></i>
-                    </div>
-                    <h3>eSign PDF</h3>
-                    <p>Add electronic signatures to your PDF documents.</p>
-                    <a href="esign-to-pdf.html" class="btn">Use Tool</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #0d0d0d, #1e1e1e);
+    }
+    .hero h1 { font-size: 2.8rem; margin-bottom: 20px; }
+    .hero p { color: var(--text-muted); max-width: 600px; margin: auto; margin-bottom: 30px; }
+    .btn {
+      padding: 12px 24px;
+      border-radius: var(--border-radius);
+      background: var(--primary-blue);
+      color: #fff;
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover { background: #0b57d0; box-shadow: var(--hover-shadow); }
 
-    <!-- Calculator Tools Section -->
-    <section class="tools-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>🧮 Calculator Tools</h2>
-                <p>Perform various calculations for everyday needs and specialized purposes</p>
-            </div>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <h3>Scientific Calculator</h3>
-                    <p>Advanced calculator for complex mathematical operations.</p>
-                    <a href="scientific-calculator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <h3>Age Calculator</h3>
-                    <p>Calculate age based on birth date and current date.</p>
-                    <a href="age-calculator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-weight"></i>
-                    </div>
-                    <h3>BMI Calculator</h3>
-                    <p>Calculate Body Mass Index based on height and weight.</p>
-                    <a href="bmi-calculator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <h3>Loan EMI Calculator</h3>
-                    <p>Calculate Equated Monthly Installments for loans.</p>
-                    <a href="loan-emi-calculator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-percentage"></i>
-                    </div>
-                    <h3>GST Calculator</h3>
-                    <p>Calculate Goods and Services Tax amounts.</p>
-                    <a href="gst-calculator.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3>Currency Converter</h3>
-                    <p>Convert between different world currencies.</p>
-                    <a href="currency-converter.html" class="btn">Use Tool</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    .tools-illustration { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
+    .tool-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary-blue);
+      font-size: 1.5rem;
+      box-shadow: var(--shadow);
+    }
 
-    <!-- Text Tools Section -->
-    <section class="tools-section" style="background-color: #f5f7fa;">
-        <div class="container">
-            <div class="section-header">
-                <h2>🔤 Text Tools</h2>
-                <p>Manipulate, analyze, and transform text with our text processing utilities</p>
-            </div>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-text-height"></i>
-                    </div>
-                    <h3>Text Case Converter</h3>
-                    <p>Convert text between uppercase, lowercase, title case, and more.</p>
-                    <a href="test-case-converter" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-sort-alpha-down"></i>
-                    </div>
-                    <h3>Word & Character Counter</h3>
-                    <p>Count words, characters, sentences, and paragraphs in text.</p>
-                    <a href="word-counter.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-filter"></i>
-                    </div>
-                    <h3>Remove Duplicate Lines</h3>
-                    <p>Eliminate duplicate lines from text while preserving order.</p>
-                    <a href="remove-duplicate-lines.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-sort"></i>
-                    </div>
-                    <h3>Text Sorter</h3>
-                    <p>Sort lines of text alphabetically or numerically.</p>
-                    <a href="text-sorter.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-undo-alt"></i>
-                    </div>
-                    <h3>Text Reverser</h3>
-                    <p>Reverse text characters, words, or lines.</p>
-                    <a href="text-reverse.html" class="btn">Use Tool</a>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon-small">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>Text Encryptor/Decryptor</h3>
-                    <p>Encrypt and decrypt text with various algorithms.</p>
-                    <a href="text-encryptor-decryptor.html" class="btn">Use Tool</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    /* Search */
+    .search-section { padding: 40px 20px; background: var(--bg-card); }
+    .search-container { max-width: 700px; margin: auto; position: relative; }
+    .search-input {
+      width: 100%; padding: 16px 20px;
+      border-radius: var(--border-radius);
+      border: none;
+      background: #2a2a2a;
+      color: var(--text-light);
+    }
+    .search-input:focus { outline: 2px solid var(--primary-blue); }
+    .search-btn {
+      position: absolute; top: 5px; right: 5px;
+      background: var(--primary-blue); border: none;
+      padding: 12px 18px; border-radius: var(--border-radius);
+      color: #fff; cursor: pointer;
+    }
 
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-about">
-                    <div class="footer-logo">Stellar Tools</div>
-                    <p class="footer-tagline">Your Universe of Utilities. Simplifying everyday tasks with powerful, easy-to-use tools.</p>
-                    <div class="footer-contact">
-                        <i class="fas fa-envelope"></i>
-                        <span>stellartool.ai@gmail.com</span>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#tools">All Tools</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="terms-and-condition.html">Terms of Use</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2023 Stellartools. All rights reserved.</p>
-                <div class="footer-bottom-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Use</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    /* Tools */
+    .tools-section { padding: 60px 20px; }
+    .section-header { text-align: center; margin-bottom: 40px; }
+    .section-header h2 { font-size: 2rem; margin-bottom: 10px; }
+    .section-header p { color: var(--text-muted); }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+    .tool-card {
+      background: var(--bg-card);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .tool-card:hover { transform: translateY(-5px); box-shadow: var(--hover-shadow); }
+    .tool-icon-small {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: #2a2a2a;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary-blue); font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    .tool-card p { color: var(--text-muted); flex-grow: 1; }
+
+    /* Footer */
+    footer {
+      background: var(--bg-footer);
+      color: var(--text-muted);
+      padding: 60px 20px 30px;
+    }
+    .footer-logo { font-size: 1.8rem; font-weight: bold; color: var(--primary-blue); margin-bottom: 15px; }
+    .footer-links a { color: var(--text-muted); transition: var(--transition); }
+    .footer-links a:hover { color: #fff; }
+    .footer-bottom { text-align: center; border-top: 1px solid #333; padding-top: 20px; margin-top: 30px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="#" class="logo">Stellar <span>Tools</span></a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <nav id="main-nav">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#tools">Tools</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Your Daily Tools, All in One Place 🚀</h1>
+    <p>Convert, calculate, compress, and simplify your everyday tasks — fast and free.</p>
+    <a href="#tools" class="btn">Explore Tools</a>
+    <div class="tools-illustration">
+      <div class="tool-icon"><i class="fas fa-image"></i></div>
+      <div class="tool-icon"><i class="fas fa-file-alt"></i></div>
+      <div class="tool-icon"><i class="fas fa-calculator"></i></div>
+      <div class="tool-icon"><i class="fas fa-code"></i></div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section class="search-section">
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search a tool...">
+      <button class="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+  </section>
+
+  <!-- Example Tools -->
+  <section id="tools" class="tools-section">
+    <div class="section-header">
+      <h2>🖼 Image Tools</h2>
+      <p>Enhance, convert, and optimize your images</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-icon-small"><i class="fas fa-exchange-alt"></i></div>
+        <h3>Image Converter</h3>
+        <p>Convert images between JPG, PNG, WEBP, and more.</p>
+        <a href="image-converter.html" class="btn">Use Tool</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon-small"><i class="fas fa-compress-alt"></i></div>
+        <h3>Image Compressor</h3>
+        <p>Reduce image size without quality loss.</p>
+        <a href="image-compressor.html" class="btn">Use Tool</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-logo">Stellar Tools</div>
+    <p>Your Universe of Utilities ✨</p>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Stellar Tools | All Rights Reserved</p>
+    </div>
+  </footer>
+</body>
+</html>
+
 
     <script>
         // Mobile menu toggle
