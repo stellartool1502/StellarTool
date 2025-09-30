@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>StellarTool — Background Remover & Compressor</title>
@@ -35,4 +35,86 @@
     .panel{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));padding:18px;border-radius:16px;box-shadow:0 6px 20px rgba(11,84,128,0.06)}
     .upload-area{border:2px dashed rgba(10,165,255,0.22);padding:18px;border-radius:12px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;min-height:170px}
     .upload-area.dragover{background:rgba(10,165,255,0.03);border-color:var(--blue-700)}
-    input[type=f
+    
+    /* Fixed the broken input selector */
+    input[type=file] {
+      display: none;
+    }
+    
+    /* Added some additional styling for better appearance */
+    .btn {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--blue-700);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <header>
+        <div class="logo">ST</div>
+        <h1>StellarTool — Background Remover</h1>
+      </header>
+      <p class="lead">Upload an image to remove its background automatically</p>
+      
+      <div class="upload-area" id="uploadArea">
+        <p>Drag & drop your image here</p>
+        <p>or</p>
+        <button class="btn" id="uploadBtn">Choose File</button>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
+    </div>
+    
+    <div class="panel">
+      <h2>Result</h2>
+      <p>Your processed image will appear here</p>
+    </div>
+  </div>
+
+  <script>
+    // Basic file upload functionality
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        alert('File selected: ' + e.target.files[0].name);
+        // Add your background removal logic here
+      }
+    });
+    
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        alert('File dropped: ' + e.dataTransfer.files[0].name);
+        // Add your background removal logic here
+      }
+    });
+  </script>
+</body>
+</html>
