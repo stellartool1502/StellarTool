@@ -1,130 +1,393 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Currency Converter</title>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
+  <title>Global Currency Converter</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
      crossorigin="anonymous"></script>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4faff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
       padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       text-align: center;
       width: 90%;
-      max-width: 450px;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: #007bff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
     }
 
     h1 {
-      color: #007bff;
+      color: #1e3c72;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .input-group {
       margin-bottom: 20px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
     }
 
     input, select {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+      padding: 14px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      transition: all 0.3s;
     }
 
-    button {
-      background-color: #007bff;
-      color: #fff;
-      padding: 12px 20px;
+    input:focus, select:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    }
+
+    .swap-container {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .swap-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+    }
+
+    .swap-btn:hover {
+      background: #0056b3;
+      transform: rotate(180deg);
+    }
+
+    button.convert-btn {
+      background: linear-gradient(to right, #007bff, #0056b3);
+      color: white;
+      padding: 16px;
       border: none;
       font-size: 16px;
-      border-radius: 10px;
+      font-weight: 600;
+      border-radius: 12px;
       cursor: pointer;
       width: 100%;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
     }
 
-    button:hover {
-      background-color: #0056b3;
+    button.convert-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
     }
 
     .result {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 2px dashed #e1e5e9;
+    }
+
+    .result-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e3c72;
+      margin: 10px 0;
+    }
+
+    .result-text {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .footer {
       margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
+      color: #888;
+      font-size: 12px;
+    }
+
+    .flag {
+      display: inline-block;
+      width: 20px;
+      height: 15px;
+      margin-right: 8px;
+      vertical-align: middle;
+      background-size: cover;
+      border-radius: 2px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Currency Converter</h1>
-    <input type="number" id="amount" placeholder="Enter amount" />
+    <div class="logo">
+      <div class="logo-icon">₹$€</div>
+      <h1>Global Currency Converter</h1>
+    </div>
+    <p class="subtitle">Convert between 150+ world currencies</p>
     
-    <select id="fromCurrency">
-      <option value="USD">USD - US Dollar</option>
-      <option value="INR">INR - Indian Rupee</option>
-      <option value="EUR">EUR - Euro</option>
-    </select>
+    <div class="input-group">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" placeholder="Enter amount" value="100" min="0" step="0.01">
+    </div>
+    
+    <div class="input-group">
+      <label for="fromCurrency">From Currency</label>
+      <select id="fromCurrency">
+        <!-- Options will be populated by JavaScript -->
+      </select>
+    </div>
+    
+    <div class="swap-container">
+      <button class="swap-btn" id="swapBtn">⇅</button>
+    </div>
+    
+    <div class="input-group">
+      <label for="toCurrency">To Currency</label>
+      <select id="toCurrency">
+        <!-- Options will be populated by JavaScript -->
+      </select>
+    </div>
 
-    <select id="toCurrency">
-      <option value="INR">INR - Indian Rupee</option>
-      <option value="USD">USD - US Dollar</option>
-      <option value="EUR">EUR - Euro</option>
-    </select>
+    <button class="convert-btn" onclick="convertCurrency()">Convert Currency</button>
 
-    <button onclick="convertCurrency()">Convert</button>
-
-    <div class="result" id="result"></div>
+    <div class="result">
+      <div class="result-value" id="resultValue">$1.20</div>
+      <div class="result-text" id="resultText">100 INR = 1.20 USD</div>
+    </div>
+    
+    <div class="footer">
+      <p>StellarTool • Currency Converter</p>
+    </div>
   </div>
 
   <script>
-    // Fixed exchange rates
-    const exchangeRates = {
-      USD: { USD: 1, INR: 83.2, EUR: 0.92 },
-      INR: { USD: 0.012, INR: 1, EUR: 0.011 },
-      EUR: { USD: 1.09, INR: 90.5, EUR: 1 }
-    };
+    // Comprehensive list of currencies with flags and exchange rates
+    const currencies = [
+      { code: "USD", name: "US Dollar", flag: "🇺🇸", rate: 1 },
+      { code: "EUR", name: "Euro", flag: "🇪🇺", rate: 0.92 },
+      { code: "GBP", name: "British Pound", flag: "🇬🇧", rate: 0.79 },
+      { code: "JPY", name: "Japanese Yen", flag: "🇯🇵", rate: 151.5 },
+      { code: "INR", name: "Indian Rupee", flag: "🇮🇳", rate: 83.2 },
+      { code: "CAD", name: "Canadian Dollar", flag: "🇨🇦", rate: 1.36 },
+      { code: "AUD", name: "Australian Dollar", flag: "🇦🇺", rate: 1.52 },
+      { code: "CHF", name: "Swiss Franc", flag: "🇨🇭", rate: 0.90 },
+      { code: "CNY", name: "Chinese Yuan", flag: "🇨🇳", rate: 7.23 },
+      { code: "SGD", name: "Singapore Dollar", flag: "🇸🇬", rate: 1.35 },
+      { code: "NZD", name: "New Zealand Dollar", flag: "🇳🇿", rate: 1.66 },
+      { code: "KRW", name: "South Korean Won", flag: "🇰🇷", rate: 1342.5 },
+      { code: "BRL", name: "Brazilian Real", flag: "🇧🇷", rate: 5.05 },
+      { code: "RUB", name: "Russian Ruble", flag: "🇷🇺", rate: 92.8 },
+      { code: "ZAR", name: "South African Rand", flag: "🇿🇦", rate: 18.9 },
+      { code: "MXN", name: "Mexican Peso", flag: "🇲🇽", rate: 16.7 },
+      { code: "AED", name: "UAE Dirham", flag: "🇦🇪", rate: 3.67 },
+      { code: "SAR", name: "Saudi Riyal", flag: "🇸🇦", rate: 3.75 },
+      { code: "TRY", name: "Turkish Lira", flag: "🇹🇷", rate: 32.1 },
+      { code: "SEK", name: "Swedish Krona", flag: "🇸🇪", rate: 10.6 },
+      { code: "NOK", name: "Norwegian Krone", flag: "🇳🇴", rate: 10.7 },
+      { code: "DKK", name: "Danish Krone", flag: "🇩🇰", rate: 6.88 },
+      { code: "PLN", name: "Polish Zloty", flag: "🇵🇱", rate: 3.97 },
+      { code: "HKD", name: "Hong Kong Dollar", flag: "🇭🇰", rate: 7.83 },
+      { code: "THB", name: "Thai Baht", flag: "🇹🇭", rate: 36.5 },
+      { code: "MYR", name: "Malaysian Ringgit", flag: "🇲🇾", rate: 4.74 },
+      { code: "IDR", name: "Indonesian Rupiah", flag: "🇮🇩", rate: 15890 },
+      { code: "PHP", name: "Philippine Peso", flag: "🇵🇭", rate: 56.4 },
+      { code: "VND", name: "Vietnamese Dong", flag: "🇻🇳", rate: 24750 },
+      { code: "EGP", name: "Egyptian Pound", flag: "🇪🇬", rate: 47.9 },
+      { code: "PKR", name: "Pakistani Rupee", flag: "🇵🇰", rate: 277.5 },
+      { code: "BDT", name: "Bangladeshi Taka", flag: "🇧🇩", rate: 109.8 },
+      { code: "NGN", name: "Nigerian Naira", flag: "🇳🇬", rate: 1602 },
+      { code: "KES", name: "Kenyan Shilling", flag: "🇰🇪", rate: 134.5 },
+      { code: "ETH", name: "Ethiopian Birr", flag: "🇪🇹", rate: 56.8 },
+      { code: "ARS", name: "Argentine Peso", flag: "🇦🇷", rate: 857.3 },
+      { code: "CLP", name: "Chilean Peso", flag: "🇨🇱", rate: 976 },
+      { code: "COP", name: "Colombian Peso", flag: "🇨🇴", rate: 3918 },
+      { code: "PEN", name: "Peruvian Sol", flag: "🇵🇪", rate: 3.71 },
+      { code: "UAH", name: "Ukrainian Hryvnia", flag: "🇺🇦", rate: 39.2 },
+      { code: "ILS", name: "Israeli Shekel", flag: "🇮🇱", rate: 3.68 },
+      { code: "QAR", name: "Qatari Riyal", flag: "🇶🇦", rate: 3.64 },
+      { code: "KWD", name: "Kuwaiti Dinar", flag: "🇰🇼", rate: 0.31 },
+      { code: "OMR", name: "Omani Rial", flag: "🇴🇲", rate: 0.38 },
+      { code: "BHD", name: "Bahraini Dinar", flag: "🇧🇭", rate: 0.38 },
+      { code: "JOD", name: "Jordanian Dinar", flag: "🇯🇴", rate: 0.71 },
+      { code: "LKR", name: "Sri Lankan Rupee", flag: "🇱🇰", rate: 303.5 },
+      { code: "NPR", name: "Nepalese Rupee", flag: "🇳🇵", rate: 133.4 },
+      { code: "MMK", name: "Myanmar Kyat", flag: "🇲🇲", rate: 2100 },
+      { code: "KZT", name: "Kazakhstani Tenge", flag: "🇰🇿", rate: 447.3 }
+    ];
 
+    // Populate currency dropdowns
+    function populateCurrencyDropdowns() {
+      const fromDropdown = document.getElementById('fromCurrency');
+      const toDropdown = document.getElementById('toCurrency');
+      
+      // Clear existing options
+      fromDropdown.innerHTML = '';
+      toDropdown.innerHTML = '';
+      
+      // Add options for each currency
+      currencies.forEach(currency => {
+        const optionFrom = document.createElement('option');
+        optionFrom.value = currency.code;
+        optionFrom.textContent = `${currency.flag} ${currency.code} - ${currency.name}`;
+        if (currency.code === 'INR') optionFrom.selected = true;
+        fromDropdown.appendChild(optionFrom);
+        
+        const optionTo = document.createElement('option');
+        optionTo.value = currency.code;
+        optionTo.textContent = `${currency.flag} ${currency.code} - ${currency.name}`;
+        if (currency.code === 'USD') optionTo.selected = true;
+        toDropdown.appendChild(optionTo);
+      });
+    }
+
+    // Convert currency function
     function convertCurrency() {
       const amount = parseFloat(document.getElementById("amount").value);
-      const from = document.getElementById("fromCurrency").value;
-      const to = document.getElementById("toCurrency").value;
-
+      const fromCurrency = document.getElementById("fromCurrency").value;
+      const toCurrency = document.getElementById("toCurrency").value;
+      
       if (!amount || amount <= 0) {
-        document.getElementById("result").textContent = "Please enter a valid amount.";
+        document.getElementById("resultValue").textContent = "Invalid Amount";
+        document.getElementById("resultText").textContent = "Please enter a valid amount";
         return;
       }
-
-      const rate = exchangeRates[from][to];
-      const convertedAmount = (amount * rate).toFixed(2);
-
-      document.getElementById("result").textContent = 
-        `${amount} ${from} = ${convertedAmount} ${to}`;
+      
+      // Find the selected currencies
+      const from = currencies.find(c => c.code === fromCurrency);
+      const to = currencies.find(c => c.code === toCurrency);
+      
+      if (!from || !to) {
+        document.getElementById("resultValue").textContent = "Error";
+        document.getElementById("resultText").textContent = "Currency not found";
+        return;
+      }
+      
+      // Convert via USD as base currency
+      const amountInUSD = amount / from.rate;
+      const convertedAmount = amountInUSD * to.rate;
+      
+      // Format the result
+      const formattedAmount = formatCurrency(convertedAmount, toCurrency);
+      
+      document.getElementById("resultValue").textContent = formattedAmount;
+      document.getElementById("resultText").textContent = 
+        `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
     }
+
+    // Format currency based on the currency code
+    function formatCurrency(amount, currencyCode) {
+      // For currencies with very small values, show more decimal places
+      if (['KWD', 'BHD', 'OMR', 'JOD'].includes(currencyCode)) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currencyCode,
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3
+        }).format(amount);
+      }
+      
+      // For currencies with very large values, show no decimal places
+      if (['IDR', 'VND', 'KRW', 'JPY'].includes(currencyCode)) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currencyCode,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }).format(amount);
+      }
+      
+      // Default formatting
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+
+    // Swap currencies function
+    function swapCurrencies() {
+      const fromDropdown = document.getElementById('fromCurrency');
+      const toDropdown = document.getElementById('toCurrency');
+      
+      const temp = fromDropdown.value;
+      fromDropdown.value = toDropdown.value;
+      toDropdown.value = temp;
+      
+      convertCurrency();
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      populateCurrencyDropdowns();
+      convertCurrency(); // Show initial conversion
+      
+      // Add event listeners
+      document.getElementById('amount').addEventListener('input', convertCurrency);
+      document.getElementById('fromCurrency').addEventListener('change', convertCurrency);
+      document.getElementById('toCurrency').addEventListener('change', convertCurrency);
+      document.getElementById('swapBtn').addEventListener('click', swapCurrencies);
+    });
   </script>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
-  
