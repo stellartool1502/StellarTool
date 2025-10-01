@@ -792,6 +792,17 @@
                 <p>Manage, convert, and optimize your documents with ease</p>
             </div>
             <div class="tools-grid">
+                <!-- PDF Editor Tool Added Here -->
+                <div class="tool-card">
+                    <div class="tool-icon-small">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>PDF Editor</h3>
+                    <p>Edit PDF files and images - add text, draw, highlight, and more.</p>
+                    <a href="pdf-editor.html" class="btn">Use Tool</a>
+                </div>
+                <!-- End of PDF Editor Tool -->
+                
                 <div class="tool-card">
                     <div class="tool-icon-small">
                         <i class="fas fa-file-pdf"></i>
@@ -1095,4 +1106,114 @@
             try {
                 // Request screen capture
                 const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video
+                    video: true,
+                    audio: true
+                });
+                
+                // Setup media recorder
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'video/webm;codecs=vp9,opus'
+                });
+                
+                // Event handlers
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Show video preview
+                    videoPreview.src = url;
+                    videoPreview.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                    
+                    // Setup download link
+                    downloadLink.href = url;
+                    downloadLink.download = `recording-${new Date().getTime()}.webm`;
+                    downloadLink.style.display = 'inline-block';
+                    
+                    // Stop all tracks
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                // Start recording
+                mediaRecorder.start();
+                timerInterval = setInterval(updateTimer, 1000);
+                
+                // Update UI
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stopBtn.disabled = false;
+                statusDisplay.textContent = 'Recording...';
+                statusDisplay.className = 'status recording';
+                
+            } catch (error) {
+                console.error('Error starting recording:', error);
+                alert('Error starting recording. Please make sure to select a screen/window to record.');
+            }
+        }
+
+        // Pause recording
+        function pauseRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.pause();
+                clearInterval(timerInterval);
+                isPaused = true;
+                
+                pauseBtn.disabled = true;
+                resumeBtn.disabled = false;
+                statusDisplay.textContent = 'Paused';
+                statusDisplay.className = 'status paused';
+            }
+        }
+
+        // Resume recording
+        function resumeRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'paused') {
+                mediaRecorder.resume();
+                timerInterval = setInterval(updateTimer, 1000);
+                isPaused = false;
+                
+                pauseBtn.disabled = false;
+                resumeBtn.disabled = true;
+                statusDisplay.textContent = 'Recording...';
+                statusDisplay.className = 'status recording';
+            }
+        }
+
+        // Stop recording
+        function stopRecording() {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+                clearInterval(timerInterval);
+                
+                // Reset UI
+                startBtn.disabled = false;
+                pauseBtn.disabled = true;
+                resumeBtn.disabled = true;
+                stopBtn.disabled = true;
+                statusDisplay.textContent = 'Recording stopped';
+                statusDisplay.className = 'status idle';
+                
+                // Reset timer
+                seconds = 0;
+                minutes = 0;
+                hours = 0;
+                timerDisplay.textContent = '00:00:00';
+            }
+        }
+
+        // Event listeners for recorder buttons
+        if (startBtn) {
+            startBtn.addEventListener('click', startRecording);
+            pauseBtn.addEventListener('click', pauseRecording);
+            resumeBtn.addEventListener('click', resumeRecording);
+            stopBtn.addEventListener('click', stopRecording);
+        }
+    </script>
+</body>
+</html>
