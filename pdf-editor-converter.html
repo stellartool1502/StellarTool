@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor Tool | Multi-Tool Website</title>
+    <style>
+        :root {
+            --primary-blue: #2196F3;
+            --dark-blue: #1976D2;
+            --light-blue: #E3F2FD;
+            --white: #FFFFFF;
+            --gray: #f5f5f5;
+            --text-dark: #333333;
+            --shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .upload-section, .tools-section, .preview-section {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-blue);
+            font-size: 1.5rem;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--primary-blue);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: var(--light-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background-color: #d1e9ff;
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-download {
+            background-color: #4CAF50;
+        }
+
+        .btn-download:hover {
+            background-color: #388E3C;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tool-card {
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 8px 15px rgba(33, 150, 243, 0.2);
+        }
+
+        .tool-icon {
+            font-size: 30px;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .preview-area {
+            width: 100%;
+            min-height: 400px;
+            border: 2px solid var(--light-blue);
+            border-radius: 10px;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: #777;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 500px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .preview-area {
+                min-height: 300px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .upload-section, .tools-section, .preview-section {
+                padding: 15px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>PDF & Image Editor</h1>
+            <p class="subtitle">Edit, annotate, and customize your PDFs and images</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="editor-container">
+            <section class="upload-section">
+                <h2 class="section-title">Upload File</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <h3>Drag & Drop your file here</h3>
+                    <p>or</p>
+                    <button class="btn" id="browseBtn">Browse Files</button>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png,.gif">
+                    <p class="file-info">Supported formats: PDF, JPG, PNG, GIF</p>
+                </div>
+            </section>
+
+            <section class="tools-section">
+                <h2 class="section-title">Editing Tools</h2>
+                <div class="tools-grid">
+                    <div class="tool-card" data-tool="text">
+                        <div class="tool-icon">T</div>
+                        <h3>Add Text</h3>
+                    </div>
+                    <div class="tool-card" data-tool="draw">
+                        <div class="tool-icon">✏️</div>
+                        <h3>Draw</h3>
+                    </div>
+                    <div class="tool-card" data-tool="highlight">
+                        <div class="tool-icon">🖍️</div>
+                        <h3>Highlight</h3>
+                    </div>
+                    <div class="tool-card" data-tool="stamp">
+                        <div class="tool-icon">🖇️</div>
+                        <h3>Add Stamp</h3>
+                    </div>
+                    <div class="tool-card" data-tool="rotate">
+                        <div class="tool-icon">🔄</div>
+                        <h3>Rotate</h3>
+                    </div>
+                    <div class="tool-card" data-tool="crop">
+                        <div class="tool-icon">✂️</div>
+                        <h3>Crop</h3>
+                    </div>
+                </div>
+                <div class="tool-options" id="toolOptions">
+                    <!-- Tool options will appear here dynamically -->
+                </div>
+            </section>
+
+            <section class="preview-section">
+                <h2 class="section-title">Preview</h2>
+                <div class="preview-container">
+                    <div class="preview-area" id="previewArea">
+                        <div class="preview-placeholder">
+                            <p>Your edited file will appear here</p>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn" id="resetBtn">
+                            <span>↺</span> Reset Changes
+                        </button>
+                        <button class="btn btn-download" id="downloadBtn">
+                            <span>⬇️</span> Download Edited File
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>PDF Editor Tool - Part of Multi-Tool Website</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const previewArea = document.getElementById('previewArea');
+            const toolOptions = document.getElementById('toolOptions');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            let currentFile = null;
+            let editedFile = null;
+            
+            // File upload handling
+            browseBtn.addEventListener('click', () => fileInput.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.backgroundColor = '#d1e9ff';
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.backgroundColor = '';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.backgroundColor = '';
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+            
+            function handleFile(file) {
+                currentFile = file;
+                editedFile = file;
+                
+                // Display file info
+                const fileInfo = uploadArea.querySelector('.file-info');
+                fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                
+                // Preview the file
+                previewFile(file);
+                
+                // Enable tools
+                toolCards.forEach(card => {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                });
+            }
+            
+            function previewFile(file) {
+                const fileType = file.type;
+                previewArea.innerHTML = '';
+                
+                if (fileType === 'application/pdf') {
+                    // For PDF files, we would typically use a PDF.js library
+                    // For this demo, we'll show a placeholder
+                    const pdfPreview = document.createElement('div');
+                    pdfPreview.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 60px; margin-bottom: 20px;">📄</div>
+                            <h3>PDF Preview</h3>
+                            <p>${file.name}</p>
+                            <p>In a real implementation, PDF.js would render the PDF here</p>
+                        </div>
+                    `;
+                    previewArea.appendChild(pdfPreview);
+                } else if (fileType.startsWith('image/')) {
+                    // For image files, display the image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-image';
+                        previewArea.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewArea.innerHTML = '<p>Unsupported file type</p>';
+                }
+            }
+            
+            // Tool selection
+            toolCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const tool = this.getAttribute('data-tool');
+                    activateTool(tool);
+                    
+                    // Update active state
+                    toolCards.forEach(c => c.style.borderColor = 'transparent');
+                    this.style.borderColor = 'var(--primary-blue)';
+                });
+            });
+            
+            function activateTool(tool) {
+                // Clear previous options
+                toolOptions.innerHTML = '';
+                
+                // Add tool-specific options
+                switch(tool) {
+                    case 'text':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <input type="text" placeholder="Enter text to add" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; flex: 1;">
+                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Arial</option>
+                                    <option>Times New Roman</option>
+                                    <option>Courier New</option>
+                                </select>
+                                <input type="color" value="#2196F3" style="width: 40px; height: 40px;">
+                                <button class="btn" style="padding: 10px 15px;">Add Text</button>
+                            </div>
+                        `;
+                        break;
+                    case 'draw':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Pen</option>
+                                    <option>Brush</option>
+                                    <option>Marker</option>
+                                </select>
+                                <input type="color" value="#2196F3" style="width: 40px; height: 40px;">
+                                <input type="range" min="1" max="10" value="3" style="flex: 1;">
+                                <button class="btn" style="padding: 10px 15px;">Start Drawing</button>
+                            </div>
+                        `;
+                        break;
+                    case 'highlight':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <input type="color" value="#FFFF00" style="width: 40px; height: 40px;">
+                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Yellow</option>
+                                    <option>Pink</option>
+                                    <option>Green</option>
+                                    <option>Blue</option>
+                                </select>
+                                <button class="btn" style="padding: 10px 15px;">Highlight Mode</button>
+                            </div>
+                        `;
+                        break;
+                    case 'stamp':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Approved</option>
+                                    <option>Confidential</option>
+                                    <option>Draft</option>
+                                    <option>Final</option>
+                                </select>
+                                <button class="btn" style="padding: 10px 15px;">Add Stamp</button>
+                            </div>
+                        `;
+                        break;
+                    case 'rotate':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button class="btn" style="padding: 10px 15px;">Rotate Left</button>
+                                <button class="btn" style="padding: 10px 15px;">Rotate Right</button>
+                                <button class="btn" style="padding: 10px 15px;">Flip Horizontal</button>
+                                <button class="btn" style="padding: 10px 15px;">Flip Vertical</button>
+                            </div>
+                        `;
+                        break;
+                    case 'crop':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button class="btn" style="padding: 10px 15px;">Select Area</button>
+                                <button class="btn" style="padding: 10px 15px;">Crop</button>
+                                <button class="btn" style="padding: 10px 15px;">Reset Crop</button>
+                            </div>
+                        `;
+                        break;
+                }
+            }
+            
+            // Reset changes
+            resetBtn.addEventListener('click', function() {
+                if (currentFile) {
+                    editedFile = currentFile;
+                    previewFile(currentFile);
+                    toolOptions.innerHTML = '';
+                    toolCards.forEach(card => {
+                        card.style.borderColor = 'transparent';
+                    });
+                }
+            });
+            
+            // Download file
+            downloadBtn.addEventListener('click', function() {
+                if (editedFile) {
+                    // In a real implementation, this would download the edited file
+                    // For this demo, we'll simulate a download
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(editedFile);
+                    link.download = `edited_${currentFile.name}`;
+                    link.click();
+                    
+                    // Show success message
+                    alert('Your edited file has been downloaded!');
+                } else {
+                    alert('Please upload a file first.');
+                }
+            });
+            
+            // Initially disable tools until a file is uploaded
+            toolCards.forEach(card => {
+                card.style.opacity = '0.5';
+                card.style.pointerEvents = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
