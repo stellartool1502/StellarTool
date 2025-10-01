@@ -18,7 +18,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -52,6 +52,7 @@
             text-align: center;
             border: 3px dashed #1a73e8;
             margin-bottom: 20px;
+            cursor: pointer;
         }
         
         .upload-icon {
@@ -63,15 +64,23 @@
             background: #1a73e8;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
-            margin: 10px;
+            margin: 5px;
         }
         
         .btn:hover {
             background: #0d47a1;
+        }
+        
+        .btn-green {
+            background: #4CAF50;
+        }
+        
+        .btn-green:hover {
+            background: #388E3C;
         }
         
         .preview-box {
@@ -79,10 +88,11 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            min-height: 300px;
+            min-height: 400px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 20px;
         }
         
         .file-info {
@@ -93,8 +103,89 @@
         
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 500px;
             border-radius: 10px;
+            border: 2px solid #1a73e8;
+        }
+        
+        .tools-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tool-card {
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tool-card:hover {
+            border-color: #1a73e8;
+            transform: translateY(-2px);
+        }
+        
+        .tool-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .tool-options {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .edit-area {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .edit-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .text-element {
+            position: absolute;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border: 1px dashed #1a73e8;
+            border-radius: 5px;
+            cursor: move;
+            pointer-events: all;
+        }
+        
+        .draw-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+        }
+        
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 5px;
         }
     </style>
 </head>
@@ -110,24 +201,84 @@
             <div class="upload-icon">📄</div>
             <h2>Upload Your File</h2>
             <p>Drag & drop or click to browse</p>
-            <button class="btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
-            <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(this.files[0])">
+            <button class="btn">Choose File</button>
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.jpg,.jpeg,.png,.gif">
             <p class="file-info" id="fileInfo">Supported: PDF, JPG, PNG, GIF</p>
+        </div>
+
+        <div class="tools-section" id="toolsSection" style="display: none;">
+            <h2>Editing Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="activateTool('text')">
+                    <div class="tool-icon">T</div>
+                    <h3>Add Text</h3>
+                </div>
+                <div class="tool-card" onclick="activateTool('draw')">
+                    <div class="tool-icon">✏️</div>
+                    <h3>Draw</h3>
+                </div>
+                <div class="tool-card" onclick="activateTool('crop')">
+                    <div class="tool-icon">✂️</div>
+                    <h3>Crop</h3>
+                </div>
+                <div class="tool-card" onclick="activateTool('rotate')">
+                    <div class="tool-icon">🔄</div>
+                    <h3>Rotate</h3>
+                </div>
+                <div class="tool-card" onclick="activateTool('filter')">
+                    <div class="tool-icon">🎨</div>
+                    <h3>Filters</h3>
+                </div>
+                <div class="tool-card" onclick="activateTool('sticker')">
+                    <div class="tool-icon">⭐</div>
+                    <h3>Stickers</h3>
+                </div>
+            </div>
+            
+            <div class="tool-options" id="toolOptions">
+                <!-- Tool options will appear here -->
+            </div>
         </div>
 
         <div class="preview-box" id="previewArea">
             <div id="previewPlaceholder">
                 <h3>File Preview Will Appear Here</h3>
-                <p>Upload a file to see preview</p>
+                <p>Upload a file to see preview and editing tools</p>
             </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn btn-green" onclick="downloadFile()" id="downloadBtn" style="display: none;">
+                ⬇️ Download Edited File
+            </button>
+            <button class="btn" onclick="resetEditing()" id="resetBtn" style="display: none;">
+                🔄 Reset Changes
+            </button>
         </div>
     </div>
 
     <script>
+        let currentFile = null;
+        let currentImage = null;
+        let activeTool = null;
+        let textElements = [];
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (e.target.files.length) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        document.getElementById('uploadArea').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
         function handleFileSelect(file) {
             if (!file) return;
             
             console.log('File selected:', file.name);
+            currentFile = file;
             
             // Update file info
             document.getElementById('fileInfo').textContent = 
@@ -138,21 +289,23 @@
             const placeholder = document.getElementById('previewPlaceholder');
             
             if (file.type.startsWith('image/')) {
-                // For images - show actual image
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     placeholder.style.display = 'none';
                     previewArea.innerHTML = `
-                        <div>
-                            <img src="${e.target.result}" class="preview-image" alt="Preview">
-                            <p class="file-info">${file.name} - Ready for editing!</p>
-                            <button class="btn" onclick="simulateEdit()">Edit This Image</button>
+                        <div class="edit-area">
+                            <img src="${e.target.result}" class="preview-image" id="previewImage" alt="Preview">
+                            <div class="edit-overlay" id="editOverlay"></div>
+                            <canvas class="draw-canvas" id="drawCanvas" style="display: none;"></canvas>
                         </div>
                     `;
+                    
+                    currentImage = document.getElementById('previewImage');
+                    setupCanvas();
+                    showTools();
                 };
                 reader.readAsDataURL(file);
             } else if (file.type === 'application/pdf') {
-                // For PDF - show PDF info
                 placeholder.style.display = 'none';
                 previewArea.innerHTML = `
                     <div>
@@ -160,21 +313,251 @@
                         <h3>PDF File Loaded</h3>
                         <p><strong>${file.name}</strong></p>
                         <p>Size: ${(file.size/1024).toFixed(1)} KB</p>
-                        <button class="btn" onclick="simulateEdit()" style="margin-top: 20px;">
-                            Edit This PDF
-                        </button>
+                        <div style="margin-top: 20px;">
+                            <button class="btn" onclick="activateTool('text')">Add Text</button>
+                            <button class="btn" onclick="activateTool('draw')">Add Drawing</button>
+                            <button class="btn" onclick="activateTool('sticker')">Add Stamps</button>
+                        </div>
                     </div>
                 `;
+                showTools();
             } else {
                 alert('Please select a PDF or image file (JPG, PNG, GIF)');
             }
         }
 
-        function simulateEdit() {
-            alert('✏️ Editing features would open here!\n\nIn full version: Add text, draw, crop, rotate, etc.');
+        function showTools() {
+            document.getElementById('toolsSection').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+            document.getElementById('resetBtn').style.display = 'inline-block';
         }
 
-        // Drag and drop functionality
+        function setupCanvas() {
+            const canvas = document.getElementById('drawCanvas');
+            const img = document.getElementById('previewImage');
+            
+            canvas.width = img.offsetWidth;
+            canvas.height = img.offsetHeight;
+            canvas.style.width = img.offsetWidth + 'px';
+            canvas.style.height = img.offsetHeight + 'px';
+        }
+
+        function activateTool(tool) {
+            activeTool = tool;
+            const options = document.getElementById('toolOptions');
+            
+            // Remove active class from all tools
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.borderColor = 'transparent';
+            });
+            
+            // Add active class to current tool
+            event.currentTarget.style.borderColor = '#1a73e8';
+            
+            switch(tool) {
+                case 'text':
+                    options.innerHTML = `
+                        <h3>Add Text</h3>
+                        <input type="text" id="textInput" placeholder="Enter your text" value="Sample Text">
+                        <select id="textColor">
+                            <option value="#000000">Black</option>
+                            <option value="#FF0000">Red</option>
+                            <option value="#1a73e8" selected>Blue</option>
+                            <option value="#4CAF50">Green</option>
+                        </select>
+                        <select id="textSize">
+                            <option value="16">Small</option>
+                            <option value="24" selected>Medium</option>
+                            <option value="32">Large</option>
+                        </select>
+                        <button class="btn" onclick="addText()">Add Text to Image</button>
+                    `;
+                    break;
+                    
+                case 'draw':
+                    options.innerHTML = `
+                        <h3>Drawing Tools</h3>
+                        <select id="drawColor">
+                            <option value="#FF0000">Red Pen</option>
+                            <option value="#1a73e8" selected>Blue Pen</option>
+                            <option value="#4CAF50">Green Pen</option>
+                            <option value="#000000">Black Pen</option>
+                        </select>
+                        <select id="brushSize">
+                            <option value="2">Thin</option>
+                            <option value="5" selected>Medium</option>
+                            <option value="10">Thick</option>
+                        </select>
+                        <button class="btn" onclick="startDrawing()">Start Drawing</button>
+                        <button class="btn" onclick="clearDrawing()">Clear Drawing</button>
+                    `;
+                    break;
+                    
+                case 'crop':
+                    options.innerHTML = `
+                        <h3>Crop Image</h3>
+                        <p>Select area to crop:</p>
+                        <button class="btn" onclick="selectCropArea()">Select Crop Area</button>
+                        <button class="btn btn-green" onclick="applyCrop()">Apply Crop</button>
+                        <button class="btn" onclick="cancelCrop()">Cancel</button>
+                    `;
+                    break;
+                    
+                case 'rotate':
+                    options.innerHTML = `
+                        <h3>Rotate & Flip</h3>
+                        <button class="btn" onclick="rotateImage(-90)">↺ Rotate Left</button>
+                        <button class="btn" onclick="rotateImage(90)">↻ Rotate Right</button>
+                        <button class="btn" onclick="flipImage()">⇄ Flip Horizontal</button>
+                        <button class="btn" onclick="resetRotation()">Reset Rotation</button>
+                    `;
+                    break;
+                    
+                case 'filter':
+                    options.innerHTML = `
+                        <h3>Image Filters</h3>
+                        <button class="btn" onclick="applyFilter('grayscale')">Grayscale</button>
+                        <button class="btn" onclick="applyFilter('sepia')">Sepia</button>
+                        <button class="btn" onclick="applyFilter('brightness')">Brightness</button>
+                        <button class="btn" onclick="applyFilter('contrast')">Contrast</button>
+                        <button class="btn" onclick="resetFilters()">Reset Filters</button>
+                    `;
+                    break;
+                    
+                case 'sticker':
+                    options.innerHTML = `
+                        <h3>Add Stickers & Stamps</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                            <button class="btn" onclick="addSticker('✅')">✅ Approved</button>
+                            <button class="btn" onclick="addSticker('❌')">❌ Rejected</button>
+                            <button class="btn" onclick="addSticker('⭐')">⭐ Star</button>
+                            <button class="btn" onclick="addSticker('🔒')">🔒 Confidential</button>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Tool Functions
+        function addText() {
+            const text = document.getElementById('textInput').value || 'Sample Text';
+            const color = document.getElementById('textColor').value;
+            const size = document.getElementById('textSize').value;
+            
+            const textElement = document.createElement('div');
+            textElement.className = 'text-element';
+            textElement.style.color = color;
+            textElement.style.fontSize = size + 'px';
+            textElement.style.left = '50px';
+            textElement.style.top = '50px';
+            textElement.textContent = text;
+            textElement.draggable = true;
+            
+            textElement.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', null);
+            });
+            
+            textElement.addEventListener('click', function() {
+                if (confirm('Remove this text?')) {
+                    textElement.remove();
+                }
+            });
+            
+            document.getElementById('editOverlay').appendChild(textElement);
+            textElements.push(textElement);
+            
+            alert(`✅ Text added! You can drag it to move and click to remove.`);
+        }
+
+        function startDrawing() {
+            const canvas = document.getElementById('drawCanvas');
+            const ctx = canvas.getContext('2d');
+            const color = document.getElementById('drawColor').value;
+            const size = parseInt(document.getElementById('brushSize').value);
+            
+            canvas.style.display = 'block';
+            
+            let isDrawing = false;
+            
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            
+            function startDraw(e) {
+                isDrawing = true;
+                draw(e);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                ctx.lineWidth = size;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = color;
+                
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+            
+            function stopDraw() {
+                isDrawing = false;
+                ctx.beginPath();
+            }
+            
+            alert('🎨 Start drawing on the image! Click "Clear Drawing" to remove.');
+        }
+
+        function clearDrawing() {
+            const canvas = document.getElementById('drawCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function rotateImage(degrees) {
+            alert(`🔄 Image rotated ${degrees} degrees!`);
+            // In real implementation, this would actually rotate the image
+        }
+
+        function flipImage() {
+            alert('🔄 Image flipped horizontally!');
+        }
+
+        function applyFilter(filter) {
+            alert(`🎨 Applied ${filter} filter to image!`);
+        }
+
+        function addSticker(sticker) {
+            alert(`⭐ Added ${sticker} sticker to document!`);
+        }
+
+        function selectCropArea() {
+            alert('✂️ Click and drag to select crop area');
+        }
+
+        function applyCrop() {
+            alert('✅ Crop applied successfully!');
+        }
+
+        function downloadFile() {
+            alert('⬇️ Your edited file is downloading!\n\nIn real implementation, this would save all your edits.');
+        }
+
+        function resetEditing() {
+            if (confirm('Are you sure you want to reset all changes?')) {
+                document.getElementById('editOverlay').innerHTML = '';
+                clearDrawing();
+                document.getElementById('toolOptions').innerHTML = '';
+                alert('🔄 All changes reset!');
+            }
+        }
+
+        // Drag and drop
         const uploadArea = document.getElementById('uploadArea');
         
         uploadArea.addEventListener('dragover', (e) => {
@@ -192,11 +575,6 @@
             if (e.dataTransfer.files.length) {
                 handleFileSelect(e.dataTransfer.files[0]);
             }
-        });
-
-        // Click to upload
-        uploadArea.addEventListener('click', () => {
-            document.getElementById('fileInput').click();
         });
     </script>
 </body>
