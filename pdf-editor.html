@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Editor Tool | Multi-Tool Website</title>
+    <title>PDF Editor | Stellar Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #2196F3;
-            --dark-blue: #1976D2;
-            --light-blue: #E3F2FD;
+            --primary-blue: #1a73e8;
+            --primary-dark: #0d47a1;
+            --primary-light: #4285f4;
+            --accent-blue: #64b5f6;
+            --light-bg: #f8f9fa;
             --white: #FFFFFF;
-            --gray: #f5f5f5;
-            --text-dark: #333333;
-            --shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+            --dark-text: #202124;
+            --medium-text: #5f6368;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
         }
 
         * {
@@ -23,8 +28,8 @@
         }
 
         body {
-            background-color: var(--gray);
-            color: var(--text-dark);
+            background-color: var(--light-bg);
+            color: var(--dark-text);
             line-height: 1.6;
         }
 
@@ -35,22 +40,34 @@
         }
 
         header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
             color: var(--white);
-            padding: 30px 0;
+            padding: 20px 0;
             text-align: center;
             border-radius: 0 0 20px 20px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--card-shadow);
             margin-bottom: 30px;
         }
 
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             opacity: 0.9;
         }
 
@@ -64,15 +81,15 @@
             background-color: var(--white);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--card-shadow);
         }
 
         .section-title {
-            color: var(--dark-blue);
+            color: var(--primary-dark);
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--light-blue);
-            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+            font-size: 1.4rem;
         }
 
         .upload-area {
@@ -80,7 +97,7 @@
             border-radius: 10px;
             padding: 40px 20px;
             text-align: center;
-            background-color: var(--light-blue);
+            background-color: #e8f0fe;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -116,9 +133,9 @@
         }
 
         .btn:hover {
-            background-color: var(--dark-blue);
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3);
+            box-shadow: 0 6px 15px rgba(26, 115, 232, 0.3);
         }
 
         .btn-download {
@@ -137,7 +154,7 @@
         }
 
         .tool-card {
-            background-color: var(--light-blue);
+            background-color: #e8f0fe;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
@@ -149,7 +166,7 @@
         .tool-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary-blue);
-            box-shadow: 0 8px 15px rgba(33, 150, 243, 0.2);
+            box-shadow: 0 8px 15px rgba(26, 115, 232, 0.2);
         }
 
         .tool-icon {
@@ -168,9 +185,9 @@
         .preview-area {
             width: 100%;
             min-height: 400px;
-            border: 2px solid var(--light-blue);
+            border: 2px solid #e8f0fe;
             border-radius: 10px;
-            background-color: var(--gray);
+            background-color: var(--light-bg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -180,7 +197,7 @@
 
         .preview-placeholder {
             text-align: center;
-            color: #777;
+            color: var(--medium-text);
         }
 
         .preview-image {
@@ -196,22 +213,25 @@
             flex-wrap: wrap;
         }
 
+        .tool-options {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
             padding: 20px;
-            color: #777;
+            color: var(--medium-text);
             font-size: 0.9rem;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
+                font-size: 1.8rem;
             }
             
             .tools-grid {
@@ -225,6 +245,14 @@
             .btn {
                 padding: 10px 20px;
                 font-size: 0.9rem;
+            }
+            
+            .back-btn {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-bottom: 15px;
+                justify-content: center;
             }
         }
 
@@ -255,6 +283,9 @@
 <body>
     <header>
         <div class="container">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
             <h1>PDF & Image Editor</h1>
             <p class="subtitle">Edit, annotate, and customize your PDFs and images</p>
         </div>
@@ -330,7 +361,7 @@
 
     <footer>
         <div class="container">
-            <p>PDF Editor Tool - Part of Multi-Tool Website</p>
+            <p>PDF Editor Tool - Part of Stellar Tools</p>
         </div>
     </footer>
 
@@ -397,20 +428,19 @@
                 previewArea.innerHTML = '';
                 
                 if (fileType === 'application/pdf') {
-                    // For PDF files, we would typically use a PDF.js library
-                    // For this demo, we'll show a placeholder
+                    // For PDF files
                     const pdfPreview = document.createElement('div');
                     pdfPreview.innerHTML = `
                         <div style="text-align: center; padding: 20px;">
                             <div style="font-size: 60px; margin-bottom: 20px;">📄</div>
                             <h3>PDF Preview</h3>
                             <p>${file.name}</p>
-                            <p>In a real implementation, PDF.js would render the PDF here</p>
+                            <p>File ready for editing</p>
                         </div>
                     `;
                     previewArea.appendChild(pdfPreview);
                 } else if (fileType.startsWith('image/')) {
-                    // For image files, display the image
+                    // For image files
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const img = document.createElement('img');
@@ -451,7 +481,7 @@
                                     <option>Times New Roman</option>
                                     <option>Courier New</option>
                                 </select>
-                                <input type="color" value="#2196F3" style="width: 40px; height: 40px;">
+                                <input type="color" value="#1a73e8" style="width: 40px; height: 40px;">
                                 <button class="btn" style="padding: 10px 15px;">Add Text</button>
                             </div>
                         `;
@@ -464,7 +494,7 @@
                                     <option>Brush</option>
                                     <option>Marker</option>
                                 </select>
-                                <input type="color" value="#2196F3" style="width: 40px; height: 40px;">
+                                <input type="color" value="#1a73e8" style="width: 40px; height: 40px;">
                                 <input type="range" min="1" max="10" value="3" style="flex: 1;">
                                 <button class="btn" style="padding: 10px 15px;">Start Drawing</button>
                             </div>
@@ -486,74 +516,4 @@
                         break;
                     case 'stamp':
                         toolOptions.innerHTML = `
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                                    <option>Approved</option>
-                                    <option>Confidential</option>
-                                    <option>Draft</option>
-                                    <option>Final</option>
-                                </select>
-                                <button class="btn" style="padding: 10px 15px;">Add Stamp</button>
-                            </div>
-                        `;
-                        break;
-                    case 'rotate':
-                        toolOptions.innerHTML = `
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <button class="btn" style="padding: 10px 15px;">Rotate Left</button>
-                                <button class="btn" style="padding: 10px 15px;">Rotate Right</button>
-                                <button class="btn" style="padding: 10px 15px;">Flip Horizontal</button>
-                                <button class="btn" style="padding: 10px 15px;">Flip Vertical</button>
-                            </div>
-                        `;
-                        break;
-                    case 'crop':
-                        toolOptions.innerHTML = `
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <button class="btn" style="padding: 10px 15px;">Select Area</button>
-                                <button class="btn" style="padding: 10px 15px;">Crop</button>
-                                <button class="btn" style="padding: 10px 15px;">Reset Crop</button>
-                            </div>
-                        `;
-                        break;
-                }
-            }
-            
-            // Reset changes
-            resetBtn.addEventListener('click', function() {
-                if (currentFile) {
-                    editedFile = currentFile;
-                    previewFile(currentFile);
-                    toolOptions.innerHTML = '';
-                    toolCards.forEach(card => {
-                        card.style.borderColor = 'transparent';
-                    });
-                }
-            });
-            
-            // Download file
-            downloadBtn.addEventListener('click', function() {
-                if (editedFile) {
-                    // In a real implementation, this would download the edited file
-                    // For this demo, we'll simulate a download
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(editedFile);
-                    link.download = `edited_${currentFile.name}`;
-                    link.click();
-                    
-                    // Show success message
-                    alert('Your edited file has been downloaded!');
-                } else {
-                    alert('Please upload a file first.');
-                }
-            });
-            
-            // Initially disable tools until a file is uploaded
-            toolCards.forEach(card => {
-                card.style.opacity = '0.5';
-                card.style.pointerEvents = 'none';
-            });
-        });
-    </script>
-</body>
-</html>
+                            <div style="display: flex; gap: 10
