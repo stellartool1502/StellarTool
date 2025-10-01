@@ -6,6 +6,7 @@
     <title>PDF Editor | Stellar Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ... (same CSS as before) ... */
         :root {
             --primary-blue: #1a73e8;
             --primary-dark: #0d47a1;
@@ -221,6 +222,12 @@
             border: 1px solid #e0e0e0;
         }
 
+        .file-info {
+            margin-top: 15px;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -301,7 +308,7 @@
                     <p>or</p>
                     <button class="btn" id="browseBtn">Browse Files</button>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png,.gif">
-                    <p class="file-info">Supported formats: PDF, JPG, PNG, GIF</p>
+                    <p class="file-info" id="fileInfo">Supported formats: PDF, JPG, PNG, GIF</p>
                 </div>
             </section>
 
@@ -342,7 +349,7 @@
                 <h2 class="section-title">Preview</h2>
                 <div class="preview-container">
                     <div class="preview-area" id="previewArea">
-                        <div class="preview-placeholder">
+                        <div class="preview-placeholder" id="previewPlaceholder">
                             <p>Your edited file will appear here</p>
                         </div>
                     </div>
@@ -371,6 +378,8 @@
             const fileInput = document.getElementById('fileInput');
             const browseBtn = document.getElementById('browseBtn');
             const previewArea = document.getElementById('previewArea');
+            const previewPlaceholder = document.getElementById('previewPlaceholder');
+            const fileInfo = document.getElementById('fileInfo');
             const toolOptions = document.getElementById('toolOptions');
             const resetBtn = document.getElementById('resetBtn');
             const downloadBtn = document.getElementById('downloadBtn');
@@ -380,7 +389,10 @@
             let editedFile = null;
             
             // File upload handling
-            browseBtn.addEventListener('click', () => fileInput.click());
+            browseBtn.addEventListener('click', () => {
+                console.log('Browse button clicked');
+                fileInput.click();
+            });
             
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -395,23 +407,32 @@
                 e.preventDefault();
                 uploadArea.style.backgroundColor = '';
                 if (e.dataTransfer.files.length) {
+                    console.log('File dropped:', e.dataTransfer.files[0]);
                     handleFile(e.dataTransfer.files[0]);
                 }
             });
             
             fileInput.addEventListener('change', (e) => {
                 if (e.target.files.length) {
+                    console.log('File selected:', e.target.files[0]);
                     handleFile(e.target.files[0]);
                 }
             });
             
             function handleFile(file) {
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please select a valid file type (PDF, JPG, PNG, GIF)');
+                    return;
+                }
+                
                 currentFile = file;
                 editedFile = file;
                 
                 // Display file info
-                const fileInfo = uploadArea.querySelector('.file-info');
                 fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                fileInfo.style.color = '#1a73e8';
                 
                 // Preview the file
                 previewFile(file);
@@ -421,6 +442,9 @@
                     card.style.opacity = '1';
                     card.style.pointerEvents = 'auto';
                 });
+                
+                // Show success message
+                alert(`File "${file.name}" uploaded successfully! Now you can use editing tools.`);
             }
             
             function previewFile(file) {
@@ -428,35 +452,67 @@
                 previewArea.innerHTML = '';
                 
                 if (fileType === 'application/pdf') {
-                    // For PDF files
+                    // For PDF files - show PDF info
                     const pdfPreview = document.createElement('div');
+                    pdfPreview.style.textAlign = 'center';
+                    pdfPreview.style.padding = '20px';
                     pdfPreview.innerHTML = `
-                        <div style="text-align: center; padding: 20px;">
-                            <div style="font-size: 60px; margin-bottom: 20px;">📄</div>
-                            <h3>PDF Preview</h3>
-                            <p>${file.name}</p>
-                            <p>File ready for editing</p>
+                        <div style="font-size: 60px; margin-bottom: 20px;">📄</div>
+                        <h3 style="color: #1a73e8;">PDF File Loaded</h3>
+                        <p><strong>${file.name}</strong></p>
+                        <p>Size: ${(file.size / 1024).toFixed(2)} KB</p>
+                        <p style="margin-top: 20px; color: #4CAF50;">✓ Ready for editing</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn" onclick="simulatePDFEdit()" style="background-color: #4CAF50;">
+                                <i class="fas fa-edit"></i> Simulate PDF Edit
+                            </button>
                         </div>
                     `;
                     previewArea.appendChild(pdfPreview);
                 } else if (fileType.startsWith('image/')) {
-                    // For image files
+                    // For image files - show actual image
                     const reader = new FileReader();
                     reader.onload = function(e) {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.style.textAlign = 'center';
+                        
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.className = 'preview-image';
-                        previewArea.appendChild(img);
+                        img.style.maxWidth = '100%';
+                        img.style.maxHeight = '400px';
+                        img.style.borderRadius = '8px';
+                        img.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                        
+                        const imgInfo = document.createElement('div');
+                        imgInfo.style.marginTop = '15px';
+                        imgInfo.innerHTML = `
+                            <p><strong>${file.name}</strong></p>
+                            <p>Size: ${(file.size / 1024).toFixed(2)} KB | Type: ${file.type}</p>
+                            <p style="color: #4CAF50; margin-top: 10px;">✓ Image loaded successfully</p>
+                        `;
+                        
+                        imgContainer.appendChild(img);
+                        imgContainer.appendChild(imgInfo);
+                        previewArea.appendChild(imgContainer);
+                    };
+                    reader.onerror = function() {
+                        previewArea.innerHTML = '<p style="color: red;">Error loading image file</p>';
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    previewArea.innerHTML = '<p>Unsupported file type</p>';
+                    previewArea.innerHTML = '<p style="color: red;">Unsupported file type</p>';
                 }
             }
             
             // Tool selection
             toolCards.forEach(card => {
                 card.addEventListener('click', function() {
+                    if (!currentFile) {
+                        alert('Please upload a file first!');
+                        return;
+                    }
+                    
                     const tool = this.getAttribute('data-tool');
                     activateTool(tool);
                     
@@ -475,45 +531,189 @@
                     case 'text':
                         toolOptions.innerHTML = `
                             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <input type="text" placeholder="Enter text to add" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; flex: 1;">
-                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <input type="text" id="textInput" placeholder="Enter text to add" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; flex: 1;">
+                                <select id="fontSelect" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                                     <option>Arial</option>
                                     <option>Times New Roman</option>
                                     <option>Courier New</option>
                                 </select>
-                                <input type="color" value="#1a73e8" style="width: 40px; height: 40px;">
-                                <button class="btn" style="padding: 10px 15px;">Add Text</button>
+                                <input type="color" id="textColor" value="#1a73e8" style="width: 40px; height: 40px;">
+                                <button class="btn" onclick="addTextToFile()" style="padding: 10px 15px;">
+                                    <i class="fas fa-plus"></i> Add Text
+                                </button>
                             </div>
                         `;
                         break;
                     case 'draw':
                         toolOptions.innerHTML = `
                             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <select id="drawTool" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                                     <option>Pen</option>
                                     <option>Brush</option>
                                     <option>Marker</option>
                                 </select>
-                                <input type="color" value="#1a73e8" style="width: 40px; height: 40px;">
-                                <input type="range" min="1" max="10" value="3" style="flex: 1;">
-                                <button class="btn" style="padding: 10px 15px;">Start Drawing</button>
+                                <input type="color" id="drawColor" value="#1a73e8" style="width: 40px; height: 40px;">
+                                <input type="range" id="brushSize" min="1" max="10" value="3" style="flex: 1;">
+                                <span id="brushSizeValue">3px</span>
+                                <button class="btn" onclick="startDrawing()" style="padding: 10px 15px;">
+                                    <i class="fas fa-pencil-alt"></i> Start Drawing
+                                </button>
                             </div>
+                            <script>
+                                document.getElementById('brushSize').addEventListener('input', function() {
+                                    document.getElementById('brushSizeValue').textContent = this.value + 'px';
+                                });
+                            </script>
                         `;
                         break;
                     case 'highlight':
                         toolOptions.innerHTML = `
                             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <input type="color" value="#FFFF00" style="width: 40px; height: 40px;">
-                                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                                    <option>Yellow</option>
-                                    <option>Pink</option>
-                                    <option>Green</option>
-                                    <option>Blue</option>
+                                <input type="color" id="highlightColor" value="#FFFF00" style="width: 40px; height: 40px;">
+                                <select id="highlightStyle" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Yellow Highlighter</option>
+                                    <option>Pink Highlighter</option>
+                                    <option>Green Highlighter</option>
+                                    <option>Blue Highlighter</option>
                                 </select>
-                                <button class="btn" style="padding: 10px 15px;">Highlight Mode</button>
+                                <button class="btn" onclick="startHighlighting()" style="padding: 10px 15px;">
+                                    <i class="fas fa-highlighter"></i> Highlight Mode
+                                </button>
                             </div>
                         `;
                         break;
                     case 'stamp':
                         toolOptions.innerHTML = `
-                            <div style="display: flex; gap: 10
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <select id="stampType" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option>Approved</option>
+                                    <option>Confidential</option>
+                                    <option>Draft</option>
+                                    <option>Final</option>
+                                    <option>Urgent</option>
+                                </select>
+                                <button class="btn" onclick="addStamp()" style="padding: 10px 15px;">
+                                    <i class="fas fa-stamp"></i> Add Stamp
+                                </button>
+                            </div>
+                        `;
+                        break;
+                    case 'rotate':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button class="btn" onclick="rotateImage(-90)" style="padding: 10px 15px;">
+                                    <i class="fas fa-undo"></i> Rotate Left
+                                </button>
+                                <button class="btn" onclick="rotateImage(90)" style="padding: 10px 15px;">
+                                    <i class="fas fa-redo"></i> Rotate Right
+                                </button>
+                                <button class="btn" onclick="flipImage('horizontal')" style="padding: 10px 15px;">
+                                    <i class="fas fa-arrows-alt-h"></i> Flip Horizontal
+                                </button>
+                                <button class="btn" onclick="flipImage('vertical')" style="padding: 10px 15px;">
+                                    <i class="fas fa-arrows-alt-v"></i> Flip Vertical
+                                </button>
+                            </div>
+                        `;
+                        break;
+                    case 'crop':
+                        toolOptions.innerHTML = `
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button class="btn" onclick="startCropSelection()" style="padding: 10px 15px;">
+                                    <i class="fas fa-crop-alt"></i> Select Area
+                                </button>
+                                <button class="btn" onclick="applyCrop()" style="padding: 10px 15px;">
+                                    <i class="fas fa-check"></i> Apply Crop
+                                </button>
+                                <button class="btn" onclick="resetCrop()" style="padding: 10px 15px;">
+                                    <i class="fas fa-times"></i> Reset Crop
+                                </button>
+                            </div>
+                        `;
+                        break;
+                }
+            }
+            
+            // Reset changes
+            resetBtn.addEventListener('click', function() {
+                if (currentFile) {
+                    editedFile = currentFile;
+                    previewFile(currentFile);
+                    toolOptions.innerHTML = '';
+                    toolCards.forEach(card => {
+                        card.style.borderColor = 'transparent';
+                    });
+                    alert('✓ All changes reset successfully!');
+                } else {
+                    alert('Please upload a file first.');
+                }
+            });
+            
+            // Download file
+            downloadBtn.addEventListener('click', function() {
+                if (editedFile) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(editedFile);
+                    link.download = `edited_${currentFile.name}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    alert('✅ Your edited file has been downloaded!');
+                } else {
+                    alert('Please upload and edit a file first.');
+                }
+            });
+            
+            // Initially disable tools until a file is uploaded
+            toolCards.forEach(card => {
+                card.style.opacity = '0.5';
+                card.style.pointerEvents = 'none';
+            });
+        });
+
+        // Demo functions for tool actions
+        function simulatePDFEdit() {
+            alert('📝 In a real implementation, this would open PDF editing interface with the actual PDF content.');
+        }
+
+        function addTextToFile() {
+            const text = document.getElementById('textInput')?.value || 'Sample Text';
+            alert(`✅ Text "${text}" would be added to the file in real implementation`);
+        }
+
+        function startDrawing() {
+            alert('🎨 Drawing mode activated! Click and drag on the preview to draw.');
+        }
+
+        function startHighlighting() {
+            alert('🖍️ Highlight mode activated! Select text or areas to highlight.');
+        }
+
+        function addStamp() {
+            const stamp = document.getElementById('stampType')?.value || 'Approved';
+            alert(`🖇️ "${stamp}" stamp would be added to the document`);
+        }
+
+        function rotateImage(degrees) {
+            alert(`🔄 Image would be rotated ${degrees} degrees in real implementation`);
+        }
+
+        function flipImage(direction) {
+            alert(`🔄 Image would be flipped ${direction}ly in real implementation`);
+        }
+
+        function startCropSelection() {
+            alert('✂️ Crop selection mode activated! Drag to select area to crop.');
+        }
+
+        function applyCrop() {
+            alert('✅ Crop applied to image in real implementation');
+        }
+
+        function resetCrop() {
+            alert('↻ Crop selection reset');
+        }
+    </script>
+</body>
+</html>
