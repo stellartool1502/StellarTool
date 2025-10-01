@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
     <meta charset="UTF-8">
-    <meta 
-        name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellartools -  Your Daily Tools, All in One Place 🚀
- Convert, calculate, compress, and simplify tasks.
- [ Explore Tools ]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellartools - Your Daily Tools, All in One Place 🚀</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
      crossorigin="anonymous"></script>
@@ -315,6 +312,168 @@
             font-size: 0.9rem;
         }
 
+        /* Screen Recorder Styles */
+        .screen-recorder-container {
+            background-color: var(--light-text);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 400px;
+            background-color: #e8f0fe;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px dashed var(--accent-blue);
+        }
+
+        #video-preview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: var(--primary-blue);
+        }
+
+        .preview-placeholder i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .recorder-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .recorder-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .recorder-btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--light-text);
+        }
+
+        .recorder-btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .recorder-btn-secondary {
+            background-color: #e8f0fe;
+            color: var(--primary-blue);
+        }
+
+        .recorder-btn-secondary:hover {
+            background-color: #d2e3fc;
+        }
+
+        .recorder-btn-danger {
+            background-color: #f44336;
+            color: var(--light-text);
+        }
+
+        .recorder-btn-danger:hover {
+            background-color: #d32f2f;
+        }
+
+        .recorder-btn:disabled {
+            background-color: #BDBDBD;
+            cursor: not-allowed;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .status.recording {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+
+        .status.paused {
+            background-color: #FFF8E1;
+            color: #FF8F00;
+        }
+
+        .status.idle {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .instructions {
+            background-color: #e8f0fe;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .instructions h3 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #download-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        #download-link:hover {
+            background-color: #388E3C;
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark-text);
@@ -401,6 +560,10 @@
             .tools-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
+            
+            .preview-container {
+                height: 300px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -445,6 +608,14 @@
                 flex-direction: column;
                 gap: 30px;
             }
+            
+            .recorder-controls {
+                flex-direction: column;
+            }
+            
+            .recorder-btn {
+                width: 100%;
+            }
         }
 
         @media (max-width: 576px) {
@@ -462,6 +633,14 @@
             
             .section-header h2 {
                 font-size: 1.6rem;
+            }
+            
+            .preview-container {
+                height: 250px;
+            }
+            
+            .screen-recorder-container {
+                padding: 15px;
             }
         }
     </style>
@@ -530,6 +709,64 @@
                 <button class="search-btn">
                     <i class="fas fa-search"></i>
                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screen Recorder Tool -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🎥 Screen Recorder</h2>
+                <p>Record your screen with audio and save as video file</p>
+            </div>
+            
+            <div class="screen-recorder-container">
+                <div class="preview-container">
+                    <div class="preview-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>Screen preview will appear here</p>
+                    </div>
+                    <video id="video-preview" controls></video>
+                </div>
+
+                <div class="timer" id="timer">00:00:00</div>
+
+                <div class="recorder-controls">
+                    <button id="start-btn" class="recorder-btn recorder-btn-primary">
+                        <i class="fas fa-record-vinyl"></i> Start Recording
+                    </button>
+                    <button id="pause-btn" class="recorder-btn recorder-btn-secondary" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button id="resume-btn" class="recorder-btn recorder-btn-secondary" disabled>
+                        <i class="fas fa-play"></i> Resume
+                    </button>
+                    <button id="stop-btn" class="recorder-btn recorder-btn-danger" disabled>
+                        <i class="fas fa-stop"></i> Stop Recording
+                    </button>
+                </div>
+
+                <div class="status idle" id="status">
+                    Ready to record
+                </div>
+
+                <div class="download-section">
+                    <a id="download-link" href="#" download="screen-recording.webm" style="display: none;">
+                        <i class="fas fa-download"></i> Download Recording
+                    </a>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>How to use the Screen Recorder</h3>
+                <ol>
+                    <li>Click "Start Recording" to begin capturing your screen</li>
+                    <li>Select the screen or application window you want to record</li>
+                    <li>Use Pause and Resume buttons to control recording</li>
+                    <li>Click "Stop Recording" when finished</li>
+                    <li>Download your recording using the provided link</li>
+                </ol>
             </div>
         </div>
     </section>
@@ -867,8 +1104,51 @@
                 }
             });
         });
-    </script>
-    <script async="async" data-cfasync="false" src="//pl27743391.revenuecpmgate.com/35a64ab1615db732cc9c10f28fe0f636/invoke.js"></script>
-<div id="container-35a64ab1615db732cc9c10f28fe0f636"></div>
-</body>
-</html>
+
+        // Screen Recorder Functionality
+        // DOM Elements
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resumeBtn = document.getElementById('resume-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const videoPreview = document.getElementById('video-preview');
+        const timerDisplay = document.getElementById('timer');
+        const statusDisplay = document.getElementById('status');
+        const downloadLink = document.getElementById('download-link');
+        const previewPlaceholder = document.querySelector('.preview-placeholder');
+
+        // Variables
+        let mediaRecorder;
+        let recordedChunks = [];
+        let timerInterval;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+        let isPaused = false;
+
+        // Timer function
+        function updateTimer() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+            
+            const formattedTime = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+            
+            timerDisplay.textContent = formattedTime;
+        }
+
+        // Start recording
+        async function startRecording() {
+            try {
+                // Request screen capture
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video
