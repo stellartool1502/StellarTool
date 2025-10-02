@@ -5,9 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Case Converter - Stellar Tools</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Fallback styles in case Tailwind CDN fails */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .container {
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      max-width: 28rem;
+      width: 100%;
+    }
+    textarea, .output {
+      border: 2px solid #3b82f6;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+<body>
+  <div class="container">
     <h2 class="text-2xl font-bold text-blue-600 text-center mb-4">Text Case Converter</h2>
     
     <textarea
@@ -55,52 +94,80 @@
   </div>
 
   <script>
-    function convertText(type) {
-      const text = document.getElementById("inputText").value;
-      let result = "";
+    document.addEventListener('DOMContentLoaded', () => {
+      function convertText(type) {
+        try {
+          const inputText = document.getElementById("inputText");
+          if (!inputText) throw new Error("Input textarea not found");
+          const text = inputText.value;
+          let result = "";
 
-      switch (type) {
-        case 'upper':
-          result = text.toUpperCase();
-          break;
-        case 'lower':
-          result = text.toLowerCase();
-          break;
-        case 'title':
-          result = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-          break;
-        case 'sentence':
-          result = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, char => char.toUpperCase());
-          break;
-        case 'toggle':
-          result = text.split("").map(char => 
-            char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
-          ).join("");
-          break;
+          switch (type) {
+            case 'upper':
+              result = text.toUpperCase();
+              break;
+            case 'lower':
+              result = text.toLowerCase();
+              break;
+            case 'title':
+              result = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+              break;
+            case 'sentence':
+              result = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, char => char.toUpperCase());
+              break;
+            case 'toggle':
+              result = text.split("").map(char => 
+                char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+              ).join("");
+              break;
+            default:
+              throw new Error("Invalid conversion type");
+          }
+
+          const outputDiv = document.getElementById("output");
+          if (!outputDiv) throw new Error("Output div not found");
+          outputDiv.textContent = result;
+        } catch (err) {
+          console.error("Conversion error:", err);
+          alert("An error occurred while converting the text. Please try again.");
+        }
       }
 
-      document.getElementById("output").textContent = result;
-    }
-
-    function clearText() {
-      document.getElementById("inputText").value = "";
-      document.getElementById("output").textContent = "";
-    }
-
-    async function copyText() {
-      const output = document.getElementById("output").textContent;
-      if (!output) {
-        alert("No text to copy!");
-        return;
+      function clearText() {
+        try {
+          const inputText = document.getElementById("inputText");
+          const outputDiv = document.getElementById("output");
+          if (!inputText || !outputDiv) throw new Error("Input or output element not found");
+          inputText.value = "";
+          outputDiv.textContent = "";
+        } catch (err) {
+          console.error("Clear error:", err);
+          alert("An error occurred while clearing the text. Please try again.");
+        }
       }
-      try {
-        await navigator.clipboard.writeText(output);
-        alert("Output copied to clipboard!");
-      } catch (err) {
-        console.error('Copy failed:', err);
-        alert("Failed to copy text. Please try again.");
+
+      async function copyText() {
+        try {
+          const outputDiv = document.getElementById("output");
+          if (!outputDiv) throw new Error("Output div not found");
+          const output = outputDiv.textContent;
+          if (!output) {
+            alert("No text to copy!");
+            return;
+          }
+          await navigator.clipboard.writeText(output);
+          alert("Output copied to clipboard!");
+        } catch (err) {
+          console.error("Copy error:", err);
+          alert("Failed to copy text. Please try again.");
+        }
       }
-    }
+
+      // Expose functions to global scope safely
+      window.convertText = convertText;
+      window.clearText = clearText;
+      window.copyText = copyText;
+    });
   </script>
 </body>
 </html>
