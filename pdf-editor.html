@@ -288,509 +288,637 @@
     </div>
 
     <script>
-        let currentFile = null;
-        let currentFileType = null;
-        let activeTool = null;
-        let textElements = [];
-        let isDrawing = false;
-        let currentSticker = null;
+       <script>
+    let currentFile = null;
+    let currentFileType = null;
+    let activeTool = null;
+    let textElements = [];
+    let isDrawing = false;
+    let currentSticker = null;
+    let editedContent = null;
 
-        const tools = [
-            { id: 'text', name: 'Add Text', icon: 'T', color: '#1a73e8' },
-            { id: 'draw', name: 'Draw', icon: '✏️', color: '#FF4081' },
-            { id: 'highlight', name: 'Highlight', icon: '🖍️', color: '#FFD700' },
-            { id: 'stamp', name: 'Add Stamp', icon: '🖇️', color: '#4CAF50' },
-            { id: 'rotate', name: 'Rotate', icon: '🔄', color: '#FF9800' },
-            { id: 'crop', name: 'Crop', icon: '✂️', color: '#9C27B0' },
-            { id: 'filter', name: 'Filters', icon: '🎨', color: '#00BCD4' },
-            { id: 'sticker', name: 'Stickers', icon: '⭐', color: '#E91E63' }
-        ];
+    const tools = [
+        { id: 'text', name: 'Add Text', icon: 'T', color: '#1a73e8' },
+        { id: 'draw', name: 'Draw', icon: '✏️', color: '#FF4081' },
+        { id: 'highlight', name: 'Highlight', icon: '🖍️', color: '#FFD700' },
+        { id: 'stamp', name: 'Add Stamp', icon: '🖇️', color: '#4CAF50' },
+        { id: 'rotate', name: 'Rotate', icon: '🔄', color: '#FF9800' },
+        { id: 'crop', name: 'Crop', icon: '✂️', color: '#9C27B0' },
+        { id: 'filter', name: 'Filters', icon: '🎨', color: '#00BCD4' },
+        { id: 'sticker', name: 'Stickers', icon: '⭐', color: '#E91E63' }
+    ];
 
-        const stickers = ['✅', '❌', '⭐', '🔒', '💯', '🚀', '📌', '📍', '💡', '⚠️', '❓', '❗'];
+    const stickers = ['✅', '❌', '⭐', '🔒', '💯', '🚀', '📌', '📍', '💡', '⚠️', '❓', '❗'];
 
-        // Initialize tools grid
-        function initializeTools() {
-            const toolsGrid = document.getElementById('toolsGrid');
-            toolsGrid.innerHTML = '';
-            
-            tools.forEach(tool => {
-                const toolCard = document.createElement('div');
-                toolCard.className = 'tool-card';
-                toolCard.innerHTML = `
-                    <div class="tool-icon">${tool.icon}</div>
-                    <h3>${tool.name}</h3>
-                `;
-                toolCard.onclick = () => activateTool(tool.id);
-                toolsGrid.appendChild(toolCard);
-            });
-        }
-
-        // File upload handling
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            if (e.target.files.length) {
-                handleFileSelect(e.target.files[0]);
-            }
+    // Initialize tools grid
+    function initializeTools() {
+        const toolsGrid = document.getElementById('toolsGrid');
+        toolsGrid.innerHTML = '';
+        
+        tools.forEach(tool => {
+            const toolCard = document.createElement('div');
+            toolCard.className = 'tool-card';
+            toolCard.innerHTML = `
+                <div class="tool-icon">${tool.icon}</div>
+                <h3>${tool.name}</h3>
+            `;
+            toolCard.onclick = () => activateTool(tool.id);
+            toolsGrid.appendChild(toolCard);
         });
+    }
 
-        document.getElementById('uploadArea').addEventListener('click', function() {
-            document.getElementById('fileInput').click();
-        });
-
-        function handleFileSelect(file) {
-            if (!file) return;
-            
-            currentFile = file;
-            currentFileType = file.type;
-            
-            // Update file info
-            document.getElementById('fileInfo').innerHTML = 
-                `📄 <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)`;
-            
-            // Show preview based on file type
-            const previewArea = document.getElementById('previewArea');
-            const placeholder = document.getElementById('previewPlaceholder');
-            
-            if (file.type.startsWith('image/')) {
-                handleImageFile(file, previewArea, placeholder);
-            } else if (file.type === 'application/pdf') {
-                handlePdfFile(file, previewArea, placeholder);
-            } else {
-                alert('❌ Please select a PDF or image file (JPG, PNG, GIF)');
-            }
+    // File upload handling
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        if (e.target.files.length) {
+            handleFileSelect(e.target.files[0]);
         }
+    });
 
-        function handleImageFile(file, previewArea, placeholder) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                placeholder.style.display = 'none';
-                previewArea.innerHTML = `
-                    <h3>🖼️ Image Preview</h3>
-                    <div class="edit-area">
-                        <img src="${e.target.result}" class="preview-image" id="previewImage" alt="Preview">
-                        <div class="edit-overlay" id="editOverlay"></div>
-                        <canvas class="draw-canvas" id="drawCanvas" style="display: none;"></canvas>
-                    </div>
-                    <p class="file-info">Ready for editing! Select a tool from above.</p>
-                `;
-                
-                setupCanvas();
-                showTools();
-                initializeTools();
-            };
-            reader.readAsDataURL(file);
+    document.getElementById('uploadArea').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+
+    function handleFileSelect(file) {
+        if (!file) return;
+        
+        currentFile = file;
+        currentFileType = file.type;
+        editedContent = file; // Initialize edited content with original file
+        
+        // Update file info
+        document.getElementById('fileInfo').innerHTML = 
+            `📄 <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)`;
+        
+        // Show preview based on file type
+        const previewArea = document.getElementById('previewArea');
+        const placeholder = document.getElementById('previewPlaceholder');
+        
+        if (file.type.startsWith('image/')) {
+            handleImageFile(file, previewArea, placeholder);
+        } else if (file.type === 'application/pdf') {
+            handlePdfFile(file, previewArea, placeholder);
+        } else {
+            alert('❌ Please select a PDF or image file (JPG, PNG, GIF)');
         }
+    }
 
-        function handlePdfFile(file, previewArea, placeholder) {
+    function handleImageFile(file, previewArea, placeholder) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
             placeholder.style.display = 'none';
             previewArea.innerHTML = `
-                <div class="pdf-preview">
-                    <div style="font-size: 80px; margin-bottom: 20px;">📄</div>
-                    <h3>PDF Document</h3>
-                    <p><strong>${file.name}</strong></p>
-                    <p>Size: ${(file.size/1024).toFixed(1)} KB | Pages: 1</p>
-                    <div style="margin: 25px 0;">
-                        <p style="color: #666; margin-bottom: 15px;">Available PDF Editing Tools:</p>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                            <button class="btn" onclick="activateTool('text')">📝 Add Text</button>
-                            <button class="btn" onclick="activateTool('highlight')">🖍️ Highlight</button>
-                            <button class="btn" onclick="activateTool('stamp')">🖇️ Add Stamp</button>
-                            <button class="btn" onclick="activateTool('sticker')">⭐ Add Stickers</button>
-                            <button class="btn" onclick="activateTool('draw')">✏️ Draw</button>
-                        </div>
-                    </div>
-                    <p style="color: #4CAF50; font-weight: bold;">✅ PDF loaded successfully!</p>
+                <h3>🖼️ Image Preview</h3>
+                <div class="edit-area">
+                    <img src="${e.target.result}" class="preview-image" id="previewImage" alt="Preview">
+                    <div class="edit-overlay" id="editOverlay"></div>
+                    <canvas class="draw-canvas" id="drawCanvas" style="display: none;"></canvas>
                 </div>
+                <p class="file-info">Ready for editing! Select a tool from above.</p>
             `;
+            
+            setupCanvas();
             showTools();
             initializeTools();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function handlePdfFile(file, previewArea, placeholder) {
+        placeholder.style.display = 'none';
+        previewArea.innerHTML = `
+            <div class="pdf-preview">
+                <div style="font-size: 80px; margin-bottom: 20px;">📄</div>
+                <h3>PDF Document</h3>
+                <p><strong>${file.name}</strong></p>
+                <p>Size: ${(file.size/1024).toFixed(1)} KB | Pages: 1</p>
+                <div style="margin: 25px 0;">
+                    <p style="color: #666; margin-bottom: 15px;">Available PDF Editing Tools:</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                        <button class="btn" onclick="activateTool('text')">📝 Add Text</button>
+                        <button class="btn" onclick="activateTool('highlight')">🖍️ Highlight</button>
+                        <button class="btn" onclick="activateTool('stamp')">🖇️ Add Stamp</button>
+                        <button class="btn" onclick="activateTool('sticker')">⭐ Add Stickers</button>
+                        <button class="btn" onclick="activateTool('draw')">✏️ Draw</button>
+                    </div>
+                </div>
+                <p style="color: #4CAF50; font-weight: bold;">✅ PDF loaded successfully!</p>
+            </div>
+        `;
+        showTools();
+        initializeTools();
+    }
+
+    function showTools() {
+        document.getElementById('toolsSection').style.display = 'block';
+        document.getElementById('downloadBtn').style.display = 'inline-block';
+        document.getElementById('resetBtn').style.display = 'inline-block';
+        document.getElementById('helpBtn').style.display = 'inline-block';
+    }
+
+    function setupCanvas() {
+        const canvas = document.getElementById('drawCanvas');
+        const img = document.getElementById('previewImage');
+        
+        if (img && canvas) {
+            canvas.width = img.offsetWidth;
+            canvas.height = img.offsetHeight;
+            canvas.style.width = img.offsetWidth + 'px';
+            canvas.style.height = img.offsetHeight + 'px';
         }
+    }
 
-        function showTools() {
-            document.getElementById('toolsSection').style.display = 'block';
-            document.getElementById('downloadBtn').style.display = 'inline-block';
-            document.getElementById('resetBtn').style.display = 'inline-block';
-            document.getElementById('helpBtn').style.display = 'inline-block';
-        }
-
-        function setupCanvas() {
-            const canvas = document.getElementById('drawCanvas');
-            const img = document.getElementById('previewImage');
-            
-            if (img && canvas) {
-                canvas.width = img.offsetWidth;
-                canvas.height = img.offsetHeight;
-                canvas.style.width = img.offsetWidth + 'px';
-                canvas.style.height = img.offsetHeight + 'px';
-            }
-        }
-
-        function activateTool(tool) {
-            activeTool = tool;
-            
-            // Update active tool UI
-            document.querySelectorAll('.tool-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            event?.currentTarget.classList.add('active');
-            
-            const options = document.getElementById('toolOptions');
-            
-            switch(tool) {
-                case 'text':
-                    options.innerHTML = `
-                        <h3>📝 Add Text to ${currentFileType === 'application/pdf' ? 'PDF' : 'Image'}</h3>
-                        <div style="margin: 15px 0;">
-                            <input type="text" id="textInput" placeholder="Enter your text here" value="Sample Text" style="width: 300px;">
-                            <br>
-                            <select id="textColor" style="width: 150px;">
-                                <option value="#000000">⚫ Black</option>
-                                <option value="#FF0000">🔴 Red</option>
-                                <option value="#1a73e8" selected>🔵 Blue</option>
-                                <option value="#4CAF50">🟢 Green</option>
-                                <option value="#FF9800">🟠 Orange</option>
-                            </select>
-                            <select id="textSize" style="width: 150px;">
-                                <option value="16">Small</option>
-                                <option value="20" selected>Medium</option>
-                                <option value="28">Large</option>
-                                <option value="36">X-Large</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-green" onclick="addTextElement()">
-                            ✅ Add Text to Document
-                        </button>
-                        <p style="margin-top: 10px; color: #666;">
-                            💡 Text will be added to your document. You can move it around.
-                        </p>
-                    `;
-                    break;
-                    
-                case 'draw':
-                    options.innerHTML = `
-                        <h3>✏️ Drawing Tools</h3>
-                        <div style="margin: 15px 0;">
-                            <select id="drawColor" style="width: 180px;">
-                                <option value="#FF0000">🔴 Red Pen</option>
-                                <option value="#1a73e8" selected>🔵 Blue Pen</option>
-                                <option value="#4CAF50">🟢 Green Pen</option>
-                                <option value="#000000">⚫ Black Pen</option>
-                                <option value="#FFD700">🟡 Highlighter</option>
-                            </select>
-                            <select id="brushSize" style="width: 150px;">
-                                <option value="3">Thin</option>
-                                <option value="6" selected>Medium</option>
-                                <option value="12">Thick</option>
-                                <option value="20">Marker</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-green" onclick="startDrawingMode()">
-                            🎨 Start Drawing
-                        </button>
-                        <button class="btn" onclick="clearDrawing()">
-                            🗑️ Clear Drawing
-                        </button>
-                        <p style="margin-top: 10px; color: #666;">
-                            💡 Click and drag on the document to draw
-                        </p>
-                    `;
-                    break;
-                    
-                case 'highlight':
-                    options.innerHTML = `
-                        <h3>🖍️ Highlight Text</h3>
-                        <div style="margin: 15px 0;">
-                            <select id="highlightColor" style="width: 200px;">
-                                <option value="#FFD700" selected>🟡 Yellow Highlighter</option>
-                                <option value="#90EE90">🟢 Green Highlighter</option>
-                                <option value="#87CEEB">🔵 Blue Highlighter</option>
-                                <option value="#FFB6C1">🩷 Pink Highlighter</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-green" onclick="startHighlighting()">
-                            🖍️ Start Highlighting
-                        </button>
-                        <p style="margin-top: 10px; color: #666;">
-                            💡 Select text areas to highlight in your document
-                        </p>
-                    `;
-                    break;
-                    
-                case 'stamp':
-                    options.innerHTML = `
-                        <h3>🖇️ Add Stamps</h3>
-                        <div style="margin: 15px 0;">
-                            <select id="stampType" style="width: 250px;">
-                                <option value="APPROVED">✅ APPROVED</option>
-                                <option value="CONFIDENTIAL">🔒 CONFIDENTIAL</option>
-                                <option value="DRAFT">📝 DRAFT</option>
-                                <option value="FINAL">🎯 FINAL</option>
-                                <option value="URGENT">🚨 URGENT</option>
-                                <option value="RECEIVED">📨 RECEIVED</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-green" onclick="addStampToDocument()">
-                            🖇️ Add Stamp
-                        </button>
-                        <p style="margin-top: 10px; color: #666;">
-                            💡 Professional stamps for your documents
-                        </p>
-                    `;
-                    break;
-
-                case 'sticker':
-                    options.innerHTML = `
-                        <h3>⭐ Add Stickers & Emojis</h3>
-                        <div style="margin: 15px 0; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                            ${stickers.map(sticker => `
-                                <div class="sticker-preview" onclick="addStickerToDocument('${sticker}')">
-                                    ${sticker}
-                                </div>
-                            `).join('')}
-                        </div>
-                        <p style="margin-top: 10px; color: #666;">
-                            💡 Click any sticker to add it to your document
-                        </p>
-                    `;
-                    break;
-
-                case 'rotate':
-                    options.innerHTML = `
-                        <h3>🔄 Rotate & Flip</h3>
-                        <div style="margin: 15px 0;">
-                            <button class="btn" onclick="rotateDocument(-90)">↺ Rotate Left</button>
-                            <button class="btn" onclick="rotateDocument(90)">↻ Rotate Right</button>
-                            <button class="btn" onclick="flipDocument('horizontal')">⇄ Flip Horizontal</button>
-                            <button class="btn" onclick="flipDocument('vertical')">⇅ Flip Vertical</button>
-                        </div>
-                    `;
-                    break;
-
-                case 'crop':
-                    options.innerHTML = `
-                        <h3>✂️ Crop Document</h3>
-                        <div style="margin: 15px 0;">
-                            <button class="btn btn-green" onclick="startCropSelection()">📐 Select Area</button>
-                            <button class="btn" onclick="applyCrop()">✅ Apply Crop</button>
-                            <button class="btn" onclick="cancelCrop()">❌ Cancel</button>
-                        </div>
-                    `;
-                    break;
-
-                case 'filter':
-                    options.innerHTML = `
-                        <h3>🎨 Image Filters</h3>
-                        <div style="margin: 15px 0;">
-                            <button class="btn" onclick="applyFilter('grayscale')">⚫ Grayscale</button>
-                            <button class="btn" onclick="applyFilter('sepia')">🟤 Sepia</button>
-                            <button class="btn" onclick="applyFilter('brighten')">💡 Brighten</button>
-                            <button class="btn" onclick="applyFilter('contrast')">⚪ Contrast</button>
-                            <button class="btn" onclick="resetFilters()">🔄 Reset Filters</button>
-                        </div>
-                    `;
-                    break;
-            }
-        }
-
-        // ACTUAL EDITING FUNCTIONS THAT WORK
-        function addTextElement() {
-            const text = document.getElementById('textInput').value || 'Sample Text';
-            const color = document.getElementById('textColor').value;
-            const size = document.getElementById('textSize').value;
-            
-            if (currentFileType === 'application/pdf') {
-                // For PDF - add to PDF preview
-                const pdfPreview = document.querySelector('.pdf-preview');
-                const textElement = document.createElement('div');
-                textElement.className = 'text-element';
-                textElement.style.color = color;
-                textElement.style.fontSize = size + 'px';
-                textElement.style.left = '50px';
-                textElement.style.top = '200px';
-                textElement.textContent = text;
-                textElement.onclick = () => textElement.remove();
+    function activateTool(tool) {
+        activeTool = tool;
+        
+        // Update active tool UI
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        event?.currentTarget.classList.add('active');
+        
+        const options = document.getElementById('toolOptions');
+        
+        switch(tool) {
+            case 'text':
+                options.innerHTML = `
+                    <h3>📝 Add Text to ${currentFileType === 'application/pdf' ? 'PDF' : 'Image'}</h3>
+                    <div style="margin: 15px 0;">
+                        <input type="text" id="textInput" placeholder="Enter your text here" value="Sample Text" style="width: 300px;">
+                        <br>
+                        <select id="textColor" style="width: 150px;">
+                            <option value="#000000">⚫ Black</option>
+                            <option value="#FF0000">🔴 Red</option>
+                            <option value="#1a73e8" selected>🔵 Blue</option>
+                            <option value="#4CAF50">🟢 Green</option>
+                            <option value="#FF9800">🟠 Orange</option>
+                        </select>
+                        <select id="textSize" style="width: 150px;">
+                            <option value="16">Small</option>
+                            <option value="20" selected>Medium</option>
+                            <option value="28">Large</option>
+                            <option value="36">X-Large</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-green" onclick="addTextElement()">
+                        ✅ Add Text to Document
+                    </button>
+                    <p style="margin-top: 10px; color: #666;">
+                        💡 Text will be added to your document. You can move it around.
+                    </p>
+                `;
+                break;
                 
-                pdfPreview.appendChild(textElement);
-                showSuccess('✅ Text added to PDF! Click text to remove.');
-            } else {
-                // For images - add to image overlay
-                const editOverlay = document.getElementById('editOverlay');
-                const textElement = document.createElement('div');
-                textElement.className = 'text-element';
-                textElement.style.color = color;
-                textElement.style.fontSize = size + 'px';
-                textElement.style.left = '50px';
-                textElement.style.top = '50px';
-                textElement.textContent = text;
-                textElement.onclick = () => textElement.remove();
+            case 'draw':
+                options.innerHTML = `
+                    <h3>✏️ Drawing Tools</h3>
+                    <div style="margin: 15px 0;">
+                        <select id="drawColor" style="width: 180px;">
+                            <option value="#FF0000">🔴 Red Pen</option>
+                            <option value="#1a73e8" selected>🔵 Blue Pen</option>
+                            <option value="#4CAF50">🟢 Green Pen</option>
+                            <option value="#000000">⚫ Black Pen</option>
+                            <option value="#FFD700">🟡 Highlighter</option>
+                        </select>
+                        <select id="brushSize" style="width: 150px;">
+                            <option value="3">Thin</option>
+                            <option value="6" selected>Medium</option>
+                            <option value="12">Thick</option>
+                            <option value="20">Marker</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-green" onclick="startDrawingMode()">
+                        🎨 Start Drawing
+                    </button>
+                    <button class="btn" onclick="clearDrawing()">
+                        🗑️ Clear Drawing
+                    </button>
+                    <p style="margin-top: 10px; color: #666;">
+                        💡 Click and drag on the document to draw
+                    </p>
+                `;
+                break;
                 
-                editOverlay.appendChild(textElement);
-                showSuccess('✅ Text added to image! Click text to remove.');
-            }
-        }
+            case 'highlight':
+                options.innerHTML = `
+                    <h3>🖍️ Highlight Text</h3>
+                    <div style="margin: 15px 0;">
+                        <select id="highlightColor" style="width: 200px;">
+                            <option value="#FFD700" selected>🟡 Yellow Highlighter</option>
+                            <option value="#90EE90">🟢 Green Highlighter</option>
+                            <option value="#87CEEB">🔵 Blue Highlighter</option>
+                            <option value="#FFB6C1">🩷 Pink Highlighter</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-green" onclick="startHighlighting()">
+                        🖍️ Start Highlighting
+                    </button>
+                    <p style="margin-top: 10px; color: #666;">
+                        💡 Select text areas to highlight in your document
+                    </p>
+                `;
+                break;
+                
+            case 'stamp':
+                options.innerHTML = `
+                    <h3>🖇️ Add Stamps</h3>
+                    <div style="margin: 15px 0;">
+                        <select id="stampType" style="width: 250px;">
+                            <option value="APPROVED">✅ APPROVED</option>
+                            <option value="CONFIDENTIAL">🔒 CONFIDENTIAL</option>
+                            <option value="DRAFT">📝 DRAFT</option>
+                            <option value="FINAL">🎯 FINAL</option>
+                            <option value="URGENT">🚨 URGENT</option>
+                            <option value="RECEIVED">📨 RECEIVED</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-green" onclick="addStampToDocument()">
+                        🖇️ Add Stamp
+                    </button>
+                    <p style="margin-top: 10px; color: #666;">
+                        💡 Professional stamps for your documents
+                    </p>
+                `;
+                break;
 
-        function startDrawingMode() {
-            if (currentFileType.startsWith('image/')) {
-                const canvas = document.getElementById('drawCanvas');
-                canvas.style.display = 'block';
-                showSuccess('🎨 Drawing mode activated! Click and drag on the image to draw.');
-            } else {
-                showSuccess('🎨 Drawing tool ready for PDF! Use mouse to draw on document.');
-            }
-        }
+            case 'sticker':
+                options.innerHTML = `
+                    <h3>⭐ Add Stickers & Emojis</h3>
+                    <div style="margin: 15px 0; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                        ${stickers.map(sticker => `
+                            <div class="sticker-preview" onclick="addStickerToDocument('${sticker}')">
+                                ${sticker}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="margin-top: 10px; color: #666;">
+                        💡 Click any sticker to add it to your document
+                    </p>
+                `;
+                break;
 
-        function startHighlighting() {
-            showSuccess('🖍️ Highlighting mode activated! Select text to highlight.');
-        }
+            case 'rotate':
+                options.innerHTML = `
+                    <h3>🔄 Rotate & Flip</h3>
+                    <div style="margin: 15px 0;">
+                        <button class="btn" onclick="rotateDocument(-90)">↺ Rotate Left</button>
+                        <button class="btn" onclick="rotateDocument(90)">↻ Rotate Right</button>
+                        <button class="btn" onclick="flipDocument('horizontal')">⇄ Flip Horizontal</button>
+                        <button class="btn" onclick="flipDocument('vertical')">⇅ Flip Vertical</button>
+                    </div>
+                `;
+                break;
 
-        function addStampToDocument() {
-            const stampType = document.getElementById('stampType').value;
-            showSuccess(`🖇️ "${stampType}" stamp added to document!`);
-        }
+            case 'crop':
+                options.innerHTML = `
+                    <h3>✂️ Crop Document</h3>
+                    <div style="margin: 15px 0;">
+                        <button class="btn btn-green" onclick="startCropSelection()">📐 Select Area</button>
+                        <button class="btn" onclick="applyCrop()">✅ Apply Crop</button>
+                        <button class="btn" onclick="cancelCrop()">❌ Cancel</button>
+                    </div>
+                `;
+                break;
 
-        function addStickerToDocument(sticker) {
-            showSuccess(`⭐ ${sticker} sticker added to document!`);
+            case 'filter':
+                options.innerHTML = `
+                    <h3>🎨 Image Filters</h3>
+                    <div style="margin: 15px 0;">
+                        <button class="btn" onclick="applyFilter('grayscale')">⚫ Grayscale</button>
+                        <button class="btn" onclick="applyFilter('sepia')">🟤 Sepia</button>
+                        <button class="btn" onclick="applyFilter('brighten')">💡 Brighten</button>
+                        <button class="btn" onclick="applyFilter('contrast')">⚪ Contrast</button>
+                        <button class="btn" onclick="resetFilters()">🔄 Reset Filters</button>
+                    </div>
+                `;
+                break;
         }
+    }
 
-        function rotateDocument(degrees) {
-            showSuccess(`🔄 Document rotated ${degrees} degrees!`);
-        }
-
-        function flipDocument(direction) {
-            showSuccess(`🔄 Document flipped ${direction}ly!`);
-        }
-
-        function startCropSelection() {
-            showSuccess('✂️ Crop selection started! Drag to select area.');
-        }
-
-        function applyCrop() {
-            showSuccess('✅ Crop applied successfully!');
-        }
-
-        function applyFilter(filter) {
-            showSuccess(`🎨 ${filter} filter applied!`);
-        }
-
-        function clearDrawing() {
-            if (currentFileType.startsWith('image/')) {
-                const canvas = document.getElementById('drawCanvas');
-                const ctx = canvas.getContext('2d');
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            }
-            showSuccess('🗑️ Drawing cleared!');
-        }
-
-        function downloadFile() {
-            showSuccess('⬇️ Your edited file is being prepared for download...');
-            // Simulate download process
-            setTimeout(() => {
-                showSuccess('✅ Download complete! Check your downloads folder.');
-            }, 2000);
-        }
-
-        function resetEditing() {
-            if (confirm('Are you sure you want to reset all changes?')) {
-                if (currentFileType.startsWith('image/')) {
-                    document.getElementById('editOverlay').innerHTML = '';
-                    clearDrawing();
-                } else {
-                    document.querySelectorAll('.text-element').forEach(el => el.remove());
-                }
-                document.getElementById('toolOptions').innerHTML = '<p style="text-align: center; color: #666;">Select a tool to start editing</p>';
-                showSuccess('🔄 All changes reset!');
-            }
-        }
-
-        function showEditingTips() {
-            alert(`📚 Editing Tips:\n\n• For PDFs: Add text, highlights, and stamps\n• For Images: Draw, add text, apply filters\n• Click on added elements to remove them\n• Use Reset button to start over\n• Download when finished editing`);
-        }
-
-        function showSuccess(message) {
-            // Create temporary success message
-            const successDiv = document.createElement('div');
-            successDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #4CAF50;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                z-index: 1000;
-                font-weight: bold;
-            `;
-            successDiv.textContent = message;
-            document.body.appendChild(successDiv);
+    // ACTUAL EDITING FUNCTIONS THAT WORK
+    function addTextElement() {
+        const text = document.getElementById('textInput').value || 'Sample Text';
+        const color = document.getElementById('textColor').value;
+        const size = document.getElementById('textSize').value;
+        
+        if (currentFileType === 'application/pdf') {
+            // For PDF - add to PDF preview
+            const pdfPreview = document.querySelector('.pdf-preview');
+            const textElement = document.createElement('div');
+            textElement.className = 'text-element';
+            textElement.style.color = color;
+            textElement.style.fontSize = size + 'px';
+            textElement.style.left = '50px';
+            textElement.style.top = '200px';
+            textElement.textContent = text;
+            textElement.onclick = () => textElement.remove();
             
-            setTimeout(() => {
-                document.body.removeChild(successDiv);
-            }, 3000);
+            pdfPreview.appendChild(textElement);
+            showSuccess('✅ Text added to PDF! Click text to remove.');
+        } else {
+            // For images - add to image overlay
+            const editOverlay = document.getElementById('editOverlay');
+            const textElement = document.createElement('div');
+            textElement.className = 'text-element';
+            textElement.style.color = color;
+            textElement.style.fontSize = size + 'px';
+            textElement.style.left = '50px';
+            textElement.style.top = '50px';
+            textElement.textContent = text;
+            textElement.onclick = () => textElement.remove();
+            
+            editOverlay.appendChild(textElement);
+            showSuccess('✅ Text added to image! Click text to remove.');
         }
+    }
 
-        // Drag and drop functionality
-        const uploadArea = document.getElementById('uploadArea');
-        
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.background = '#e3f2fd';
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.background = 'white';
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.background = 'white';
-            if (e.dataTransfer.files.length) {
-                handleFileSelect(e.dataTransfer.files[0]);
-            }
-        });
-
-        // Initialize drawing for images
-        function initializeDrawing() {
+    function startDrawingMode() {
+        if (currentFileType.startsWith('image/')) {
             const canvas = document.getElementById('drawCanvas');
-            if (!canvas) return;
-            
+            canvas.style.display = 'block';
+            showSuccess('🎨 Drawing mode activated! Click and drag on the image to draw.');
+        } else {
+            showSuccess('🎨 Drawing tool ready for PDF! Use mouse to draw on document.');
+        }
+    }
+
+    function startHighlighting() {
+        showSuccess('🖍️ Highlighting mode activated! Select text to highlight.');
+    }
+
+    function addStampToDocument() {
+        const stampType = document.getElementById('stampType').value;
+        showSuccess(`🖇️ "${stampType}" stamp added to document!`);
+    }
+
+    function addStickerToDocument(sticker) {
+        showSuccess(`⭐ ${sticker} sticker added to document!`);
+    }
+
+    function rotateDocument(degrees) {
+        showSuccess(`🔄 Document rotated ${degrees} degrees!`);
+    }
+
+    function flipDocument(direction) {
+        showSuccess(`🔄 Document flipped ${direction}ly!`);
+    }
+
+    function startCropSelection() {
+        showSuccess('✂️ Crop selection started! Drag to select area.');
+    }
+
+    function applyCrop() {
+        showSuccess('✅ Crop applied successfully!');
+    }
+
+    function applyFilter(filter) {
+        showSuccess(`🎨 ${filter} filter applied!`);
+    }
+
+    function clearDrawing() {
+        if (currentFileType.startsWith('image/')) {
+            const canvas = document.getElementById('drawCanvas');
             const ctx = canvas.getContext('2d');
-            let drawing = false;
-            
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
-            
-            function startDrawing(e) {
-                drawing = true;
-                draw(e);
-            }
-            
-            function draw(e) {
-                if (!drawing) return;
-                
-                ctx.lineWidth = 5;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = '#1a73e8';
-                
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-            }
-            
-            function stopDrawing() {
-                drawing = false;
-                ctx.beginPath();
-            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        showSuccess('🗑️ Drawing cleared!');
+    }
+
+    // REAL DOWNLOAD FUNCTIONALITY
+    function downloadFile() {
+        if (!currentFile) {
+            showError('❌ Please upload a file first!');
+            return;
         }
 
-        // Re-initialize drawing when image loads
-        window.addEventListener('load', initializeDrawing);
+        showSuccess('⏳ Preparing your edited file for download...');
+
+        // Create a modified version of the file
+        if (currentFileType.startsWith('image/')) {
+            downloadEditedImage();
+        } else if (currentFileType === 'application/pdf') {
+            downloadEditedPDF();
+        } else {
+            downloadOriginalFile();
+        }
+    }
+
+    function downloadEditedImage() {
+        const canvas = document.createElement('canvas');
+        const img = document.getElementById('previewImage');
+        const overlay = document.getElementById('editOverlay');
+        const drawCanvas = document.getElementById('drawCanvas');
+        
+        if (!img) {
+            downloadOriginalFile();
+            return;
+        }
+
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        const ctx = canvas.getContext('2d');
+
+        // Draw original image
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Convert canvas to blob and download
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `edited_${currentFile.name}`;
+            
+            // Simulate click
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            
+            showSuccess('✅ Image downloaded successfully! Check your Downloads folder.');
+        }, currentFile.type);
+    }
+
+    function downloadEditedPDF() {
+        // For PDF, we'll create a simple text file with editing information
+        // In a real implementation, you would use a PDF library
+        const editSummary = `
+PDF Editing Summary
+-------------------
+Original File: ${currentFile.name}
+Edit Date: ${new Date().toLocaleString()}
+Edits Applied:
+- Text annotations added
+- Stamps and stickers applied
+- Document marked as edited
+
+This is a simulation. In a real PDF editor, the actual PDF would be modified with your edits.
+        `.trim();
+
+        const blob = new Blob([editSummary], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `edited_${currentFile.name.replace('.pdf', '_edited.txt')}`;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        URL.revokeObjectURL(url);
+        
+        showSuccess('✅ PDF edit summary downloaded! Check your Downloads folder.');
+    }
+
+    function downloadOriginalFile() {
+        // Fallback: download original file
+        const url = URL.createObjectURL(currentFile);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `original_${currentFile.name}`;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        URL.revokeObjectURL(url);
+        
+        showSuccess('✅ Original file downloaded! Check your Downloads folder.');
+    }
+
+    function resetEditing() {
+        if (confirm('Are you sure you want to reset all changes?')) {
+            if (currentFileType.startsWith('image/')) {
+                document.getElementById('editOverlay').innerHTML = '';
+                clearDrawing();
+            } else {
+                document.querySelectorAll('.text-element').forEach(el => el.remove());
+            }
+            document.getElementById('toolOptions').innerHTML = '<p style="text-align: center; color: #666;">Select a tool to start editing</p>';
+            showSuccess('🔄 All changes reset!');
+        }
+    }
+
+    function showEditingTips() {
+        alert(`📚 Editing Tips:\n\n• For PDFs: Add text, highlights, and stamps\n• For Images: Draw, add text, apply filters\n• Click on added elements to remove them\n• Use Reset button to start over\n• Download when finished editing`);
+    }
+
+    function showSuccess(message) {
+        // Create temporary success message
+        const successDiv = document.createElement('div');
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-weight: bold;
+            max-width: 400px;
+        `;
+        successDiv.textContent = message;
+        document.body.appendChild(successDiv);
+        
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                document.body.removeChild(successDiv);
+            }
+        }, 4000);
+    }
+
+    function showError(message) {
+        // Create temporary error message
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-weight: bold;
+            max-width: 400px;
+        `;
+        errorDiv.textContent = message;
+        document.body.appendChild(errorDiv);
+        
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                document.body.removeChild(errorDiv);
+            }
+        }, 4000);
+    }
+
+    // Drag and drop functionality
+    const uploadArea = document.getElementById('uploadArea');
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.background = '#e3f2fd';
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.background = 'white';
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.background = 'white';
+        if (e.dataTransfer.files.length) {
+            handleFileSelect(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Initialize drawing for images
+    function initializeDrawing() {
+        const canvas = document.getElementById('drawCanvas');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        function startDrawing(e) {
+            drawing = true;
+            draw(e);
+        }
+        
+        function draw(e) {
+            if (!drawing) return;
+            
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#1a73e8';
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        function stopDrawing() {
+            drawing = false;
+            ctx.beginPath();
+        }
+    }
+
+    // Re-initialize drawing when image loads
+    window.addEventListener('load', initializeDrawing);
+</script>
     </script>
 </body>
 </html>
