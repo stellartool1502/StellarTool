@@ -338,27 +338,42 @@
         document.getElementById('fileInput').click();
     });
 
-    function handleFileSelect(file) {
-        if (!file) return;
-        
-        currentFile = file;
-        currentFileType = file.type;
-        editedContent = file; // Initialize edited content with original file
-        
-        // Update file info
-        document.getElementById('fileInfo').innerHTML = 
-            `📄 <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)`;
-        
-        // Show preview based on file type
-        const previewArea = document.getElementById('previewArea');
-        const placeholder = document.getElementById('previewPlaceholder');
-        
-        if (file.type.startsWith('image/')) {
-            handleImageFile(file, previewArea, placeholder);
-        } else if (file.type === 'application/pdf') {
-            handlePdfFile(file, previewArea, placeholder);
-        } else {
-            alert('❌ Please select a PDF or image file (JPG, PNG, GIF)');
+   function handleFileSelect(file) {
+    console.log('handleFileSelect called with:', file.name);
+    if (!file) return;
+    
+    currentFile = file;
+    currentFileType = file.type;
+    
+    // Show file info
+    document.getElementById('fileInfo').textContent = 
+        `Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    
+    // Show preview
+    const previewArea = document.getElementById('previewArea');
+    previewArea.innerHTML = `<p>Loading ${file.type.startsWith('image/') ? 'image' : 'PDF'}...</p>`;
+    
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewArea.innerHTML = `
+                <img src="${e.target.result}" style="max-width: 100%; max-height: 400px;">
+                <p>✅ Image loaded successfully!</p>
+            `;
+            showTools();
+        };
+        reader.readAsDataURL(file);
+    } else if (file.type === 'application/pdf') {
+        previewArea.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="font-size: 60px;">📄</div>
+                <h3>${file.name}</h3>
+                <p>PDF File Ready for Editing</p>
+                <p>Size: ${(file.size/1024).toFixed(1)} KB</p>
+            </div>
+        `;
+        showTools();
+    
         }
     }
 
