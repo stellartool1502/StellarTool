@@ -11,20 +11,19 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Variables for consistent theming */
+        /* CSS Variables for new theme */
         :root {
-            --primary-blue: #1a73e8;
-            --primary-dark: #0d47a1;
-            --primary-light: #4285f4;
-            --accent-blue: #64b5f6;
-            --light-bg: #f8f9fa;
-            --dark-text: #202124;
-            --medium-text: #5f6368;
-            --light-text: #ffffff;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --border-radius: 12px;
-            --transition: all 0.3s ease;
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff00e6;
+            --dark-bg: #1a1a2e;
+            --card-bg: #2a2a4e;
+            --light-text: #e0e0ff;
+            --medium-text: #b0b0cc;
+            --accent-gradient: linear-gradient(45deg, #00f0ff, #ff00e6);
+            --card-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s ease-in-out;
         }
 
         /* Reset and Base Styles */
@@ -32,12 +31,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            color: var(--dark-text);
-            background-color: var(--light-bg);
+            color: var(--light-text);
+            background-color: var(--dark-bg);
             line-height: 1.6;
         }
 
@@ -60,7 +59,7 @@
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background-color: var(--primary-blue);
+            background: var(--accent-gradient);
             color: var(--light-text);
             border-radius: var(--border-radius);
             font-weight: 600;
@@ -68,28 +67,31 @@
             border: none;
             cursor: pointer;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
-            background-color: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
         .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--primary-blue);
-            color: var(--primary-blue);
+            background: transparent;
+            border: 2px solid var(--primary-neon);
+            color: var(--primary-neon);
         }
 
         .btn-outline:hover {
-            background-color: var(--primary-blue);
-            color: var(--light-text);
+            background: var(--primary-neon);
+            color: var(--dark-bg);
         }
 
         /* Header Styles */
         header {
-            background-color: var(--light-text);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 240, 255, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -105,11 +107,9 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary-blue);
-        }
-
-        .logo span {
-            color: var(--primary-dark);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         nav ul {
@@ -123,7 +123,8 @@
         }
 
         nav a:hover {
-            color: var(--primary-blue);
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
         .contact-info {
@@ -134,7 +135,7 @@
         }
 
         .contact-info i {
-            color: var(--primary-blue);
+            color: var(--primary-neon);
         }
 
         .mobile-menu-btn {
@@ -142,26 +143,44 @@
             background: none;
             border: none;
             font-size: 1.5rem;
-            color: var(--primary-blue);
+            color: var(--primary-neon);
             cursor: pointer;
         }
 
         /* Hero Section */
         .hero {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+            z-index: 0;
         }
 
         .hero-content {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 20px;
-            color: var(--dark-text);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 1s ease-out;
         }
 
         .hero p {
@@ -182,22 +201,28 @@
         }
 
         .tool-icon {
-            width: 60px;
-            height: 60px;
-            background-color: var(--light-text);
+            width: 70px;
+            height: 70px;
+            background: var(--card-bg);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: var(--card-shadow);
-            font-size: 1.5rem;
-            color: var(--primary-blue);
+            font-size: 1.8rem;
+            color: var(--primary-neon);
+            transition: var(--transition);
+        }
+
+        .tool-icon:hover {
+            transform: scale(1.1);
+            box-shadow: var(--hover-shadow);
         }
 
         /* Search Section */
         .search-section {
             padding: 40px 0;
-            background-color: var(--light-text);
+            background: var(--card-bg);
         }
 
         .search-container {
@@ -209,23 +234,25 @@
         .search-input {
             width: 100%;
             padding: 16px 20px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--primary-neon);
             border-radius: var(--border-radius);
             font-size: 1rem;
+            background: var(--dark-bg);
+            color: var(--light-text);
             transition: var(--transition);
         }
 
         .search-input:focus {
-            border-color: var(--primary-blue);
+            border-color: var(--secondary-neon);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+            box-shadow: 0 0 0 3px rgba(255, 0, 230, 0.2);
         }
 
         .search-btn {
             position: absolute;
             right: 5px;
             top: 5px;
-            background-color: var(--primary-blue);
+            background: var(--accent-gradient);
             color: var(--light-text);
             border: none;
             border-radius: var(--border-radius);
@@ -235,7 +262,7 @@
         }
 
         .search-btn:hover {
-            background-color: var(--primary-dark);
+            box-shadow: var(--hover-shadow);
         }
 
         /* Tools Sections */
@@ -249,9 +276,9 @@
         }
 
         .section-header h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
-            color: var(--dark-text);
+            color: var(--light-text);
         }
 
         .section-header p {
@@ -267,7 +294,7 @@
         }
 
         .tool-card {
-            background-color: var(--light-text);
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 25px;
             box-shadow: var(--card-shadow);
@@ -275,23 +302,25 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            border: 1px solid rgba(0, 240, 255, 0.1);
         }
 
         .tool-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--hover-shadow);
+            border-color: var(--primary-neon);
         }
 
         .tool-icon-small {
             width: 50px;
             height: 50px;
-            background-color: #e8f0fe;
+            background: rgba(0, 240, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
-            color: var(--primary-blue);
+            color: var(--primary-neon);
             font-size: 1.3rem;
         }
 
@@ -314,7 +343,7 @@
 
         /* Screen Recorder Styles */
         .screen-recorder-container {
-            background-color: var(--light-text);
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--card-shadow);
             padding: 25px;
@@ -324,14 +353,14 @@
         .preview-container {
             width: 100%;
             height: 400px;
-            background-color: #e8f0fe;
+            background: rgba(0, 240, 255, 0.05);
             border-radius: 8px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 2px dashed var(--accent-blue);
+            border: 2px dashed var(--primary-neon);
         }
 
         #video-preview {
@@ -342,7 +371,7 @@
 
         .preview-placeholder {
             text-align: center;
-            color: var(--primary-blue);
+            color: var(--primary-neon);
         }
 
         .preview-placeholder i {
@@ -372,41 +401,41 @@
         }
 
         .recorder-btn-primary {
-            background-color: var(--primary-blue);
+            background: var(--accent-gradient);
             color: var(--light-text);
         }
 
         .recorder-btn-primary:hover {
-            background-color: var(--primary-dark);
+            box-shadow: var(--hover-shadow);
         }
 
         .recorder-btn-secondary {
-            background-color: #e8f0fe;
-            color: var(--primary-blue);
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--primary-neon);
         }
 
         .recorder-btn-secondary:hover {
-            background-color: #d2e3fc;
+            background: rgba(0, 240, 255, 0.2);
         }
 
         .recorder-btn-danger {
-            background-color: #f44336;
+            background: #ff4d4d;
             color: var(--light-text);
         }
 
         .recorder-btn-danger:hover {
-            background-color: #d32f2f;
+            background: #e60000;
         }
 
         .recorder-btn:disabled {
-            background-color: #BDBDBD;
+            background: #4a4a6a;
             cursor: not-allowed;
         }
 
         .timer {
             font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary-blue);
+            color: var(--primary-neon);
             margin: 10px 0;
             text-align: center;
         }
@@ -420,29 +449,29 @@
         }
 
         .status.recording {
-            background-color: #FFEBEE;
-            color: #C62828;
+            background: rgba(255, 77, 77, 0.2);
+            color: #ff4d4d;
         }
 
         .status.paused {
-            background-color: #FFF8E1;
-            color: #FF8F00;
+            background: rgba(255, 143, 0, 0.2);
+            color: #ff8f00;
         }
 
         .status.idle {
-            background-color: #E8F5E9;
-            color: #2E7D32;
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--primary-neon);
         }
 
         .instructions {
-            background-color: #e8f0fe;
+            background: rgba(0, 240, 255, 0.05);
             padding: 20px;
             border-radius: 8px;
             margin-top: 30px;
         }
 
         .instructions h3 {
-            color: var(--primary-blue);
+            color: var(--primary-neon);
             margin-bottom: 15px;
         }
 
@@ -462,21 +491,21 @@
         #download-link {
             display: inline-block;
             padding: 12px 25px;
-            background-color: #4CAF50;
-            color: white;
+            background: var(--accent-gradient);
+            color: var(--light-text);
             text-decoration: none;
             border-radius: 5px;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: var(--transition);
         }
 
         #download-link:hover {
-            background-color: #388E3C;
+            box-shadow: var(--hover-shadow);
         }
 
         /* Footer */
         footer {
-            background-color: var(--dark-text);
+            background: #0f0f1a;
             color: var(--light-text);
             padding: 60px 0 30px;
         }
@@ -493,30 +522,30 @@
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 15px;
-            color: var(--light-text);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .footer-tagline {
-            color: #b0b0b0;
+            color: var(--medium-text);
             max-width: 300px;
         }
 
         .footer-links h3 {
             margin-bottom: 20px;
             font-size: 1.2rem;
-        }
-
-        .footer-links ul li {
-            margin-bottom: 10px;
+            color: var(--light-text);
         }
 
         .footer-links a {
-            color: #b0b0b0;
+            color: var(--medium-text);
             transition: var(--transition);
         }
 
         .footer-links a:hover {
-            color: var(--light-text);
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
         .footer-contact {
@@ -524,14 +553,14 @@
             align-items: center;
             gap: 10px;
             margin-top: 15px;
-            color: #b0b0b0;
+            color: var(--medium-text);
         }
 
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid #444;
-            color: #b0b0b0;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--medium-text);
             font-size: 0.9rem;
         }
 
@@ -543,12 +572,18 @@
         }
 
         .footer-bottom-links a {
-            color: #b0b0b0;
+            color: var(--medium-text);
             transition: var(--transition);
         }
 
         .footer-bottom-links a:hover {
-            color: var(--light-text);
+            color: var(--primary-neon);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive Design */
@@ -650,7 +685,7 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="#" class="logo">Stellar <span>Tools</span></a>
+                <a href="#" class="logo">Stellar Tools</a>
                 
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
@@ -713,7 +748,6 @@
         </div>
     </section>
 
-   
     <!-- Tools Sections -->
     <section id="tools" class="tools-section">
         <div class="container">
@@ -778,21 +812,19 @@
                     <h3>Background Remover</h3>
                     <p>Remove backgrounds from images automatically.</p>
                     <a href="background-remover.html" class="btn">Use Tool</a>
-               </div>
-              <div > 
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Document Tools Section -->
-    <section class="tools-section" style="background-color: #f5f7fa;">
+    <section class="tools-section" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
         <div class="container">
             <div class="section-header">
                 <h2>📄 Document Tools</h2>
                 <p>Manage, convert, and optimize your documents with ease</p>
             </div>
             <div class="tools-grid">
-                <!-- PDF Editor Tool Added Here -->
                 <div class="tool-card">
                     <div class="tool-icon-small">
                         <i class="fas fa-edit"></i>
@@ -801,8 +833,6 @@
                     <p>Edit PDF files and images - add text, draw, highlight, and more.</p>
                     <a href="pdf-editor.html" class="btn">Use Tool</a>
                 </div>
-                <!-- End of PDF Editor Tool -->
-                
                 <div class="tool-card">
                     <div class="tool-icon-small">
                         <i class="fas fa-file-pdf"></i>
@@ -916,7 +946,7 @@
     </section>
 
     <!-- Text Tools Section -->
-    <section class="tools-section" style="background-color: #f5f7fa;">
+    <section class="tools-section" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
         <div class="container">
             <div class="section-header">
                 <h2>🔤 Text Tools</h2>
@@ -1059,161 +1089,6 @@
                 }
             });
         });
-
-        // Screen Recorder Functionality
-        // DOM Elements
-        const startBtn = document.getElementById('start-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const resumeBtn = document.getElementById('resume-btn');
-        const stopBtn = document.getElementById('stop-btn');
-        const videoPreview = document.getElementById('video-preview');
-        const timerDisplay = document.getElementById('timer');
-        const statusDisplay = document.getElementById('status');
-        const downloadLink = document.getElementById('download-link');
-        const previewPlaceholder = document.querySelector('.preview-placeholder');
-
-        // Variables
-        let mediaRecorder;
-        let recordedChunks = [];
-        let timerInterval;
-        let seconds = 0;
-        let minutes = 0;
-        let hours = 0;
-        let isPaused = false;
-
-        // Timer function
-        function updateTimer() {
-            seconds++;
-            if (seconds >= 60) {
-                seconds = 0;
-                minutes++;
-                if (minutes >= 60) {
-                    minutes = 0;
-                    hours++;
-                }
-            }
-            
-            const formattedTime = 
-                String(hours).padStart(2, '0') + ':' + 
-                String(minutes).padStart(2, '0') + ':' + 
-                String(seconds).padStart(2, '0');
-            
-            timerDisplay.textContent = formattedTime;
-        }
-
-        // Start recording
-        async function startRecording() {
-            try {
-                // Request screen capture
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: true,
-                    audio: true
-                });
-                
-                // Setup media recorder
-                mediaRecorder = new MediaRecorder(stream, {
-                    mimeType: 'video/webm;codecs=vp9,opus'
-                });
-                
-                // Event handlers
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
-                };
-                
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    
-                    // Show video preview
-                    videoPreview.src = url;
-                    videoPreview.style.display = 'block';
-                    previewPlaceholder.style.display = 'none';
-                    
-                    // Setup download link
-                    downloadLink.href = url;
-                    downloadLink.download = `recording-${new Date().getTime()}.webm`;
-                    downloadLink.style.display = 'inline-block';
-                    
-                    // Stop all tracks
-                    stream.getTracks().forEach(track => track.stop());
-                };
-                
-                // Start recording
-                mediaRecorder.start();
-                timerInterval = setInterval(updateTimer, 1000);
-                
-                // Update UI
-                startBtn.disabled = true;
-                pauseBtn.disabled = false;
-                stopBtn.disabled = false;
-                statusDisplay.textContent = 'Recording...';
-                statusDisplay.className = 'status recording';
-                
-            } catch (error) {
-                console.error('Error starting recording:', error);
-                alert('Error starting recording. Please make sure to select a screen/window to record.');
-            }
-        }
-
-        // Pause recording
-        function pauseRecording() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                mediaRecorder.pause();
-                clearInterval(timerInterval);
-                isPaused = true;
-                
-                pauseBtn.disabled = true;
-                resumeBtn.disabled = false;
-                statusDisplay.textContent = 'Paused';
-                statusDisplay.className = 'status paused';
-            }
-        }
-
-        // Resume recording
-        function resumeRecording() {
-            if (mediaRecorder && mediaRecorder.state === 'paused') {
-                mediaRecorder.resume();
-                timerInterval = setInterval(updateTimer, 1000);
-                isPaused = false;
-                
-                pauseBtn.disabled = false;
-                resumeBtn.disabled = true;
-                statusDisplay.textContent = 'Recording...';
-                statusDisplay.className = 'status recording';
-            }
-        }
-
-        // Stop recording
-        function stopRecording() {
-            if (mediaRecorder) {
-                mediaRecorder.stop();
-                clearInterval(timerInterval);
-                
-                // Reset UI
-                startBtn.disabled = false;
-                pauseBtn.disabled = true;
-                resumeBtn.disabled = true;
-                stopBtn.disabled = true;
-                statusDisplay.textContent = 'Recording stopped';
-                statusDisplay.className = 'status idle';
-                
-                // Reset timer
-                seconds = 0;
-                minutes = 0;
-                hours = 0;
-                timerDisplay.textContent = '00:00:00';
-            }
-        }
-
-        // Event listeners for recorder buttons
-        if (startBtn) {
-            startBtn.addEventListener('click', startRecording);
-            pauseBtn.addEventListener('click', pauseRecording);
-            resumeBtn.addEventListener('click', resumeRecording);
-            stopBtn.addEventListener('click', stopRecording);
-        }
     </script>
 </body>
 </html>
