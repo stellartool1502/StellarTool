@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Case Converter</title>
+  <title>Text Case Converter - Stellar Tools</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f9fbff;
       color: #222;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -132,21 +131,23 @@
 
     function copyText() {
       let output = document.getElementById("output").textContent;
-      if (!output) return;
+      if (!output) {
+        alert("No text to copy!");
+        return;
+      }
       navigator.clipboard.writeText(output).then(() => {
+        alert("Output copied to clipboard!");
+      }).catch(() => {
+        // Fallback for older browsers
+        let textarea = document.createElement("textarea");
+        textarea.value = output;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
         alert("Output copied to clipboard!");
       });
     }
   </script>
-  <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
