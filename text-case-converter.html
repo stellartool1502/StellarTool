@@ -4,104 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Case Converter - Stellar Tools</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9fbff;
-      color: #222;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      padding: 20px;
-      max-width: 500px;
-      width: 95%;
-    }
-    h2 {
-      text-align: center;
-      color: #007BFF;
-      margin-bottom: 15px;
-    }
-    textarea {
-      width: 100%;
-      height: 120px;
-      border: 2px solid #007BFF;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 1rem;
-      resize: none;
-      margin-bottom: 15px;
-    }
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    button {
-      flex: 1;
-      min-width: 45%;
-      background: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .output {
-      border: 2px solid #007BFF;
-      border-radius: 8px;
-      padding: 10px;
-      min-height: 100px;
-      background: #f1f8ff;
-      font-size: 1rem;
-      white-space: pre-wrap;
-      margin-bottom: 10px;
-    }
-    @media (max-width: 480px) {
-      button {
-        min-width: 100%;
-      }
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <h2>Text Case Converter</h2>
-    <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+    <h2 class="text-2xl font-bold text-blue-600 text-center mb-4">Text Case Converter</h2>
     
-    <div class="buttons">
-      <button onclick="convertText('upper')">UPPERCASE</button>
-      <button onclick="convertText('lower')">lowercase</button>
-      <button onclick="convertText('title')">Title Case</button>
-      <button onclick="convertText('sentence')">Sentence case</button>
-      <button onclick="convertText('toggle')">Toggle Case</button>
-      <button onclick="clearText()">Clear</button>
+    <textarea
+      id="inputText"
+      class="w-full h-32 border-2 border-blue-500 rounded-lg p-3 text-base resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Type or paste your text here..."
+    ></textarea>
+    
+    <div class="grid grid-cols-2 gap-2 mb-4">
+      <button
+        onclick="convertText('upper')"
+        class="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+      >UPPERCASE</button>
+      <button
+        onclick="convertText('lower')"
+        class="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+      >lowercase</button>
+      <button
+        onclick="convertText('title')"
+        class="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+      >Title Case</button>
+      <button
+        onclick="convertText('sentence')"
+        class="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+      >Sentence case</button>
+      <button
+        onclick="convertText('toggle')"
+        class="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+      >Toggle Case</button>
+      <button
+        onclick="clearText()"
+        class="bg-gray-500 text-white rounded-lg py-2 px-4 hover:bg-gray-600 transition text-sm"
+      >Clear</button>
     </div>
     
-    <div id="output" class="output"></div>
+    <div
+      id="output"
+      class="border-2 border-blue-500 rounded-lg p-3 min-h-[100px] bg-blue-50 text-base whitespace-pre-wrap mb-4"
+    ></div>
     
-    <button onclick="copyText()">Copy Output</button>
+    <button
+      onclick="copyText()"
+      class="w-full bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
+    >Copy Output</button>
   </div>
 
   <script>
     function convertText(type) {
-      let text = document.getElementById("inputText").value;
+      const text = document.getElementById("inputText").value;
       let result = "";
 
-      switch(type) {
+      switch (type) {
         case 'upper':
           result = text.toUpperCase();
           break;
@@ -129,24 +87,19 @@
       document.getElementById("output").textContent = "";
     }
 
-    function copyText() {
-      let output = document.getElementById("output").textContent;
+    async function copyText() {
+      const output = document.getElementById("output").textContent;
       if (!output) {
         alert("No text to copy!");
         return;
       }
-      navigator.clipboard.writeText(output).then(() => {
+      try {
+        await navigator.clipboard.writeText(output);
         alert("Output copied to clipboard!");
-      }).catch(() => {
-        // Fallback for older browsers
-        let textarea = document.createElement("textarea");
-        textarea.value = output;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-        alert("Output copied to clipboard!");
-      });
+      } catch (err) {
+        console.error('Copy failed:', err);
+        alert("Failed to copy text. Please try again.");
+      }
     }
   </script>
 </body>
