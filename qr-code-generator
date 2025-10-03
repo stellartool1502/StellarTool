@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        #qrCanvas {
+            border: 1px solid #ccc;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        #status {
+            margin-top: 10px;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+            input[type="text"] {
+                width: 95%;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator Tool</h1>
+        
+        <input type="text" id="qrInput" placeholder="Enter URL or text (e.g., https://example.com)" value="https://example.com">
+        <br>
+        <button id="generateBtn">Generate QR Code</button>
+        <br>
+        <canvas id="qrCanvas" width="256" height="256" style="display: none;"></canvas>
+        <br>
+        <button id="downloadBtn" disabled>Download QR Code (PNG)</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const qrInput = document.getElementById("qrInput");
+        const generateBtn = document.getElementById("generateBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const qrCanvas = document.getElementById("qrCanvas");
+        const statusEl = document.getElementById("status");
+
+        let qrCodeInstance; // To clear previous QR
+
+        // Generate QR Code
+        generateBtn.addEventListener("click", () => {
+            const text = qrInput.value.trim();
+            if (!text) {
+                alert("Please enter a URL or text.");
+                return;
+            }
+
+            statusEl.textContent = "Generating QR Code...";
+            try {
+                // Clear previous QR
+                if (qrCodeInstance) {
+                    qrCodeInstance.clear();
+                }
+
+                // Create QR on canvas
+                qrCodeInstance = new QRCode(qrCanvas, {
+                    text: text,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H // High error correction
+                });
+
+                qrCanvas.style.display = "block";
+                downloadBtn.disabled = false;
+                statusEl.textContent = "QR Code generated! Scan to visit: " + text;
+            } catch (err) {
+                statusEl.textContent = "Error generating QR: " + err.message;
+                console.error("QR Error:", err);
+            }
+        });
+
+        // Download QR as PNG
+        downloadBtn.addEventListener("click", () => {
+            if (!qrCanvas.style.display || qrCanvas.style.display === "none") {
+                alert("Generate a QR code first.");
+                return;
+            }
+
+            try {
+                const link = document.createElement("a");
+                link.download = "qr-code.png";
+                link.href = qrCanvas.toDataURL("image/png");
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                statusEl.textContent = "QR Code downloaded as PNG!";
+            } catch (err) {
+                statusEl.textContent = "Error downloading: " + err.message;
+                console.error("Download Error:", err);
+            }
+        });
+
+        // Allow Enter key to generate
+        qrInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                generateBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
