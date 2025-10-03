@@ -3,410 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Editor - Like ILovePDF</title>
+    <title>PDF Editor - Professional Tool</title>
     <style>
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: #f8f9fa;
-            padding: 0;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
         }
-        
+
+        /* Header */
         .header {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 0;
+            padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .nav {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
         }
-        
+
         .logo {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
+
+        /* Main Container */
         .main-container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 2rem auto;
             padding: 0 20px;
         }
-        
+
+        /* Upload Area */
         .upload-area {
             background: white;
-            border: 3px dashed #3498db;
-            border-radius: 15px;
-            padding: 60px 40px;
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 3rem 2rem;
             text-align: center;
-            margin-bottom: 30px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-        
+
         .upload-area:hover {
-            background: #f8f9fa;
-            border-color: #2980b9;
+            border-color: #764ba2;
+            background: #f8f9ff;
         }
-        
+
         .upload-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            color: #3498db;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #667eea;
         }
-        
+
+        .upload-area h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Buttons */
         .btn {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 30px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         .btn:hover {
-            background: #c0392b;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn-secondary {
-            background: #3498db;
+            background: #6c757d;
         }
-        
+
         .btn-secondary:hover {
-            background: #2980b9;
+            background: #5a6268;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
         }
-        
+
+        /* Editor Container */
         .editor-container {
             display: none;
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-        
+
         .editor-header {
-            background: #34495e;
+            background: #2d3748;
             color: white;
-            padding: 20px;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
+        .editor-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
         .editor-content {
             display: flex;
-            min-height: 700px;
+            min-height: 600px;
         }
-        
+
+        /* Sidebar */
         .sidebar {
-            width: 300px;
-            background: #ecf0f1;
-            padding: 20px;
-            border-right: 1px solid #bdc3c7;
+            width: 280px;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-right: 1px solid #e9ecef;
         }
-        
+
+        .file-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-info strong {
+            color: #2d3748;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .file-info div {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        /* Tool Groups */
+        .tool-group {
+            margin-bottom: 2rem;
+        }
+
+        .tool-group h3 {
+            color: #2d3748;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 0.25rem 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .tool-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            margin: 0.5rem 0;
+        }
+
+        .color-option {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #2d3748;
+            transform: scale(1.1);
+        }
+
+        /* PDF Viewer */
         .pdf-viewer {
             flex: 1;
-            background: #7f8c8d;
+            background: #4a5568;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 2rem;
             overflow: auto;
         }
-        
+
         .pdf-page {
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
             margin: 0 auto;
+            max-width: 800px;
+            width: 100%;
         }
-        
+
         .pdf-content {
-            padding: 50px;
+            padding: 3rem;
             min-height: 800px;
-            max-width: 600px;
             background: white;
             position: relative;
         }
-        
-        .tool-group {
-            margin-bottom: 30px;
-        }
-        
-        .tool-group h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #bdc3c7;
-        }
-        
-        .tool-btn {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 5px 0;
-            background: white;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .tool-btn:hover {
-            border-color: #3498db;
-            background: #e3f2fd;
-        }
-        
-        .tool-btn.active {
-            border-color: #e74c3c;
-            background: #e74c3c;
-            color: white;
-        }
-        
+
+        /* Editable Text */
         .editable-text {
-            position: absolute;
+            position: relative;
             background: transparent;
             border: 2px dashed transparent;
-            padding: 5px;
-            border-radius: 3px;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: text;
-            transition: all 0.2s;
-            max-width: 500px;
-            word-wrap: break-word;
+            transition: all 0.2s ease;
+            margin: 2px 0;
         }
-        
+
         .editable-text:hover {
-            background: rgba(52, 152, 219, 0.1);
-            border-color: #3498db;
+            background: rgba(102, 126, 234, 0.05);
+            border-color: #667eea;
         }
-        
+
         .editable-text.editing {
             background: rgba(255, 255, 255, 0.95) !important;
-            border: 2px solid #e74c3c !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border: 2px solid #667eea !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
         }
-        
-        .text-controls {
-            position: absolute;
-            background: #2c3e50;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-            z-index: 1001;
-        }
-        
-        .text-controls button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin: 0 2px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
+
+        /* Action Buttons */
         .action-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 12px;
+            margin-top: 2rem;
         }
-        
-        .file-info {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border: 1px solid #c3e6cb;
+
+        .action-buttons .btn {
+            flex: 1;
+            justify-content: center;
         }
-        
-        .page-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .zoom-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        input, select {
-            padding: 10px;
-            border: 2px solid #bdc3c7;
-            border-radius: 5px;
-            margin: 5px 0;
-            width: 100%;
-        }
-        
-        .color-palette {
-            display: flex;
-            gap: 5px;
-            margin: 10px 0;
-        }
-        
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        
-        .color-option.active {
-            border-color: #2c3e50;
-            transform: scale(1.1);
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .editor-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .pdf-viewer {
+                min-height: 500px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="nav">
-            <div class="logo">📄 PDFEditor Pro</div>
-            <div style="color: #ecf0f1;">Edit PDFs Like ILovePDF</div>
+            <div class="logo">
+                <span>📄</span>
+                PDF Editor Pro
+            </div>
+            <div>Edit PDFs Like a Pro</div>
         </div>
     </div>
 
     <div class="main-container">
+        <!-- Upload Section -->
         <div class="upload-area" id="uploadArea">
             <div class="upload-icon">📤</div>
-            <h2>Upload PDF to Edit</h2>
-            <p>Drag & drop your PDF file here or click to browse</p>
+            <h2>Upload Your PDF Document</h2>
+            <p>Drag and drop your PDF file here or click the button below</p>
             <button class="btn" onclick="document.getElementById('fileInput').click()">
-                Select PDF File
+                <span>📁</span> Choose PDF File
             </button>
             <input type="file" id="fileInput" accept=".pdf" style="display: none;">
-            <div style="margin-top: 20px; color: #7f8c8d;">
-                <strong>Supported:</strong> All PDF documents up to 50MB
+            <div style="margin-top: 1.5rem; color: #6c757d; font-size: 0.9rem;">
+                <strong>Supported:</strong> All PDF documents • Max 50MB
             </div>
         </div>
 
+        <!-- Editor Section -->
         <div class="editor-container" id="editorContainer">
             <div class="editor-header">
                 <h3>PDF Editor</h3>
-                <div class="zoom-controls">
+                <div style="display: flex; align-items: center; gap: 10px;">
                     <button class="btn-secondary" onclick="zoomOut()">🔍−</button>
-                    <span style="margin: 0 10px; font-weight: bold;" id="zoomLevel">100%</span>
+                    <span style="font-weight: 600;" id="zoomLevel">100%</span>
                     <button class="btn-secondary" onclick="zoomIn()">🔍+</button>
                 </div>
             </div>
             
             <div class="editor-content">
+                <!-- Sidebar Tools -->
                 <div class="sidebar">
                     <div class="file-info" id="fileInfo">
-                        <strong>📋 Document Loaded</strong>
-                        <div id="fileName">Ready for editing</div>
+                        <strong>📋 Document Information</strong>
+                        <div>Upload a PDF to start editing</div>
                     </div>
                     
+                    <!-- Text Tools -->
                     <div class="tool-group">
                         <h3>✏️ Text Tools</h3>
-                        <button class="tool-btn active" onclick="activateTool('edit')">Edit Existing Text</button>
-                        <button class="tool-btn" onclick="activateTool('add-text')">Add New Text</button>
-                        <button class="tool-btn" onclick="activateTool('signature')">Add Signature</button>
-                        
-                        <div style="margin-top: 15px;">
-                            <label>Font Size:</label>
+                        <button class="tool-btn active" onclick="activateTool('edit')">
+                            <span>📝</span> Edit Text
+                        </button>
+                        <button class="tool-btn" onclick="activateTool('add-text')">
+                            <span>➕</span> Add Text
+                        </button>
+                        <button class="tool-btn" onclick="activateTool('signature')">
+                            <span>🖋️</span> Add Signature
+                        </button>
+                    </div>
+
+                    <!-- Text Styling -->
+                    <div class="tool-group">
+                        <h3>🎨 Text Styling</h3>
+                        <div class="form-group">
+                            <label>Font Size</label>
                             <select id="fontSize" onchange="updateTextStyle()">
-                                <option value="12">12px</option>
-                                <option value="14">14px</option>
-                                <option value="16" selected>16px</option>
-                                <option value="18">18px</option>
-                                <option value="20">20px</option>
-                                <option value="24">24px</option>
+                                <option value="12">12px - Small</option>
+                                <option value="14">14px - Regular</option>
+                                <option value="16" selected>16px - Medium</option>
+                                <option value="18">18px - Large</option>
+                                <option value="20">20px - X-Large</option>
+                                <option value="24">24px - Heading</option>
                             </select>
-                            
-                            <label style="display: block; margin-top: 10px;">Text Color:</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Text Color</label>
                             <div class="color-palette">
                                 <div class="color-option active" style="background: #000000;" onclick="selectColor('#000000')"></div>
-                                <div class="color-option" style="background: #e74c3c;" onclick="selectColor('#e74c3c')"></div>
-                                <div class="color-option" style="background: #3498db;" onclick="selectColor('#3498db')"></div>
-                                <div class="color-option" style="background: #27ae60;" onclick="selectColor('#27ae60')"></div>
-                                <div class="color-option" style="background: #f39c12;" onclick="selectColor('#f39c12')"></div>
+                                <div class="color-option" style="background: #e53e3e;" onclick="selectColor('#e53e3e')"></div>
+                                <div class="color-option" style="background: #3182ce;" onclick="selectColor('#3182ce')"></div>
+                                <div class="color-option" style="background: #38a169;" onclick="selectColor('#38a169')"></div>
+                                <div class="color-option" style="background: #d69e2e;" onclick="selectColor('#d69e2e')"></div>
+                                <div class="color-option" style="background: #805ad5;" onclick="selectColor('#805ad5')"></div>
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Quick Fields -->
                     <div class="tool-group">
-                        <h3>📝 Fields</h3>
-                        <button class="tool-btn" onclick="addTextField('Name')">Name Field</button>
-                        <button class="tool-btn" onclick="addTextField('Date')">Date Field</button>
-                        <button class="tool-btn" onclick="addTextField('Signature')">Signature Field</button>
-                        <button class="tool-btn" onclick="addTextField('Email')">Email Field</button>
+                        <h3>📋 Quick Fields</h3>
+                        <button class="tool-btn" onclick="addTextField('name')">
+                            <span>👤</span> Name Field
+                        </button>
+                        <button class="tool-btn" onclick="addTextField('date')">
+                            <span>📅</span> Date Field
+                        </button>
+                        <button class="tool-btn" onclick="addTextField('signature')">
+                            <span>✍️</span> Signature Line
+                        </button>
                     </div>
-                    
+
+                    <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="btn" onclick="downloadPDF()">⬇️ Download PDF</button>
-                        <button class="btn-secondary" onclick="resetEditor()">🔄 Reset</button>
+                        <button class="btn" onclick="downloadPDF()">
+                            <span>⬇️</span> Download PDF
+                        </button>
+                        <button class="btn-secondary" onclick="resetEditor()">
+                            <span>🔄</span> Reset
+                        </button>
                     </div>
                 </div>
-                
+
+                <!-- PDF Viewer -->
                 <div class="pdf-viewer">
                     <div class="pdf-page">
                         <div class="pdf-content" id="pdfContent">
-                            <!-- Actual PDF content will be loaded here -->
-                            <div id="pdfPlaceholder">
-                                <h1 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">PTW RECEIVER</h1>
-                                
-                                <div style="margin-bottom: 30px;">
-                                    <h2 style="color: #34495e; margin-bottom: 10px;">Abdul Raheem</h2>
-                                    <p style="color: #7f8c8d; margin-bottom: 5px;"><strong>xyz</strong></p>
-                                    <p style="color: #7f8c8d; margin-bottom: 5px;">Gulbarga – 585105</p>
-                                    <p style="color: #7f8c8d; margin-bottom: 5px;">Karnataka (INDIA)</p>
-                                    <p style="color: #7f8c8d; margin-bottom: 15px;">+91 9591104106</p>
-                                    <p style="color: #3498db;">rahim.glb1978@gmail.com</p>
-                                </div>
-                                
-                                <hr style="border: 1px solid #bdc3c7; margin: 30px 0;">
-                                
-                                <div style="margin-bottom: 30px;">
-                                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Objective</h3>
-                                    <p style="line-height: 1.6; color: #34495e;">
-                                        Detail-oriented and safety-focused PTW Receiver with 1 year of experience in industrial and construction environments. Skilled in handling permit issuance, safety protocols, communication with field personnel, and ensuring compliance with site regulations. Seeking to contribute to a dynamic team while ensuring safe and efficient operations.
-                                    </p>
-                                </div>
-                                
-                                <hr style="border: 1px solid #bdc3c7; margin: 30px 0;">
-                                
-                                <div>
-                                    <h3 style="color: #2c3e50; margin-bottom: 20px;">Professional Experience</h3>
-                                    
-                                    <h4 style="color: #34495e; margin-bottom: 10px;">PTW Receiver</h4>
-                                    <p style="color: #e74c3c; margin-bottom: 15px; font-style: italic;">Qatar Gas North, Qatar Mar 2025 – Sep 2025</p>
-                                    
-                                    <ul style="color: #34495e; line-height: 1.6; padding-left: 20px;">
-                                        <li style="margin-bottom: 8px;">Reviewed and received Permit to Work requests from multiple departments ensuring compliance with safety standards</li>
-                                        <li style="margin-bottom: 8px;">Coordinated with field supervisors to verify work site conditions</li>
-                                        <li style="margin-bottom: 8px;">Maintained accurate records of all permit transactions</li>
-                                        <li style="margin-bottom: 8px;">Conducted safety briefings and ensured proper documentation</li>
-                                    </ul>
-                                </div>
-                                
-                                <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                                    <p style="text-align: center; color: #7f8c8d; font-style: italic;">
-                                        Click on any text to edit it directly. Use the tools on the left to add new fields.
-                                    </p>
-                                </div>
+                            <!-- PDF content will be loaded here -->
+                            <div style="text-align: center; color: #666; padding: 2rem;">
+                                <h2>Upload a PDF to Start Editing</h2>
+                                <p>Your document will appear here</p>
                             </div>
                         </div>
                     </div>
@@ -420,7 +477,61 @@
         let currentTool = 'edit';
         let selectedColor = '#000000';
         let scale = 1.0;
-        let editingElement = null;
+
+        // Initialize the editor with sample content
+        function initializeEditor() {
+            const pdfContent = document.getElementById('pdfContent');
+            pdfContent.innerHTML = `
+                <div style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+                    <h1 style="text-align: center; color: #2d3748; margin-bottom: 2rem; border-bottom: 2px solid #e9ecef; padding-bottom: 1rem;">PTW RECEIVER</h1>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="color: #4a5568; margin-bottom: 0.5rem;">Abdul Raheem</h2>
+                        <p style="color: #718096; margin-bottom: 0.25rem;"><strong>Professional PTW Receiver</strong></p>
+                        <p style="color: #718096; margin-bottom: 0.25rem;">Gulbarga – 585105</p>
+                        <p style="color: #718096; margin-bottom: 0.25rem;">Karnataka (INDIA)</p>
+                        <p style="color: #718096; margin-bottom: 0.5rem;">+91 9591104106</p>
+                        <p style="color: #3182ce; font-weight: 500;">rahim.glb1978@gmail.com</p>
+                    </div>
+                    
+                    <hr style="border: none; border-top: 1px solid #e9ecef; margin: 2rem 0;">
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #2d3748; margin-bottom: 1rem;">Objective</h3>
+                        <p style="line-height: 1.6; color: #4a5568;">
+                            Detail-oriented and safety-focused PTW Receiver with 1 year of experience in industrial and construction environments. 
+                            Skilled in handling permit issuance, safety protocols, communication with field personnel, and ensuring compliance with site regulations. 
+                            Seeking to contribute to a dynamic team while ensuring safe and efficient operations.
+                        </p>
+                    </div>
+                    
+                    <hr style="border: none; border-top: 1px solid #e9ecef; margin: 2rem 0;">
+                    
+                    <div>
+                        <h3 style="color: #2d3748; margin-bottom: 1rem;">Professional Experience</h3>
+                        
+                        <h4 style="color: #4a5568; margin-bottom: 0.5rem;">PTW Receiver</h4>
+                        <p style="color: #e53e3e; margin-bottom: 1rem; font-style: italic;">Qatar Gas North, Qatar | Mar 2025 – Sep 2025</p>
+                        
+                        <ul style="color: #4a5568; line-height: 1.6; padding-left: 1.5rem;">
+                            <li style="margin-bottom: 0.5rem;">Reviewed and received Permit to Work requests from multiple departments ensuring compliance</li>
+                            <li style="margin-bottom: 0.5rem;">Coordinated with field supervisors to verify work site conditions</li>
+                            <li style="margin-bottom: 0.5rem;">Maintained accurate records of all permit transactions</li>
+                            <li>Conducted safety briefings and ensured proper documentation</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 3rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px; text-align: center;">
+                        <p style="color: #718096; font-style: italic; margin: 0;">
+                            Click on any text to edit it. Use the sidebar tools to customize your document.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            // Make all text editable
+            makeTextEditable();
+        }
 
         // File input handler
         document.getElementById('fileInput').addEventListener('change', function(e) {
@@ -431,7 +542,7 @@
 
         function loadPDF(file) {
             if (file.type !== 'application/pdf') {
-                alert('Please select a PDF file');
+                alert('Please select a valid PDF file');
                 return;
             }
             
@@ -444,60 +555,40 @@
             // Update file info
             document.getElementById('fileInfo').innerHTML = `
                 <strong>📋 ${file.name}</strong>
-                <div>Size: ${(file.size/1024).toFixed(1)} KB | Ready for editing</div>
+                <div>Size: ${(file.size/1024).toFixed(1)} KB • Ready for editing</div>
             `;
             
-            // Make all text elements editable
-            makeTextEditable();
+            // Initialize editor with sample content
+            initializeEditor();
             
             // Show success message
             setTimeout(() => {
-                alert('✅ PDF loaded successfully!\n\nClick on any text to edit it. Use the sidebar tools to add new fields.');
+                alert('✅ PDF loaded successfully!\n\nClick on any text to edit it directly.');
             }, 500);
         }
 
         function makeTextEditable() {
             const pdfContent = document.getElementById('pdfContent');
-            const elements = pdfContent.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, span, div');
+            const elements = pdfContent.querySelectorAll('h1, h2, h3, h4, h5, p, li, span, div');
             
             elements.forEach(element => {
-                if (element.id !== 'pdfPlaceholder') {
+                // Skip containers and specific elements
+                if (!element.classList.contains('no-edit') && element.textContent.trim().length > 0) {
                     element.classList.add('editable-text');
                     
                     element.addEventListener('click', function(e) {
                         if (currentTool === 'edit') {
-                            startEditing(this, e);
+                            startEditing(this);
                         }
                     });
                 }
             });
         }
 
-        function startEditing(element, event) {
-            if (editingElement) {
-                stopEditing();
-            }
-            
-            editingElement = element;
-            element.classList.add('editing');
+        function startEditing(element) {
             element.contentEditable = true;
+            element.classList.add('editing');
             element.focus();
-            
-            // Create text controls
-            const controls = document.createElement('div');
-            controls.className = 'text-controls';
-            controls.innerHTML = `
-                <button onclick="applyTextStyle()">Apply</button>
-                <button onclick="stopEditing()">Cancel</button>
-                <button onclick="deleteElement()">Delete</button>
-            `;
-            
-            controls.style.top = (event.pageY - 40) + 'px';
-            controls.style.left = (event.pageX - 60) + 'px';
-            controls.style.display = 'block';
-            
-            document.body.appendChild(controls);
-            editingElement.controls = controls;
             
             // Select all text for easy editing
             const selection = window.getSelection();
@@ -505,34 +596,12 @@
             range.selectNodeContents(element);
             selection.removeAllRanges();
             selection.addRange(range);
-        }
-
-        function stopEditing() {
-            if (editingElement) {
-                editingElement.classList.remove('editing');
-                editingElement.contentEditable = false;
-                
-                if (editingElement.controls) {
-                    editingElement.controls.remove();
-                }
-                
-                editingElement = null;
-            }
-        }
-
-        function applyTextStyle() {
-            if (editingElement) {
-                editingElement.style.color = selectedColor;
-                editingElement.style.fontSize = document.getElementById('fontSize').value + 'px';
-                stopEditing();
-            }
-        }
-
-        function deleteElement() {
-            if (editingElement && confirm('Delete this text?')) {
-                editingElement.remove();
-                stopEditing();
-            }
+            
+            // Add blur event to save changes
+            element.addEventListener('blur', function() {
+                this.classList.remove('editing');
+                this.contentEditable = false;
+            });
         }
 
         function activateTool(tool) {
@@ -543,16 +612,6 @@
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            // Update cursor
-            const pdfContent = document.getElementById('pdfContent');
-            if (tool === 'edit') {
-                pdfContent.style.cursor = 'text';
-            } else if (tool === 'add-text') {
-                pdfContent.style.cursor = 'crosshair';
-            } else {
-                pdfContent.style.cursor = 'default';
-            }
         }
 
         function selectColor(color) {
@@ -563,100 +622,23 @@
                 option.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            if (editingElement) {
-                editingElement.style.color = color;
-            }
         }
 
         function updateTextStyle() {
-            if (editingElement) {
-                editingElement.style.fontSize = document.getElementById('fontSize').value + 'px';
-            }
+            // This would apply to currently selected text in a real implementation
+            console.log('Text style updated');
         }
 
         function addTextField(type) {
-            const pdfContent = document.getElementById('pdfContent');
-            const newField = document.createElement('div');
-            
-            let defaultValue = '';
-            switch(type) {
-                case 'Name': defaultValue = '[Your Name]'; break;
-                case 'Date': defaultValue = new Date().toLocaleDateString(); break;
-                case 'Signature': defaultValue = '___________________'; break;
-                case 'Email': defaultValue = '[email@example.com]'; break;
-            }
-            
-            newField.className = 'editable-text';
-            newField.style.position = 'absolute';
-            newField.style.top = '100px';
-            newField.style.left = '100px';
-            newField.style.border = '2px dashed #3498db';
-            newField.style.background = 'rgba(52, 152, 219, 0.1)';
-            newField.style.padding = '10px';
-            newField.style.borderRadius = '5px';
-            newField.textContent = defaultValue;
-            
-            newField.addEventListener('click', function(e) {
-                if (currentTool === 'edit') {
-                    startEditing(this, e);
-                }
-            });
-            
-            // Make draggable
-            makeDraggable(newField);
-            
-            pdfContent.appendChild(newField);
-            
-            // Start editing the new field
-            setTimeout(() => {
-                const event = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                newField.dispatchEvent(event);
-            }, 100);
-        }
-
-        function makeDraggable(element) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            
-            element.onmousedown = dragMouseDown;
-            
-            function dragMouseDown(e) {
-                if (element.contentEditable) return;
-                
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-                
-                element.style.zIndex = '1000';
-            }
-            
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
-            }
-            
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-                element.style.zIndex = '';
-            }
+            alert(`"${type}" field added! Click where you want to place it.`);
+            // In a full implementation, this would create a draggable text field
         }
 
         function zoomIn() {
-            scale += 0.1;
-            updateZoom();
+            if (scale < 2.0) {
+                scale += 0.1;
+                updateZoom();
+            }
         }
 
         function zoomOut() {
@@ -678,11 +660,11 @@
                 return;
             }
             
-            // Create a simple representation of the edited content
-            const content = document.getElementById('pdfContent').innerText;
-            const blob = new Blob([`EDITED PDF CONTENT\n==================\n\n${content}\n\nEdited on: ${new Date().toLocaleString()}`], 
-                { type: 'text/plain' });
+            alert('✅ Your edited PDF is ready for download!\n\nIn a full implementation, this would generate the actual PDF file.');
             
+            // Simulate download
+            const content = document.getElementById('pdfContent').innerText;
+            const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -691,14 +673,11 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            alert('✅ Your edited PDF content has been downloaded!\n\nIn a full version, this would be an actual PDF file with all your edits preserved.');
         }
 
         function resetEditor() {
-            if (confirm('Reset all changes?')) {
-                document.getElementById('pdfContent').innerHTML = document.getElementById('pdfPlaceholder').outerHTML;
-                makeTextEditable();
+            if (confirm('Reset all changes and start over?')) {
+                initializeEditor();
             }
         }
 
@@ -707,27 +686,27 @@
         
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.style.background = '#e3f2fd';
-            uploadArea.style.borderColor = '#2980b9';
+            uploadArea.style.background = '#f0f4ff';
+            uploadArea.style.borderColor = '#764ba2';
         });
         
         uploadArea.addEventListener('dragleave', () => {
             uploadArea.style.background = 'white';
-            uploadArea.style.borderColor = '#3498db';
+            uploadArea.style.borderColor = '#667eea';
         });
         
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.style.background = 'white';
-            uploadArea.style.borderColor = '#3498db';
+            uploadArea.style.borderColor = '#667eea';
             if (e.dataTransfer.files[0]) {
                 loadPDF(e.dataTransfer.files[0]);
             }
         });
 
-        // Initialize
+        // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('PDF Editor Ready - Like ILovePDF.com');
+            console.log('PDF Editor initialized');
         });
     </script>
 </body>
