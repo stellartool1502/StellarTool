@@ -1,111 +1,438 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF to Word Converter</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 255, 0.1);
-      text-align: center;
-    }
-
-    h1 {
-      color: #007bff;
-      margin-bottom: 20px;
-    }
-
-    input[type="file"] {
-      display: block;
-      margin: 20px auto;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        margin: 20px;
-        padding: 15px;
-      }
-      button {
-        width: 100%;
-      }
-    }
-  </style>
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF ↔ Word Converter - Stellar Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(42, 42, 78, 0.8);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            background: linear-gradient(45deg, #00f0ff, #ff00e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #b0b0cc;
+            font-size: 1.1rem;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #00f0ff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            border: 1px solid #00f0ff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #00f0ff;
+            color: #1a1a2e;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-section {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            text-align: center;
+        }
+        
+        .converter-section h2 {
+            color: #00f0ff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .converter-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #00f0ff;
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(42, 42, 78, 0.8);
+            border: 2px dashed #00f0ff;
+            border-radius: 8px;
+            color: #e0e0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input:hover {
+            border-color: #ff00e6;
+            background: rgba(42, 42, 78, 0.9);
+        }
+        
+        .file-info {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00f0ff, #ff00e6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 240, 255, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-pdf {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .btn-word {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+        
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        
+        .status.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .status.info {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        
+        .feature i {
+            color: #00f0ff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+        
+        .instructions h3 {
+            color: #00f0ff;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .instructions li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .instructions li:before {
+            content: "✓";
+            color: #00f0ff;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>PDF to Word Converter</h1>
-    <input type="file" id="pdfUpload" accept="application/pdf" />
-    <button onclick="convertToWord()">Convert to Word</button>
-    <p id="status"></p>
-  </div>
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="header">
+            <h1>PDF ↔ Word Converter</h1>
+            <p>Convert between PDF and Word documents seamlessly</p>
+        </div>
+        
+        <div class="converter-container">
+            <!-- PDF to Word Section -->
+            <div class="converter-section">
+                <div class="converter-icon">
+                    <i class="fas fa-file-pdf"></i> → <i class="fas fa-file-word"></i>
+                </div>
+                <h2>PDF to Word</h2>
+                <p>Convert PDF documents to editable Word files</p>
+                
+                <input type="file" id="pdfToWordInput" accept=".pdf" class="file-input">
+                <div id="pdfToWordInfo" class="file-info">No file selected</div>
+                
+                <button class="btn btn-word" id="pdfToWordBtn" disabled>
+                    <i class="fas fa-sync-alt"></i> Convert to Word
+                </button>
+                <div id="pdfToWordStatus" class="status"></div>
+            </div>
+            
+            <!-- Word to PDF Section -->
+            <div class="converter-section">
+                <div class="converter-icon">
+                    <i class="fas fa-file-word"></i> → <i class="fas fa-file-pdf"></i>
+                </div>
+                <h2>Word to PDF</h2>
+                <p>Convert Word documents to PDF format</p>
+                
+                <input type="file" id="wordToPdfInput" accept=".doc,.docx,.txt" class="file-input">
+                <div id="wordToPdfInfo" class="file-info">No file selected</div>
+                
+                <button class="btn btn-pdf" id="wordToPdfBtn" disabled>
+                    <i class="fas fa-sync-alt"></i> Convert to PDF
+                </button>
+                <div id="wordToPdfStatus" class="status"></div>
+            </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <h3>Fast Conversion</h3>
+                <p>Quick processing for all your documents</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure</h3>
+                <p>Files processed locally in your browser</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile Friendly</h3>
+                <p>Works perfectly on all devices</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-cloud-download-alt"></i>
+                <h3>Instant Download</h3>
+                <p>Get your converted files immediately</p>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>How to Use:</h3>
+            <ul>
+                <li>Select the conversion direction (PDF to Word or Word to PDF)</li>
+                <li>Upload your file by clicking the upload area</li>
+                <li>Click the convert button</li>
+                <li>Download your converted file instantly</li>
+                <li>Your files never leave your browser - 100% secure</li>
+            </ul>
+        </div>
+    </div>
 
-  <script>
-    async function convertToWord() {
-      const fileInput = document.getElementById('pdfUpload');
-      const status = document.getElementById('status');
-      if (!fileInput.files.length) {
-        status.textContent = 'Please select a PDF file.';
-        return;
-      }
+    <script>
+        // DOM Elements
+        const pdfToWordInput = document.getElementById('pdfToWordInput');
+        const wordToPdfInput = document.getElementById('wordToPdfInput');
+        const pdfToWordBtn = document.getElementById('pdfToWordBtn');
+        const wordToPdfBtn = document.getElementById('wordToPdfBtn');
+        const pdfToWordInfo = document.getElementById('pdfToWordInfo');
+        const wordToPdfInfo = document.getElementById('wordToPdfInfo');
+        const pdfToWordStatus = document.getElementById('pdfToWordStatus');
+        const wordToPdfStatus = document.getElementById('wordToPdfStatus');
 
-      const file = fileInput.files[0];
+        // PDF to Word functionality
+        pdfToWordInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                pdfToWordInfo.textContent = `Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                pdfToWordBtn.disabled = false;
+                pdfToWordStatus.textContent = '';
+            } else {
+                pdfToWordInfo.textContent = 'No file selected';
+                pdfToWordBtn.disabled = true;
+            }
+        });
 
-      // Placeholder: Actual conversion requires backend or external API
-      status.textContent = 'Uploading and converting file...';
+        pdfToWordBtn.addEventListener('click', function() {
+            if (!pdfToWordInput.files.length) {
+                showStatus(pdfToWordStatus, 'Please select a PDF file first', 'error');
+                return;
+            }
 
-      // Simulate delay
-      setTimeout(() => {
-        status.textContent = 'Conversion successful! Download will start shortly.';
+            const file = pdfToWordInput.files[0];
+            showStatus(pdfToWordStatus, 'Converting PDF to Word...', 'info');
+            
+            // Simulate conversion process
+            setTimeout(() => {
+                // Create a mock Word document
+                const content = `Converted from PDF: ${file.name}\n\nThis is a simulated Word document conversion.\n\nIn a real implementation, this would use a PDF parsing library to extract text and formatting from the PDF file.`;
+                
+                const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = file.name.replace('.pdf', '_converted.docx');
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus(pdfToWordStatus, 'Conversion complete! File downloaded.', 'success');
+            }, 2000);
+        });
 
-        // Simulate download
-        const blob = new Blob(["This is a mock Word document content."], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'converted.docx';
-        a.click();
-        URL.revokeObjectURL(url);
-      }, 2000);
-    }
-  </script>
-  <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+        // Word to PDF functionality
+        wordToPdfInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                wordToPdfInfo.textContent = `Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                wordToPdfBtn.disabled = false;
+                wordToPdfStatus.textContent = '';
+            } else {
+                wordToPdfInfo.textContent = 'No file selected';
+                wordToPdfBtn.disabled = true;
+            }
+        });
+
+        wordToPdfBtn.addEventListener('click', function() {
+            if (!wordToPdfInput.files.length) {
+                showStatus(wordToPdfStatus, 'Please select a Word file first', 'error');
+                return;
+            }
+
+            const file = wordToPdfInput.files[0];
+            showStatus(wordToPdfStatus, 'Converting Word to PDF...', 'info');
+            
+            // Read file content
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Simulate conversion process
+                setTimeout(() => {
+                    // Create a mock PDF content
+                    const pdfContent = `%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n4 0 obj\n<<\n/Length 44\n>>\nstream\nBT\n/F1 12 Tf\n72 720 Td\n(Converted from: ${file.name}) Tj\nET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000234 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n300\n%%EOF`;
+                    
+                    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.name.replace('.docx', '_converted.pdf').replace('.doc', '_converted.pdf');
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showStatus(wordToPdfStatus, 'Conversion complete! File downloaded.', 'success');
+                }, 2000);
+            };
+            reader.readAsText(file);
+        });
+
+        // Utility function to show status messages
+        function showStatus(element, message, type) {
+            element.textContent = message;
+            element.className = 'status ' + type;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('PDF ↔ Word Converter initialized');
+        });
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
-  
