@@ -131,13 +131,21 @@
         let pageWidth = 0;
         let pageHeight = 0;
 
-        // Initialize the signature pad
-        signaturePad = new SignaturePad(signaturePadCanvas);
+        // Initialize the signature pad with real-time checking
+        signaturePad = new SignaturePad(signaturePadCanvas, {
+            onEnd: () => updateDownloadButton()
+        });
 
         // Show/hide custom inputs based on preset
         posPreset.addEventListener("change", () => {
             customPos.style.display = posPreset.value === "custom" ? "block" : "none";
         });
+
+        // Update download button state
+        function updateDownloadButton() {
+            downloadBtn.disabled = signaturePad.isEmpty() || !pdfDocBytes;
+            statusEl.textContent = signaturePad.isEmpty() ? "Draw a signature to enable download." : "Signature ready. Click to download.";
+        }
 
         // Handle PDF upload
         pdfInput.addEventListener("change", async (event) => {
@@ -155,8 +163,8 @@
                         pageHeight = height;
                         
                         pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Use presets or custom x/y (y=0 is bottom).`;
-                        downloadBtn.disabled = signaturePad.isEmpty();
-                        statusEl.textContent = "PDF loaded. Draw signature and select position.";
+                        updateDownloadButton();
+                        statusEl.textContent = "PDF loaded. Draw signature to enable download.";
                     };
                     reader.readAsArrayBuffer(file);
                 } catch (err) {
@@ -172,7 +180,7 @@
         // Clear signature
         clearBtn.addEventListener("click", () => {
             signaturePad.clear();
-            downloadBtn.disabled = true;
+            updateDownloadButton();
             statusEl.textContent = "Signature cleared. Draw a new one.";
         });
 
@@ -236,7 +244,7 @@
                 const a = document.createElement("a");
                 a.href = url;
                 a.download = "signed_pdf.pdf";
-                a.style.display = "none"; // Hidden for security
+                a.style.display = "none";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -262,6 +270,10 @@
                 }
             }
         });
+
+        // Initial button state check
+        signaturePadCanvas.addEventListener("mouseup", updateDownloadButton);
+        signaturePadCanvas.addEventListener("touchend", updateDownloadButton);
     </script>
     <!-- Temporarily commented out ad script for testing -->
     <!--
