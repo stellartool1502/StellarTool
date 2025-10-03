@@ -61,10 +61,14 @@
             margin-top: 20px;
         }
 
-        input[type="number"] {
+        input[type="number"], select {
             padding: 8px;
             margin: 10px 5px;
             width: 120px;
+        }
+
+        #customPos {
+            display: none;
         }
 
         #status {
@@ -76,7 +80,7 @@
             .container {
                 width: 90%;
             }
-            input[type="number"] {
+            input[type="number"], select {
                 width: 100px;
             }
         }
@@ -93,9 +97,16 @@
             <canvas id="signaturePadCanvas" width="400" height="200"></canvas>
         </div>
         <div>
-            <label>Signature Position (x, y in points):</label><br>
-            <input type="number" id="posX" placeholder="X (e.g., 100)" min="0">
-            <input type="number" id="posY" placeholder="Y (e.g., 50)" min="0">
+            <label>Signature Position:</label><br>
+            <select id="posPreset">
+                <option value="husband">Bottom-Left (Husband)</option>
+                <option value="wife">Bottom-Right (Wife)</option>
+                <option value="custom">Custom</option>
+            </select>
+            <div id="customPos">
+                <input type="number" id="posX" placeholder="X (e.g., 50)" min="0">
+                <input type="number" id="posY" placeholder="Y (e.g., 100)" min="0">
+            </div>
             <p id="pageInfo" style="font-size: 14px; color: #666;"></p>
         </div>
         <button id="clearBtn">Clear Signature</button>
@@ -108,6 +119,8 @@
         const signaturePadCanvas = document.getElementById("signaturePadCanvas");
         const clearBtn = document.getElementById("clearBtn");
         const downloadBtn = document.getElementById("downloadBtn");
+        const posPreset = document.getElementById("posPreset");
+        const customPos = document.getElementById("customPos");
         const posX = document.getElementById("posX");
         const posY = document.getElementById("posY");
         const statusEl = document.getElementById("status");
@@ -115,10 +128,16 @@
 
         let signaturePad;
         let pdfDocBytes;
-        let pdfDoc;
+        let pageWidth = 0;
+        let pageHeight = 0;
 
         // Initialize the signature pad
         signaturePad = new SignaturePad(signaturePadCanvas);
+
+        // Show/hide custom inputs based on preset
+        posPreset.addEventListener("change", () => {
+            customPos.style.display = posPreset.value === "custom" ? "block" : "none";
+        });
 
         // Handle PDF upload
         pdfInput.addEventListener("change", async (event) => {
@@ -129,16 +148,16 @@
                     const reader = new FileReader();
                     reader.onload = async function (e) {
                         pdfDocBytes = e.target.result;
-                        pdfDoc = await PDFLib.PDFDocument.load(pdfDocBytes);
+                        const pdfDoc = await PDFLib.PDFDocument.load(pdfDocBytes);
                         const firstPage = pdfDoc.getPages()[0];
                         const { width, height } = firstPage.getSize();
+                        pageWidth = width;
+                        pageHeight = height;
                         
-                        // Suggest default position: bottom-center
-                        posX.value = (width - 150) / 2; // Center horizontally
-                        posY.value = 50; // 50 points from bottom
-                        pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Try x=${((width - 150) / 2).toFixed(0)}, y=50 for bottom-center.`;
+                        // Default preset: bottom-left (husband)
+                        pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Use presets or custom x/y (y=0 is bottom).`;
                         downloadBtn.disabled = signaturePad.isEmpty();
-                        statusEl.textContent = "PDF loaded. Draw signature and set position.";
+                        statusEl.textContent = "PDF loaded. Draw signature and select position.";
                     };
                     reader.readAsArrayBuffer(file);
                 } catch (err) {
@@ -180,23 +199,32 @@
                 const firstPage = pages[0];
                 const { width, height } = firstPage.getSize();
 
-                // Get user-defined position or fallback to bottom-center
-                let x = parseFloat(posX.value);
-                let y = parseFloat(posY.value);
-                if (isNaN(x) || x < 0) x = (width - 150) / 2; // Default: center horizontally
-                if (isNaN(y) || y < 0) y = 50; // Default: 50 points from bottom
+                // Get position based on preset or custom
+                let x, y;
+                const sigWidth = 150;
+                const sigHeight = 75;
+                if (posPreset.value === "husband") {
+                    x = 50; // Left side
+                    y = 100; // Above bottom lines
+                } else if (posPreset.value === "wife") {
+                    x = width / 2 + 50; // Right side (adjust for page width)
+                    y = 100;
+                } else { // Custom
+                    x = parseFloat(posX.value);
+                    y = parseFloat(posY.value);
+                    if (isNaN(x) || x < 0) x = 50;
+                    if (isNaN(y) || y < 0) y = 100;
+                }
 
-                // Ensure signature stays within page bounds
-                x = Math.min(x, width - 150); // Prevent overflow right
-                y = Math.min(y, height - 75); // Prevent overflow top
-                x = Math.max(x, 0); // Prevent negative x
-                y = Math.max(y, 0); // Prevent negative y
+                // Clamp to bounds
+                x = Math.max(0, Math.min(x, width - sigWidth));
+                y = Math.max(0, Math.min(y, height - sigHeight));
 
                 firstPage.drawImage(pngImage, {
                     x: x,
                     y: y,
-                    width: 150,
-                    height: 75
+                    width: sigWidth,
+                    height: sigHeight
                 });
 
                 const signedPdfBytes = await pdfDoc.save();
@@ -208,7 +236,7 @@
                 a.click();
                 URL.revokeObjectURL(url);
 
-                statusEl.textContent = "Signed PDF downloaded!";
+                statusEl.textContent = "Signed PDF downloaded! Signature placed at x=" + x.toFixed(0) + ", y=" + y.toFixed(0);
             } catch (err) {
                 statusEl.textContent = `Error signing PDF: ${err.message}`;
                 console.error("Error:", err);
