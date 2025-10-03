@@ -154,7 +154,6 @@
                         pageWidth = width;
                         pageHeight = height;
                         
-                        // Default preset: bottom-left (husband)
                         pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Use presets or custom x/y (y=0 is bottom).`;
                         downloadBtn.disabled = signaturePad.isEmpty();
                         statusEl.textContent = "PDF loaded. Draw signature and select position.";
@@ -162,6 +161,7 @@
                     reader.readAsArrayBuffer(file);
                 } catch (err) {
                     statusEl.textContent = `Error loading PDF: ${err.message}`;
+                    console.error("PDF Load Error:", err);
                 }
             } else {
                 alert("Please upload a valid PDF file.");
@@ -204,16 +204,14 @@
                 const sigWidth = 150;
                 const sigHeight = 75;
                 if (posPreset.value === "husband") {
-                    x = 50; // Left side
-                    y = 100; // Above bottom lines
+                    x = 50;
+                    y = 100;
                 } else if (posPreset.value === "wife") {
-                    x = width / 2 + 50; // Right side (adjust for page width)
+                    x = width / 2 + 50;
                     y = 100;
                 } else { // Custom
-                    x = parseFloat(posX.value);
-                    y = parseFloat(posY.value);
-                    if (isNaN(x) || x < 0) x = 50;
-                    if (isNaN(y) || y < 0) y = 100;
+                    x = parseFloat(posX.value) || 50;
+                    y = parseFloat(posY.value) || 100;
                 }
 
                 // Clamp to bounds
@@ -228,18 +226,23 @@
                 });
 
                 const signedPdfBytes = await pdfDoc.save();
+                console.log("PDF Saved Bytes Length:", signedPdfBytes.length); // Debug size
                 const blob = new Blob([signedPdfBytes], { type: "application/pdf" });
+                if (blob.size === 0) throw new Error("Blob is empty");
+                
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
                 a.download = "signed_pdf.pdf";
+                document.body.appendChild(a); // Ensure element is in DOM
                 a.click();
+                document.body.removeChild(a); // Clean up
                 URL.revokeObjectURL(url);
 
                 statusEl.textContent = "Signed PDF downloaded! Signature placed at x=" + x.toFixed(0) + ", y=" + y.toFixed(0);
             } catch (err) {
-                statusEl.textContent = `Error signing PDF: ${err.message}`;
-                console.error("Error:", err);
+                statusEl.textContent = `Error signing or downloading PDF: ${err.message}`;
+                console.error("Download Error:", err);
             }
         });
     </script>
