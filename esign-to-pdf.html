@@ -35,6 +35,7 @@
         canvas {
             border: 1px solid #ccc;
             margin-top: 20px;
+            background-color: white;
         }
 
         button {
@@ -94,6 +95,7 @@
         
         <input type="file" id="pdfInput" accept="application/pdf" />
         <div id="signaturePadContainer">
+            <p>Draw your signature below:</p>
             <canvas id="signaturePadCanvas" width="400" height="200"></canvas>
         </div>
         <div>
@@ -127,14 +129,23 @@
         const pageInfo = document.getElementById("pageInfo");
 
         let signaturePad;
-        let pdfDocBytes;
+        let pdfDocBytes = null;
         let pageWidth = 0;
         let pageHeight = 0;
 
-        // Initialize the signature pad with real-time checking
-        signaturePad = new SignaturePad(signaturePadCanvas, {
-            onEnd: () => updateDownloadButton()
-        });
+        // Initialize the signature pad
+        function initSignaturePad() {
+            signaturePad = new SignaturePad(signaturePadCanvas, {
+                backgroundColor: 'rgba(255, 255, 255, 0)',
+                penColor: 'rgb(0, 0, 0)',
+                throttle: 16
+            });
+            
+            // Update button state when signature is drawn
+            signaturePad.addEventListener("endStroke", () => {
+                updateDownloadButton();
+            });
+        }
 
         // Show/hide custom inputs based on preset
         posPreset.addEventListener("change", () => {
@@ -143,8 +154,18 @@
 
         // Update download button state
         function updateDownloadButton() {
-            downloadBtn.disabled = signaturePad.isEmpty() || !pdfDocBytes;
-            statusEl.textContent = signaturePad.isEmpty() ? "Draw a signature to enable download." : "Signature ready. Click to download.";
+            const hasSignature = !signaturePad.isEmpty();
+            const hasPdf = pdfDocBytes !== null;
+            
+            downloadBtn.disabled = !(hasSignature && hasPdf);
+            
+            if (!hasSignature) {
+                statusEl.textContent = "Please draw a signature.";
+            } else if (!hasPdf) {
+                statusEl.textContent = "Please upload a PDF file.";
+            } else {
+                statusEl.textContent = "Ready to download signed PDF.";
+            }
         }
 
         // Handle PDF upload
@@ -155,25 +176,33 @@
                 try {
                     const reader = new FileReader();
                     reader.onload = async function (e) {
-                        pdfDocBytes = e.target.result;
-                        const pdfDoc = await PDFLib.PDFDocument.load(pdfDocBytes);
-                        const firstPage = pdfDoc.getPages()[0];
-                        const { width, height } = firstPage.getSize();
-                        pageWidth = width;
-                        pageHeight = height;
-                        
-                        pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Use presets or custom x/y (y=0 is bottom).`;
-                        updateDownloadButton();
-                        statusEl.textContent = "PDF loaded. Draw signature to enable download.";
+                        try {
+                            pdfDocBytes = new Uint8Array(e.target.result);
+                            const pdfDoc = await PDFLib.PDFDocument.load(pdfDocBytes);
+                            const firstPage = pdfDoc.getPages()[0];
+                            const { width, height } = firstPage.getSize();
+                            pageWidth = width;
+                            pageHeight = height;
+                            
+                            pageInfo.textContent = `Page size: ${width.toFixed(0)} x ${height.toFixed(0)} points. Use presets or custom x/y (y=0 is bottom).`;
+                            updateDownloadButton();
+                            statusEl.textContent = "PDF loaded successfully. Draw your signature.";
+                        } catch (err) {
+                            statusEl.textContent = `Error processing PDF: ${err.message}`;
+                            console.error("PDF Processing Error:", err);
+                        }
+                    };
+                    reader.onerror = function() {
+                        statusEl.textContent = "Error reading file.";
                     };
                     reader.readAsArrayBuffer(file);
                 } catch (err) {
-                    statusEl.textContent = `Error loading PDF: ${err.message}`;
+                    statusEl.textContent = `Error: ${err.message}`;
                     console.error("PDF Load Error:", err);
                 }
             } else {
                 alert("Please upload a valid PDF file.");
-                statusEl.textContent = "";
+                statusEl.textContent = "Invalid file type. Please upload a PDF.";
             }
         });
 
@@ -181,51 +210,59 @@
         clearBtn.addEventListener("click", () => {
             signaturePad.clear();
             updateDownloadButton();
-            statusEl.textContent = "Signature cleared. Draw a new one.";
+            statusEl.textContent = "Signature cleared.";
         });
 
         // Create the signed PDF and trigger download
         downloadBtn.addEventListener("click", async () => {
             if (signaturePad.isEmpty()) {
-                alert("Please draw your signature.");
-                statusEl.textContent = "No signature drawn.";
+                alert("Please draw your signature first.");
                 return;
             }
             if (!pdfDocBytes) {
-                alert("Please upload a PDF file.");
-                statusEl.textContent = "No PDF uploaded.";
+                alert("Please upload a PDF file first.");
                 return;
             }
 
             statusEl.textContent = "Signing PDF...";
+            downloadBtn.disabled = true;
+            
             try {
+                // Load the PDF
                 const pdfDoc = await PDFLib.PDFDocument.load(pdfDocBytes);
-                const pngImageBytes = signaturePad.toDataURL('image/png').split(',')[1];
+                
+                // Get signature as PNG
+                const signatureDataUrl = signaturePad.toDataURL('image/png');
+                const pngImageBytes = await fetch(signatureDataUrl)
+                    .then(res => res.arrayBuffer());
                 const pngImage = await pdfDoc.embedPng(pngImageBytes);
 
+                // Get the first page
                 const pages = pdfDoc.getPages();
                 const firstPage = pages[0];
                 const { width, height } = firstPage.getSize();
 
-                // Get position based on preset or custom
+                // Calculate position
                 let x, y;
                 const sigWidth = 150;
                 const sigHeight = 75;
+                
                 if (posPreset.value === "husband") {
                     x = 50;
-                    y = 100;
+                    y = 50;
                 } else if (posPreset.value === "wife") {
-                    x = width / 2 + 50;
-                    y = 100;
+                    x = width - sigWidth - 50;
+                    y = 50;
                 } else { // Custom
                     x = parseFloat(posX.value) || 50;
-                    y = parseFloat(posY.value) || 100;
+                    y = parseFloat(posY.value) || 50;
                 }
 
-                // Clamp to bounds
+                // Ensure signature stays within page bounds
                 x = Math.max(0, Math.min(x, width - sigWidth));
                 y = Math.max(0, Math.min(y, height - sigHeight));
 
+                // Draw the signature
                 firstPage.drawImage(pngImage, {
                     x: x,
                     y: y,
@@ -233,60 +270,34 @@
                     height: sigHeight
                 });
 
+                // Save and download
                 const signedPdfBytes = await pdfDoc.save();
-                console.log("Signed PDF Bytes Length:", signedPdfBytes.length);
-                if (signedPdfBytes.length === 0) throw new Error("PDF save returned empty data");
-
                 const blob = new Blob([signedPdfBytes], { type: "application/pdf" });
-                if (blob.size === 0) throw new Error("Blob creation failed - empty size");
-
                 const url = URL.createObjectURL(blob);
+                
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "signed_pdf.pdf";
-                a.style.display = "none";
+                a.download = "signed_document.pdf";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-
-                statusEl.textContent = "Signed PDF downloaded! Signature at x=" + x.toFixed(0) + ", y=" + y.toFixed(0);
+                
+                statusEl.textContent = "Signed PDF downloaded successfully!";
+                downloadBtn.disabled = false;
+                
             } catch (err) {
-                statusEl.textContent = `Error: ${err.message}`;
-                console.error("Download Error:", err);
-                // Fallback: Try data URL download
-                try {
-                    const dataUrl = `data:application/pdf;base64,${btoa(String.fromCharCode(...new Uint8Array(signedPdfBytes)))}`;
-                    const fallbackA = document.createElement("a");
-                    fallbackA.href = dataUrl;
-                    fallbackA.download = "signed_pdf_fallback.pdf";
-                    document.body.appendChild(fallbackA);
-                    fallbackA.click();
-                    document.body.removeChild(fallbackA);
-                    statusEl.textContent += " Fallback download attempted.";
-                } catch (fallbackErr) {
-                    statusEl.textContent += ` Fallback failed: ${fallbackErr.message}`;
-                    console.error("Fallback Error:", fallbackErr);
-                }
+                statusEl.textContent = `Error creating signed PDF: ${err.message}`;
+                console.error("Signing Error:", err);
+                downloadBtn.disabled = false;
             }
         });
 
-        // Initial button state check
-        signaturePadCanvas.addEventListener("mouseup", updateDownloadButton);
-        signaturePadCanvas.addEventListener("touchend", updateDownloadButton);
+        // Initialize the signature pad when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initSignaturePad();
+            updateDownloadButton();
+        });
     </script>
-    <!-- Temporarily commented out ad script for testing -->
-    <!--
-    <script type="text/javascript">
-        atOptions = {
-            'key': 'f7b18c73a8f42791ff9348b5265ad846',
-            'format': 'iframe',
-            'height': 50,
-            'width': 320,
-            'params': {}
-        };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
-    -->
 </body>
 </html>
