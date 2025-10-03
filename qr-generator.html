@@ -193,8 +193,8 @@
             margin-top: 10px;
         }
     </style>
-    <!-- QRCode.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Working QRCode.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -445,39 +445,64 @@
             qrcodeDiv.innerHTML = '<div class="loading">Generating QR Code...</div>';
             downloadBtn.style.display = 'none';
             
-            // Generate new QR code
+            // Generate new QR code using qrcode-generator library
             try {
-                QRCode.toCanvas(qrcodeDiv, qrData, {
-                    width: size,
-                    height: size,
-                    margin: 2,
-                    color: {
-                        dark: '#000000',
-                        light: '#FFFFFF'
-                    }
-                }, function(error) {
-                    if (error) {
-                        showError('Error generating QR code: ' + error.message);
-                        console.error(error);
-                    } else {
-                        showSuccess('QR Code generated successfully!');
-                        downloadBtn.style.display = 'block';
-                        
-                        // Add download functionality
-                        const canvas = qrcodeDiv.querySelector('canvas');
-                        if (canvas) {
-                            downloadBtn.onclick = function() {
-                                const link = document.createElement('a');
-                                link.download = `qrcode-${type}-${Date.now()}.png`;
-                                link.href = canvas.toDataURL('image/png');
-                                link.click();
-                                showSuccess('QR Code downloaded!');
-                            };
+                // Use qrcode-generator library
+                const typeNumber = 0; // Auto detect
+                const errorCorrectionLevel = 'L';
+                
+                const qr = qrcode(typeNumber, errorCorrectionLevel);
+                qr.addData(qrData);
+                qr.make();
+                
+                // Create canvas element
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const qrSize = size;
+                canvas.width = qrSize;
+                canvas.height = qrSize;
+                
+                // Set white background
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, qrSize, qrSize);
+                
+                // Calculate module size
+                const moduleCount = qr.getModuleCount();
+                const moduleSize = qrSize / moduleCount;
+                
+                // Draw QR code
+                ctx.fillStyle = '#000000';
+                for (let row = 0; row < moduleCount; row++) {
+                    for (let col = 0; col < moduleCount; col++) {
+                        if (qr.isDark(row, col)) {
+                            ctx.fillRect(
+                                col * moduleSize,
+                                row * moduleSize,
+                                moduleSize,
+                                moduleSize
+                            );
                         }
                     }
-                });
+                }
+                
+                // Add canvas to div
+                qrcodeDiv.innerHTML = '';
+                qrcodeDiv.appendChild(canvas);
+                
+                showSuccess('QR Code generated successfully!');
+                downloadBtn.style.display = 'block';
+                
+                // Add download functionality
+                downloadBtn.onclick = function() {
+                    const link = document.createElement('a');
+                    link.download = `qrcode-${type}-${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    showSuccess('QR Code downloaded!');
+                };
+                
             } catch (error) {
-                showError('Error: ' + error.message);
+                showError('Error generating QR code: ' + error.message);
                 console.error(error);
             }
         });
