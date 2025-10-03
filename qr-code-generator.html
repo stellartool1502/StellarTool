@@ -80,7 +80,8 @@
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Correct QRCode.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -103,7 +104,7 @@
         const qrCanvas = document.getElementById("qrCanvas");
         const statusEl = document.getElementById("status");
 
-        let qrCodeInstance; // To clear previous QR
+        let qrCodeInstance = null;
 
         // Generate QR Code
         generateBtn.addEventListener("click", () => {
@@ -114,28 +115,40 @@
             }
 
             statusEl.textContent = "Generating QR Code...";
+            
             try {
-                // Clear previous QR
+                // Clear previous QR code if exists
                 if (qrCodeInstance) {
-                    qrCodeInstance.clear();
+                    // Clear the canvas
+                    const ctx = qrCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
                 }
 
-                // Create QR on canvas
-                qrCodeInstance = new QRCode(qrCanvas, {
-                    text: text,
+                // Generate QR code directly to canvas
+                QRCode.toCanvas(qrCanvas, text, {
                     width: 256,
-                    height: 256,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H // High error correction
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }, function(error) {
+                    if (error) {
+                        statusEl.textContent = "Error generating QR: " + error.message;
+                        console.error("QR Error:", error);
+                        downloadBtn.disabled = true;
+                    } else {
+                        qrCanvas.style.display = "block";
+                        downloadBtn.disabled = false;
+                        statusEl.textContent = "QR Code generated! Scan to visit: " + text;
+                        qrCodeInstance = true; // Mark as generated
+                    }
                 });
 
-                qrCanvas.style.display = "block";
-                downloadBtn.disabled = false;
-                statusEl.textContent = "QR Code generated! Scan to visit: " + text;
             } catch (err) {
                 statusEl.textContent = "Error generating QR: " + err.message;
                 console.error("QR Error:", err);
+                downloadBtn.disabled = true;
             }
         });
 
@@ -148,7 +161,11 @@
 
             try {
                 const link = document.createElement("a");
-                link.download = "qr-code.png";
+                const text = qrInput.value.trim();
+                const filename = text.includes('http') ? 
+                    'qr-code-url.png' : 'qr-code-text.png';
+                
+                link.download = filename;
                 link.href = qrCanvas.toDataURL("image/png");
                 link.style.display = "none";
                 document.body.appendChild(link);
@@ -166,6 +183,13 @@
             if (e.key === "Enter") {
                 generateBtn.click();
             }
+        });
+
+        // Auto-generate QR code when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                generateBtn.click();
+            }, 500);
         });
     </script>
 </body>
