@@ -226,27 +226,45 @@
                 });
 
                 const signedPdfBytes = await pdfDoc.save();
-                console.log("PDF Saved Bytes Length:", signedPdfBytes.length); // Debug size
+                console.log("Signed PDF Bytes Length:", signedPdfBytes.length);
+                if (signedPdfBytes.length === 0) throw new Error("PDF save returned empty data");
+
                 const blob = new Blob([signedPdfBytes], { type: "application/pdf" });
-                if (blob.size === 0) throw new Error("Blob is empty");
-                
+                if (blob.size === 0) throw new Error("Blob creation failed - empty size");
+
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
                 a.download = "signed_pdf.pdf";
-                document.body.appendChild(a); // Ensure element is in DOM
+                a.style.display = "none"; // Hidden for security
+                document.body.appendChild(a);
                 a.click();
-                document.body.removeChild(a); // Clean up
+                document.body.removeChild(a);
                 URL.revokeObjectURL(url);
 
-                statusEl.textContent = "Signed PDF downloaded! Signature placed at x=" + x.toFixed(0) + ", y=" + y.toFixed(0);
+                statusEl.textContent = "Signed PDF downloaded! Signature at x=" + x.toFixed(0) + ", y=" + y.toFixed(0);
             } catch (err) {
-                statusEl.textContent = `Error signing or downloading PDF: ${err.message}`;
+                statusEl.textContent = `Error: ${err.message}`;
                 console.error("Download Error:", err);
+                // Fallback: Try data URL download
+                try {
+                    const dataUrl = `data:application/pdf;base64,${btoa(String.fromCharCode(...new Uint8Array(signedPdfBytes)))}`;
+                    const fallbackA = document.createElement("a");
+                    fallbackA.href = dataUrl;
+                    fallbackA.download = "signed_pdf_fallback.pdf";
+                    document.body.appendChild(fallbackA);
+                    fallbackA.click();
+                    document.body.removeChild(fallbackA);
+                    statusEl.textContent += " Fallback download attempted.";
+                } catch (fallbackErr) {
+                    statusEl.textContent += ` Fallback failed: ${fallbackErr.message}`;
+                    console.error("Fallback Error:", fallbackErr);
+                }
             }
         });
     </script>
-    <!-- Your ad script -->
+    <!-- Temporarily commented out ad script for testing -->
+    <!--
     <script type="text/javascript">
         atOptions = {
             'key': 'f7b18c73a8f42791ff9348b5265ad846',
@@ -257,5 +275,6 @@
         };
     </script>
     <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    -->
 </body>
 </html>
