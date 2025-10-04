@@ -1,36 +1,36 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Age Calculator</title>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
      crossorigin="anonymous"></script>
   <style>
     body {
-      background: #f4f9ff;
+      background: #1a1f2e;
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      color: #e0e6f0;
     }
 
     .container {
-      background: #fff;
+      background: #2c2f3e;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
       text-align: center;
       width: 90%;
       max-width: 400px;
     }
 
     h1 {
-      color: #007bff;
+      color: #00c4ff;
       margin-bottom: 20px;
     }
 
@@ -38,30 +38,33 @@
       padding: 10px;
       width: 100%;
       font-size: 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #40445a;
       border-radius: 10px;
+      background: #333854;
+      color: #e0e6f0;
       margin-bottom: 20px;
     }
 
     button {
       padding: 10px 20px;
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: #fff;
       font-size: 1rem;
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
 
     #result {
       margin-top: 20px;
       font-size: 1.2rem;
       font-weight: bold;
-      color: #333;
+      color: #e0e6f0;
     }
 
     @media (max-width: 600px) {
@@ -72,14 +75,12 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <h1>Age Calculator</h1>
     <input type="date" id="dob" />
     <button onclick="calculateAge()">Calculate Age</button>
     <div id="result"></div>
   </div>
-
   <script>
     function calculateAge() {
       const dob = document.getElementById("dob").value;
@@ -108,17 +109,15 @@
       document.getElementById("result").innerText = `You are ${ageYears} years, ${ageMonths} months, and ${ageDays} days old.`;
     }
   </script>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
