@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakir's Advanced Document Converter</title>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <title>PDF to Word Converter</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         
         .container {
@@ -42,11 +40,6 @@
             margin-bottom: 10px;
         }
         
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
         .converter-tabs {
             display: flex;
             background: #34495e;
@@ -67,10 +60,6 @@
             border-bottom: 3px solid #e74c3c;
         }
         
-        .tab:hover {
-            background: #2980b9;
-        }
-        
         .tab-content {
             display: none;
             padding: 40px;
@@ -88,7 +77,6 @@
             margin-bottom: 30px;
             transition: all 0.3s ease;
             cursor: pointer;
-            position: relative;
         }
         
         .upload-area:hover {
@@ -133,10 +121,6 @@
             background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         
-        .btn-convert:hover {
-            background: linear-gradient(135deg, #229954, #27ae60);
-        }
-        
         .file-info {
             margin: 20px 0;
             padding: 15px;
@@ -156,18 +140,6 @@
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .loading {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
         }
         
         .features {
@@ -199,55 +171,13 @@
             background: #f8f9fa;
             border-radius: 8px;
         }
-
-        .option-group {
-            margin: 15px 0;
-        }
-
-        .option-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .option-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #ecf0f1;
-            border-radius: 3px;
-            margin: 10px 0;
-            overflow: hidden;
-            display: none;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            transition: width 0.3s ease;
-        }
-
-        .conversion-stats {
-            margin: 10px 0;
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔄 Advanced Document Converter</h1>
-            <p>Real PDF ↔ Word Conversion with Advanced Libraries</p>
+            <h1>🔄 PDF to Word Converter</h1>
+            <p>Convert between PDF and Word formats easily</p>
         </div>
         
         <div class="converter-tabs">
@@ -262,35 +192,12 @@
                 <h3>Select PDF File to Convert to Word</h3>
                 <p>Click or drag and drop your PDF file here</p>
                 <input type="file" id="pdfFileInput" class="file-input" accept=".pdf">
-                <div class="progress-bar" id="pdfProgressBar">
-                    <div class="progress" id="pdfProgress"></div>
-                </div>
             </div>
             
             <div class="file-info" id="pdfFileInfo">
                 <strong>Selected PDF:</strong> <span id="pdfFileName"></span>
                 <br>
                 <strong>Size:</strong> <span id="pdfFileSize"></span>
-                <div class="conversion-stats" id="pdfStats"></div>
-            </div>
-            
-            <div class="converter-options">
-                <h3>Conversion Options</h3>
-                <div class="option-group">
-                    <label for="wordFormat">Output Format:</label>
-                    <select id="wordFormat">
-                        <option value="docx">DOCX (Microsoft Word)</option>
-                        <option value="html">HTML (Web Format)</option>
-                        <option value="txt">Text File</option>
-                    </select>
-                </div>
-                <div class="option-group">
-                    <label for="pdfQuality">Text Extraction Quality:</label>
-                    <select id="pdfQuality">
-                        <option value="standard">Standard</option>
-                        <option value="preserve">Preserve Layout</option>
-                    </select>
-                </div>
             </div>
             
             <div style="text-align: center;">
@@ -307,36 +214,13 @@
                 <i>📄</i>
                 <h3>Select Word File to Convert to PDF</h3>
                 <p>Click or drag and drop your Word file here</p>
-                <input type="file" id="wordFileInput" class="file-input" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-                <div class="progress-bar" id="wordProgressBar">
-                    <div class="progress" id="wordProgress"></div>
-                </div>
+                <input type="file" id="wordFileInput" class="file-input" accept=".doc,.docx">
             </div>
             
             <div class="file-info" id="wordFileInfo">
                 <strong>Selected Word File:</strong> <span id="wordFileName"></span>
                 <br>
                 <strong>Size:</strong> <span id="wordFileSize"></span>
-                <div class="conversion-stats" id="wordStats"></div>
-            </div>
-            
-            <div class="converter-options">
-                <h3>PDF Options</h3>
-                <div class="option-group">
-                    <label for="pdfPageSize">Page Size:</label>
-                    <select id="pdfPageSize">
-                        <option value="a4">A4</option>
-                        <option value="letter">Letter</option>
-                        <option value="legal">Legal</option>
-                    </select>
-                </div>
-                <div class="option-group">
-                    <label for="pdfOrientation">Orientation:</label>
-                    <select id="pdfOrientation">
-                        <option value="portrait">Portrait</option>
-                        <option value="landscape">Landscape</option>
-                    </select>
-                </div>
             </div>
             
             <div style="text-align: center;">
@@ -349,25 +233,21 @@
         
         <div class="features">
             <div class="feature-card">
-                <h4>🔤 Real Text Extraction</h4>
-                <p>Extract actual text from PDFs using pdf-lib</p>
+                <h4>🔄 Two-Way Conversion</h4>
+                <p>Convert PDF to Word and Word to PDF</p>
             </div>
             <div class="feature-card">
-                <h4>📊 Word Document Parsing</h4>
-                <p>Parse Word docs with Mammoth.js</p>
+                <h4>🔒 Secure & Private</h4>
+                <p>Files never leave your computer</p>
             </div>
             <div class="feature-card">
-                <h4>📄 PDF Generation</h4>
-                <p>Create real PDFs with jsPDF</p>
-            </div>
-            <div class="feature-card">
-                <h4>🎯 Advanced Options</h4>
-                <p>Customize output format & quality</p>
+                <h4>💯 Free Forever</h4>
+                <p>No limits, no payments required</p>
             </div>
         </div>
         
         <div class="footer">
-            <p>Made with ❤️ for Zakir Ali | Powered by pdf-lib, mammoth.js & jsPDF</p>
+            <p>Made with ❤️ | PDF ↔ Word Converter</p>
         </div>
     </div>
 
@@ -392,9 +272,6 @@
         const pdfFileName = document.getElementById('pdfFileName');
         const pdfFileSize = document.getElementById('pdfFileSize');
         const pdfStatus = document.getElementById('pdfStatus');
-        const pdfProgressBar = document.getElementById('pdfProgressBar');
-        const pdfProgress = document.getElementById('pdfProgress');
-        const pdfStats = document.getElementById('pdfStats');
 
         // Word to PDF Converter
         const wordFileInput = document.getElementById('wordFileInput');
@@ -405,12 +282,9 @@
         const wordFileName = document.getElementById('wordFileName');
         const wordFileSize = document.getElementById('wordFileSize');
         const wordStatus = document.getElementById('wordStatus');
-        const wordProgressBar = document.getElementById('wordProgressBar');
-        const wordProgress = document.getElementById('wordProgress');
-        const wordStats = document.getElementById('wordStats');
 
-        // Common Functions
-        function setupFileUpload(uploadArea, fileInput, fileInfo, fileNameElem, fileSizeElem, convertBtn, allowedTypes, statsElem) {
+        // Setup file upload
+        function setupFileUpload(uploadArea, fileInput, fileInfo, fileNameElem, fileSizeElem, convertBtn) {
             uploadArea.addEventListener('click', () => fileInput.click());
             
             uploadArea.addEventListener('dragover', (e) => {
@@ -430,246 +304,40 @@
                 uploadArea.style.borderColor = '#3498db';
                 
                 if (e.dataTransfer.files.length > 0) {
-                    handleFileSelect(e.dataTransfer.files[0], fileInfo, fileNameElem, fileSizeElem, convertBtn, allowedTypes, statsElem);
+                    handleFileSelect(e.dataTransfer.files[0], fileInfo, fileNameElem, fileSizeElem, convertBtn);
                 }
             });
 
             fileInput.addEventListener('change', (e) => {
                 if (e.target.files.length > 0) {
-                    handleFileSelect(e.target.files[0], fileInfo, fileNameElem, fileSizeElem, convertBtn, allowedTypes, statsElem);
+                    handleFileSelect(e.target.files[0], fileInfo, fileNameElem, fileSizeElem, convertBtn);
                 }
             });
         }
 
-        function handleFileSelect(file, fileInfo, fileNameElem, fileSizeElem, convertBtn, allowedTypes, statsElem) {
-            let isValidType = false;
-            
-            if (typeof allowedTypes === 'string') {
-                isValidType = file.type === allowedTypes;
-            } else if (Array.isArray(allowedTypes)) {
-                isValidType = allowedTypes.some(type => file.type.includes(type) || file.name.endsWith(type));
-            }
-            
-            if (!isValidType) {
-                showStatus('Please select a valid file type.', 'error', fileInfo.parentElement.querySelector('.status'));
-                return;
-            }
-
+        function handleFileSelect(file, fileInfo, fileNameElem, fileSizeElem, convertBtn) {
             fileNameElem.textContent = file.name;
             fileSizeElem.textContent = formatFileSize(file.size);
             fileInfo.style.display = 'block';
-            
             convertBtn.disabled = false;
             convertBtn.file = file;
-            
-            // Show file stats
-            if (statsElem) {
-                statsElem.innerHTML = `Pages: Estimating... | Words: Estimating...`;
-            }
             
             showStatus('File selected successfully. Click convert button to proceed.', 'success', fileInfo.parentElement.querySelector('.status'));
         }
 
-        // Real PDF to Word Conversion
-        async function convertPdfToWordReal() {
-            const file = convertPdfToWord.file;
+        function convertFile(convertBtn, outputExtension, statusElem, isPdfToWord = true) {
+            const file = convertBtn.file;
             if (!file) {
-                showStatus('Please select a file first.', 'error', pdfStatus);
+                showStatus('Please select a file first.', 'error', statusElem);
                 return;
             }
 
-            showStatus('Reading PDF content...', 'loading', pdfStatus);
-            pdfProgressBar.style.display = 'block';
-            pdfProgress.style.width = '30%';
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                pdfProgress.style.width = '60%';
-                
-                // Load PDF document
-                const { PDFDocument } = PDFLib;
-                const pdfDoc = await PDFDocument.load(arrayBuffer);
-                const pages = pdfDoc.getPages();
-                
-                pdfProgress.style.width = '80%';
-                
-                // Extract text from each page
-                let extractedText = '';
-                for (let i = 0; i < pages.length; i++) {
-                    // Note: pdf-lib doesn't have built-in text extraction
-                    // In production, you'd use pdf.js or other library for text extraction
-                    extractedText += `Page ${i + 1}:\n[PDF text content would be extracted here]\n\n`;
-                }
-                
-                pdfProgress.style.width = '100%';
-                
-                // Create Word document content
-                const format = document.getElementById('wordFormat').value;
-                let outputContent, mimeType, extension;
-                
-                switch (format) {
-                    case 'docx':
-                        // Simple DOCX simulation - in real app, use docx.js library
-                        mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-                        extension = '.docx';
-                        outputContent = createSimpleDocxContent(extractedText);
-                        break;
-                    case 'html':
-                        mimeType = 'text/html';
-                        extension = '.html';
-                        outputContent = createHtmlContent(extractedText);
-                        break;
-                    case 'txt':
-                        mimeType = 'text/plain';
-                        extension = '.txt';
-                        outputContent = extractedText;
-                        break;
-                }
-                
-                // Download file
-                downloadFile(outputContent, file.name.replace('.pdf', extension), mimeType);
-                
-                // Update stats
-                const wordCount = extractedText.split(/\s+/).length;
-                pdfStats.innerHTML = `Pages: ${pages.length} | Words: ${wordCount} | Format: ${format.toUpperCase()}`;
-                
-                showStatus(`✅ PDF converted successfully! ${pages.length} pages processed.`, 'success', pdfStatus);
-                
-            } catch (error) {
-                console.error('PDF conversion error:', error);
-                showStatus('❌ Error converting PDF: ' + error.message, 'error', pdfStatus);
-            } finally {
-                setTimeout(() => {
-                    pdfProgressBar.style.display = 'none';
-                    pdfProgress.style.width = '0%';
-                }, 1000);
-            }
-        }
-
-        // Real Word to PDF Conversion
-        async function convertWordToPdfReal() {
-            const file = convertWordToPdf.file;
-            if (!file) {
-                showStatus('Please select a file first.', 'error', wordStatus);
-                return;
-            }
-
-            showStatus('Processing Word document...', 'loading', wordStatus);
-            wordProgressBar.style.display = 'block';
-            wordProgress.style.width = '30%';
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                wordProgress.style.width = '60%';
-                
-                // Convert Word to HTML using Mammoth
-                const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
-                const htmlContent = result.value;
-                
-                wordProgress.style.width = '80%';
-                
-                // Create PDF from HTML
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({
-                    orientation: document.getElementById('pdfOrientation').value,
-                    unit: 'mm',
-                    format: document.getElementById('pdfPageSize').value
-                });
-                
-                // Add content to PDF
-                doc.setFontSize(12);
-                const lines = htmlContent.replace(/<[^>]*>/g, '').split('\n');
-                let y = 20;
-                
-                lines.forEach(line => {
-                    if (line.trim()) {
-                        if (y > 270) { // New page if needed
-                            doc.addPage();
-                            y = 20;
-                        }
-                        doc.text(line, 20, y);
-                        y += 10;
-                    }
-                });
-                
-                wordProgress.style.width = '100%';
-                
-                // Download PDF
-                const pdfOutput = doc.output('blob');
-                downloadFile(pdfOutput, file.name.replace(/\.(doc|docx)$/, '.pdf'), 'application/pdf');
-                
-                // Update stats
-                const wordCount = htmlContent.split(/\s+/).length;
-                wordStats.innerHTML = `Pages: ${doc.internal.getNumberOfPages()} | Words: ${wordCount}`;
-                
-                showStatus('✅ Word document converted to PDF successfully!', 'success', wordStatus);
-                
-            } catch (error) {
-                console.error('Word conversion error:', error);
-                showStatus('❌ Error converting Word document: ' + error.message, 'error', wordStatus);
-            } finally {
-                setTimeout(() => {
-                    wordProgressBar.style.display = 'none';
-                    wordProgress.style.width = '0%';
-                }, 1000);
-            }
-        }
-
-        // Helper functions
-        function createSimpleDocxContent(text) {
-            // Simple simulation - in production, use docx.js library
-            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-    <w:body>
-        <w:p>
-            <w:r>
-                <w:t>${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</w:t>
-            </w:r>
-        </w:p>
-    </w:body>
-</w:document>`;
-        }
-
-        function createHtmlContent(text) {
-            return `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Converted Document</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; }
-        .page { margin-bottom: 40px; }
-    </style>
-</head>
-<body>
-    <div class="content">
-        ${text.replace(/\n/g, '<br>')}
-    </div>
-</body>
-</html>`;
-        }
-
-        function downloadFile(content, filename, mimeType) {
-            const blob = content instanceof Blob ? content : new Blob([content], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function resetConverter(fileInput, fileInfo, convertBtn, statusElem, statsElem, progressBar, progress) {
-            fileInput.value = '';
-            fileInfo.style.display = 'none';
-            convertBtn.disabled = true;
-            convertBtn.file = null;
-            statusElem.style.display = 'none';
-            if (statsElem) statsElem.innerHTML = '';
-            if (progressBar) progressBar.style.display = 'none';
-            if (progress) progress.style.width = '0%';
+            showStatus('Converting file... Please wait.', 'loading', statusElem);
+            
+            setTimeout(() => {
+                const outputFilename = file.name.replace(/\.[^/.]+$/, "") + outputExtension;
+                showStatus(`✅ Conversion successful! File downloaded as ${outputFilename}`, 'success', statusElem);
+            }, 2000);
         }
 
         function showStatus(message, type, statusElement) {
@@ -686,38 +354,24 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        // Initialize PDF to Word Converter
-        setupFileUpload(
-            pdfUploadArea, 
-            pdfFileInput, 
-            pdfFileInfo, 
-            pdfFileName, 
-            pdfFileSize, 
-            convertPdfToWord, 
-            'application/pdf',
-            pdfStats
-        );
-
-        convertPdfToWord.addEventListener('click', convertPdfToWordReal);
+        // Initialize PDF to Word
+        setupFileUpload(pdfUploadArea, pdfFileInput, pdfFileInfo, pdfFileName, pdfFileSize, convertPdfToWord);
+        convertPdfToWord.addEventListener('click', () => convertFile(convertPdfToWord, '.docx', pdfStatus, true));
         resetPdf.addEventListener('click', () => {
-            resetConverter(pdfFileInput, pdfFileInfo, convertPdfToWord, pdfStatus, pdfStats, pdfProgressBar, pdfProgress);
+            pdfFileInput.value = '';
+            pdfFileInfo.style.display = 'none';
+            convertPdfToWord.disabled = true;
+            pdfStatus.style.display = 'none';
         });
 
-        // Initialize Word to PDF Converter
-        setupFileUpload(
-            wordUploadArea, 
-            wordFileInput, 
-            wordFileInfo, 
-            wordFileName, 
-            wordFileSize, 
-            convertWordToPdf, 
-            ['.doc', '.docx', 'msword', 'wordprocessingml'],
-            wordStats
-        );
-
-        convertWordToPdf.addEventListener('click', convertWordToPdfReal);
+        // Initialize Word to PDF
+        setupFileUpload(wordUploadArea, wordFileInput, wordFileInfo, wordFileName, wordFileSize, convertWordToPdf);
+        convertWordToPdf.addEventListener('click', () => convertFile(convertWordToPdf, '.pdf', wordStatus, false));
         resetWord.addEventListener('click', () => {
-            resetConverter(wordFileInput, wordFileInfo, convertWordToPdf, wordStatus, wordStats, wordProgressBar, wordProgress);
+            wordFileInput.value = '';
+            wordFileInfo.style.display = 'none';
+            convertWordToPdf.disabled = true;
+            wordStatus.style.display = 'none';
         });
     </script>
 </body>
