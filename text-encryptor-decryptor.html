@@ -1,141 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Encryptor/Decryptor Tool</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #1a1f2e;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #e0e6f0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryptor/Decryptor - StellarTool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    h2 {
-      color: #00c4ff;
-      text-align: center;
-    }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
 
-    #textBox {
-      width: 90%;
-      max-width: 500px;
-      min-height: 150px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #40445a;
-      background: #2c2f3e;
-      margin-bottom: 15px;
-      outline: none;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      color: #e0e6f0;
-    }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
 
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      background: linear-gradient(90deg, #00c4ff, #8e2de2);
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 15px;
-      transition: opacity 0.3s;
-    }
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
 
-    button:hover {
-      opacity: 0.8;
-    }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
 
-    #output {
-      font-size: 16px;
-      margin-top: 20px;
-      color: #e0e6f0;
-    }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
 
-    .input-label {
-      margin-bottom: 10px;
-      color: #e0e6f0;
-    }
+        .content {
+            padding: 40px;
+        }
 
-    input[type="number"] {
-      width: 90%;
-      max-width: 500px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #40445a;
-      background: #2c2f3e;
-      color: #e0e6f0;
-      margin-bottom: 15px;
-    }
-  </style>
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .encrypt-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .decrypt-btn {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+
+        .instructions {
+            background: #e8f4fd;
+            border: 1px solid #b6e0fe;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .instructions li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+
+        .example {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h2>Text Encryptor/Decryptor Tool</h2>
-  <div id="textBox" contenteditable="true" placeholder="Paste or type text here..."></div>
-  <label class="input-label" for="shift">Enter Shift Value (for Caesar Cipher):</label>
-  <input type="number" id="shift" value="3" min="1" max="25" />
-  <button onclick="encryptText()">Encrypt Text</button>
-  <button onclick="decryptText()">Decrypt Text</button>
-  <div id="output"></div>
-  <script>
-    function caesarCipher(str, shift) {
-      return str.split('')
-        .map(char => {
-          const charCode = char.charCodeAt(0);
-          if (char >= 'a' && char <= 'z') {
-            return String.fromCharCode(((charCode - 97 + shift) % 26) + 97);
-          } else if (char >= 'A' && char <= 'Z') {
-            return String.fromCharCode(((charCode - 65 + shift) % 26) + 65);
-          } else {
-            return char;
-          }
-        })
-        .join('');
-    }
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Text Encryptor/Decryptor</h1>
+            <p>Secure your messages with Caesar Cipher</p>
+        </div>
+        
+        <div class="content">
+            <!-- Shift Value Input -->
+            <div class="input-group">
+                <label for="shiftValue">Enter Shift Value (1-25):</label>
+                <input type="number" id="shiftValue" min="1" max="25" value="3" placeholder="Enter shift value between 1-25">
+            </div>
 
-    function encryptText() {
-      const content = document.getElementById("textBox").innerText.trim();
-      const shiftValue = parseInt(document.getElementById("shift").value);
+            <!-- Text Input -->
+            <div class="input-group">
+                <label for="inputText">Enter Your Text:</label>
+                <textarea id="inputText" rows="4" placeholder="Type your message here..."></textarea>
+            </div>
 
-      if (!content) {
-        document.getElementById("output").innerText = "Please enter text to encrypt.";
-        return;
-      }
+            <!-- Buttons -->
+            <div class="button-group">
+                <button class="encrypt-btn" onclick="encryptText()">🔒 Encrypt Text</button>
+                <button class="decrypt-btn" onclick="decryptText()">🔓 Decrypt Text</button>
+                <button class="reset-btn" onclick="resetAll()">🔄 Reset</button>
+            </div>
 
-      const encryptedText = caesarCipher(content, shiftValue);
-      document.getElementById("output").innerText = "Encrypted Text: " + encryptedText;
-    }
+            <!-- Result -->
+            <div class="result">
+                <strong>Result:</strong>
+                <div id="outputText" style="margin-top: 10px; color: #2c3e50;"></div>
+            </div>
 
-    function decryptText() {
-      const content = document.getElementById("textBox").innerText.trim();
-      const shiftValue = parseInt(document.getElementById("shift").value);
+            <!-- Instructions -->
+            <div class="instructions">
+                <h3>📖 How to Use This Tool:</h3>
+                <ul>
+                    <li><strong>Step 1:</strong> Enter shift value (1-25) - Yeh aapka password hai</li>
+                    <li><strong>Step 2:</strong> Type your message in the text box</li>
+                    <li><strong>Step 3:</strong> Click "Encrypt Text" to secure your message</li>
+                    <li><strong>Step 4:</strong> Share encrypted text + shift value with receiver</li>
+                    <li><strong>Step 5:</strong> Receiver uses same shift value to decrypt</li>
+                </ul>
+                
+                <div class="example">
+                    <strong>Example:</strong><br>
+                    Shift: 3, Text: "HELLO" → Encrypted: "KHOOR"<br>
+                    Shift: 3, Encrypted: "KHOOR" → Decrypted: "HELLO"
+                </div>
+            </div>
+        </div>
+    </div>
 
-      if (!content) {
-        document.getElementById("output").innerText = "Please enter text to decrypt.";
-        return;
-      }
+    <script>
+        function caesarCipher(text, shift, encrypt = true) {
+            let result = '';
+            
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                
+                if (char.match(/[a-z]/i)) {
+                    let code = text.charCodeAt(i);
+                    
+                    // Uppercase letters
+                    if (code >= 65 && code <= 90) {
+                        char = String.fromCharCode(((code - 65 + (encrypt ? shift : (26 - shift))) % 26) + 65);
+                    }
+                    // Lowercase letters
+                    else if (code >= 97 && code <= 122) {
+                        char = String.fromCharCode(((code - 97 + (encrypt ? shift : (26 - shift))) % 26) + 97);
+                    }
+                }
+                result += char;
+            }
+            return result;
+        }
 
-      const decryptedText = caesarCipher(content, -shiftValue);
-      document.getElementById("output").innerText = "Decrypted Text: " + decryptedText;
-    }
-  </script>
-  <script type="text/javascript">
-    atOptions = {
-      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-      'format' : 'iframe',
-      'height' : 50,
-      'width' : 320,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+        function encryptText() {
+            const shift = parseInt(document.getElementById('shiftValue').value);
+            const inputText = document.getElementById('inputText').value;
+            
+            if (!inputText) {
+                alert('Please enter some text to encrypt!');
+                return;
+            }
+            
+            if (shift < 1 || shift > 25) {
+                alert('Please enter a shift value between 1 and 25!');
+                return;
+            }
+            
+            const encryptedText = caesarCipher(inputText, shift, true);
+            document.getElementById('outputText').innerHTML = `
+                <strong>Encrypted Text:</strong> ${encryptedText}<br>
+                <small style="color: #666;">Share this with shift value: ${shift}</small>
+            `;
+        }
+
+        function decryptText() {
+            const shift = parseInt(document.getElementById('shiftValue').value);
+            const inputText = document.getElementById('inputText').value;
+            
+            if (!inputText) {
+                alert('Please enter some text to decrypt!');
+                return;
+            }
+            
+            if (shift < 1 || shift > 25) {
+                alert('Please enter a shift value between 1 and 25!');
+                return;
+            }
+            
+            const decryptedText = caesarCipher(inputText, shift, false);
+            document.getElementById('outputText').innerHTML = `
+                <strong>Decrypted Text:</strong> ${decryptedText}<br>
+                <small style="color: #666;">Used shift value: ${shift}</small>
+            `;
+        }
+
+        function resetAll() {
+            document.getElementById('shiftValue').value = '3';
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').innerHTML = '';
+        }
+
+        // Add some example on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('inputText').placeholder = 'Try: HELLO WORLD (then click Encrypt)';
+        });
+    </script>
 </body>
 </html>
