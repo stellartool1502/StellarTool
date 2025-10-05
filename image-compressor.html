@@ -1,9 +1,7 @@
-  
-    
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image Compressor</title>
@@ -11,8 +9,8 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      color: #333;
+      background-color: #1a1f2e;
+      color: #e0e6f0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -20,13 +18,13 @@
     }
 
     h1 {
-      color: #007bff;
+      color: #00c4ff;
     }
 
     .container {
-      background: #ffffff;
+      background: #2c2f3e;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
       padding: 20px;
       max-width: 500px;
       width: 100%;
@@ -45,16 +43,17 @@
 
     button {
       margin-top: 15px;
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
 
     @media (max-width: 600px) {
@@ -73,7 +72,6 @@
     </div>
     <button id="compressBtn" style="display:none;">Compress & Download</button>
   </div>
-
   <script>
     const upload = document.getElementById('upload');
     const preview = document.getElementById('preview');
@@ -114,17 +112,14 @@
     });
   </script>
   <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-  
-  
-  
