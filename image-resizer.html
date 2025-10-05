@@ -1,16 +1,15 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image Resizer Tool</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #e6f0ff;
-      color: #003366;
+      background-color: #1a1f2e;
+      color: #00c4ff;
       margin: 0;
       padding: 0;
     }
@@ -19,14 +18,14 @@
       max-width: 600px;
       margin: 2rem auto;
       padding: 1rem;
-      background-color: #ffffff;
+      background-color: #2c2f3e;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
     }
 
     h1 {
       text-align: center;
-      color: #007bff;
+      color: #00c4ff;
     }
 
     input[type="file"], input[type="number"] {
@@ -34,17 +33,22 @@
       width: 100%;
       margin: 1rem 0;
       padding: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid #40445a;
       border-radius: 5px;
+      background: #333854;
+      color: #e0e6f0;
     }
 
     canvas {
       max-width: 100%;
       margin-top: 1rem;
+      border: 1px solid #40445a;
+      border-radius: 5px;
+      background: #333854;
     }
 
     button {
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       padding: 0.7rem;
       border: none;
@@ -52,10 +56,29 @@
       cursor: pointer;
       width: 100%;
       margin-top: 1rem;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
+    }
+
+    a#downloadLink {
+      display: none;
+      text-align: center;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
+      color: white;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: opacity 0.3s;
+    }
+
+    a#downloadLink:hover {
+      opacity: 0.8;
     }
 
     @media (max-width: 600px) {
@@ -76,7 +99,6 @@
     <canvas id="canvas"></canvas>
     <a id="downloadLink" style="display:none;" download="resized-image.png">Download Resized Image</a>
   </div>
-
   <script>
     let originalImage = new Image();
 
@@ -115,17 +137,14 @@
     }
   </script>
   <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
-  
