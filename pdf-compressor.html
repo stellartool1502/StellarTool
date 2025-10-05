@@ -1,8 +1,7 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PDF Compressor</title>
@@ -10,8 +9,8 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
+      background-color: #1a1f2e;
+      color: #e0e6f0;
     }
 
     .container {
@@ -19,10 +18,13 @@
       margin: auto;
       padding: 2rem;
       text-align: center;
+      background: #2c2f3e;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     }
 
     h1 {
-      color: #007BFF;
+      color: #00c4ff;
     }
 
     input[type="file"] {
@@ -31,7 +33,7 @@
     }
 
     .button {
-      background-color: #007BFF;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border: none;
       padding: 0.75rem 1.5rem;
@@ -39,11 +41,16 @@
       font-size: 1rem;
       cursor: pointer;
       margin-top: 1rem;
+      transition: opacity 0.3s;
     }
 
     .button:disabled {
-      background-color: #a6c8ff;
+      background: #a0a8b8;
       cursor: not-allowed;
+    }
+
+    .button:hover:not(:disabled) {
+      opacity: 0.8;
     }
 
     #downloadLink {
@@ -65,7 +72,6 @@
     <button class="button" id="compressBtn" disabled>Compress PDF</button>
     <a id="downloadLink" class="button" download="compressed.pdf">Download Compressed PDF</a>
   </div>
-
   <script type="module">
     import { PDFDocument } from 'https://cdn.skypack.dev/pdf-lib';
 
@@ -104,26 +110,14 @@
     });
   </script>
   <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
-	<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
