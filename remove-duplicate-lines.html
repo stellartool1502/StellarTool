@@ -1,22 +1,21 @@
-  
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <title>Remove Duplicate Lines Tool</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f8ff;
+      background: #1a1f2e;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: #e0e6f0;
     }
 
     h2 {
-      color: #007bff;
+      color: #00c4ff;
       text-align: center;
     }
 
@@ -27,38 +26,36 @@
       padding: 10px;
       font-size: 16px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      background: #fff;
+      border: 1px solid #40445a;
+      background: #2c2f3e;
       margin-bottom: 15px;
       outline: none;
       overflow-y: auto;
       white-space: pre-wrap;
+      color: #e0e6f0;
     }
 
     button {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border-radius: 8px;
       cursor: pointer;
       margin-bottom: 15px;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-
   <h2>Remove Duplicate Lines</h2>
-
   <div id="textBox" contenteditable="true" placeholder="Paste or type lines here..."></div>
-
   <button onclick="removeDuplicates()">Remove Duplicates</button>
-
   <script>
     function removeDuplicates() {
       var content = document.getElementById("textBox").innerText;
@@ -67,18 +64,15 @@
       document.getElementById("textBox").innerText = uniqueLines.join('\n');
     }
   </script>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
-  
