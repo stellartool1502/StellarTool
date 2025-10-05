@@ -13,170 +13,244 @@
     }
     
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       line-height: 1.7;
-      color: #333;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #2D3748;
+      background: #FFFFFF;
       min-height: 100vh;
-      padding: 20px;
+      padding: 0;
     }
-    
+
+    /* Professional Header */
+    .header {
+      background: #1A202C;
+      color: white;
+      padding: 40px 0;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .header-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #4299E1;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .header p {
+      color: #CBD5E0;
+      font-size: 1.1rem;
+    }
+
+    /* Main Container */
     .container {
       max-width: 1000px;
       margin: 0 auto;
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
+      padding: 40px 20px;
     }
-    
-    header {
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      color: white;
-      padding: 30px;
-      text-align: center;
-    }
-    
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      font-weight: 300;
-    }
-    
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-    
-    .content {
-      padding: 40px;
-    }
-    
+
+    /* Effective Date */
     .effective-date {
-      background: #f8f9fa;
-      padding: 15px;
+      background: #EBF8FF;
+      border: 1px solid #BEE3F8;
+      border-left: 4px solid #3182CE;
+      padding: 20px;
       border-radius: 8px;
-      margin-bottom: 30px;
-      border-left: 4px solid #667eea;
+      margin-bottom: 40px;
+      font-weight: 500;
     }
-    
-    h1 {
-      color: #2c3e50;
-      margin: 30px 0 15px 0;
-      font-size: 2rem;
+
+    /* Content Styling */
+    .content {
+      line-height: 1.8;
     }
-    
+
     h2 {
-      color: #34495e;
-      margin: 25px 0 15px 0;
+      color: #2D3748;
+      margin: 40px 0 20px 0;
       font-size: 1.5rem;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #ecf0f1;
+      font-weight: 600;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #E2E8F0;
     }
-    
+
     h3 {
-      color: #2c3e50;
-      margin: 20px 0 10px 0;
+      color: #4A5568;
+      margin: 30px 0 15px 0;
       font-size: 1.2rem;
+      font-weight: 600;
     }
-    
+
     p {
-      margin-bottom: 16px;
-      text-align: justify;
+      margin-bottom: 20px;
+      color: #4A5568;
     }
-    
+
     ul {
-      margin: 15px 0;
-      padding-left: 30px;
+      margin: 20px 0;
+      padding-left: 24px;
     }
-    
+
     li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: #4A5568;
+      position: relative;
     }
-    
-    .highlight-box {
-      background: #e8f4fd;
-      border: 1px solid #b6e0fe;
+
+    li:before {
+      content: "•";
+      color: #4299E1;
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+
+    /* Professional Boxes */
+    .info-box {
+      background: #F7FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .note-box {
+      background: #FFFBF0;
+      border: 1px solid #FEF5D4;
+      border-left: 4px solid #D69E2E;
       border-radius: 8px;
       padding: 20px;
-      margin: 20px 0;
+      margin: 24px 0;
     }
-    
+
     .warning-box {
-      background: #fff3cd;
-      border: 1px solid #ffeaa7;
+      background: #FFF5F5;
+      border: 1px solid #FED7D7;
+      border-left: 4px solid #E53E3E;
       border-radius: 8px;
       padding: 20px;
-      margin: 20px 0;
-      border-left: 4px solid #ffc107;
+      margin: 24px 0;
     }
-    
+
+    /* Contact Section */
     .contact-section {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 10px;
-      margin-top: 30px;
-      border-left: 4px solid #27ae60;
-    }
-    
-    .note {
-      background: #f8f9fa;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 20px 0;
-      font-style: italic;
-    }
-    
-    footer {
-      background: #2c3e50;
-      color: white;
+      background: #F7FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 32px;
+      margin: 40px 0 30px 0;
       text-align: center;
-      padding: 20px;
-      margin-top: 40px;
     }
-    
-    .prohibited-list {
-      background: #fff5f5;
-      border: 1px solid #fed7d7;
+
+    .contact-email {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #3182CE;
+      margin: 16px 0;
+      padding: 12px 24px;
+      background: white;
+      border: 1px solid #BEE3F8;
       border-radius: 8px;
-      padding: 20px;
-      margin: 15px 0;
+      display: inline-block;
+      text-decoration: none;
     }
-    
-    .prohibited-list ul {
-      list-style-type: '❌ ';
+
+    .contact-email:hover {
+      background: #EBF8FF;
     }
-    
+
+    /* Footer */
+    footer {
+      background: #1A202C;
+      color: #A0AEC0;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 60px;
+      border-top: 1px solid #2D3748;
+    }
+
+    .footer-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Links */
+    a {
+      color: #3182CE;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
-      .content {
-        padding: 20px;
+      .header {
+        padding: 30px 0;
       }
-      
-      header h1 {
+
+      .header h1 {
         font-size: 2rem;
       }
-      
-      h1 {
-        font-size: 1.7rem;
+
+      .container {
+        padding: 20px 15px;
+      }
+
+      .contact-email {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
       }
       
-      h2 {
-        font-size: 1.3rem;
+      .header {
+        background: white !important;
+        color: black !important;
+        border-bottom: 2px solid #000;
+      }
+      
+      .contact-section {
+        border: 1px solid #000;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
+  <!-- Professional Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">StellarTool</div>
       <h1>Terms and Conditions</h1>
-      <p>StellarTool - Browser-Based Utility Tools</p>
-    </header>
-    
+      <p>Last updated: September 28, 2025</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
     <div class="content">
       <div class="effective-date">
-        <strong>Effective date:</strong> September 28, 2025
+        <strong>Effective Date:</strong> September 28, 2025
       </div>
 
       <p>Welcome to <strong>StellarTool</strong> (<a href="https://stellartool1502.github.io/StellarTool/">https://stellartool1502.github.io/StellarTool/</a>). These Terms and Conditions ("Terms", "Agreement") govern your use of our website and services (collectively, the "Site"). By using or accessing the Site, you agree to be bound by these Terms. If you do not agree, please stop using the Site.</p>
@@ -202,13 +276,13 @@
         <li>You must not upload or input content that is illegal, harmful, defamatory, or violates intellectual property rights.</li>
       </ul>
 
-      <div class="highlight-box">
+      <div class="note-box">
         <strong>Note:</strong> Most tools on StellarTool are browser-based and process data locally on your device. In those cases, your User Content is not stored on our servers.
       </div>
 
       <h2>4. Prohibited Uses</h2>
       <p>When using the Site, you agree not to:</p>
-      <div class="prohibited-list">
+      <div class="warning-box">
         <ul>
           <li>Attempt to hack, disrupt, or damage the Site or its infrastructure</li>
           <li>Use automated scripts, bots, or scraping tools without permission</li>
@@ -246,21 +320,28 @@
       <h2>11. Governing Law</h2>
       <p>These Terms are governed by and interpreted in accordance with the laws of [insert your country/state]. Any disputes will be subject to the exclusive jurisdiction of the courts of that location.</p>
 
+      <!-- Contact Section -->
       <div class="contact-section">
-        <h2>12. Contact</h2>
-        <p>If you have questions about these Terms, contact us at: <strong>[your contact email here]</strong></p>
+        <h2>12. Contact Us</h2>
+        <p>If you have questions about these Terms, please contact us:</p>
+        <a href="mailto:stellartool.ai@gmail.com" class="contact-email">stellartool.ai@gmail.com</a>
+        <p>We typically respond within 24-48 hours.</p>
       </div>
 
-      <div class="note">
+      <div class="info-box">
         <p><strong>Developer / Site owner:</strong> StellarTool<br>
         <strong>Site:</strong> <a href="https://stellartool1502.github.io/StellarTool/">https://stellartool1502.github.io/StellarTool/</a></p>
         <p><em>This is a general template for Terms and Conditions. Please customize with your actual contact information and governing law, and seek legal advice if necessary to ensure compliance with applicable regulations.</em></p>
       </div>
     </div>
-    
-    <footer>
-      <p>&copy; 2025 StellarTool. All rights reserved.</p>
-    </footer>
   </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 StellarTool. All rights reserved.</p>
+      <p>Contact: <a href="mailto:stellartool.ai@gmail.com" style="color: #CBD5E0;">stellartool.ai@gmail.com</a></p>
+    </div>
+  </footer>
 </body>
 </html>
