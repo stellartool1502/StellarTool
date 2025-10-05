@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Case Converter - Stellar Tools</title>
@@ -9,39 +10,65 @@
     /* Fallback styles in case Tailwind CDN fails */
     body {
       font-family: Arial, sans-serif;
-      background: #f3f4f6;
+      background: #1a1f2e;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
       padding: 1rem;
+      color: #e0e6f0;
     }
     .container {
-      background: white;
+      background: #2c2f3e;
       border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
       padding: 1.5rem;
       max-width: 28rem;
       width: 100%;
     }
     textarea, .output {
-      border: 2px solid #3b82f6;
+      border: 2px solid #40445a;
       border-radius: 0.5rem;
       padding: 0.75rem;
       width: 100%;
       box-sizing: border-box;
+      background: #333854;
+      color: #e0e6f0;
     }
     button {
-      background: #3b82f6;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border: none;
       border-radius: 0.5rem;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
     button:hover {
-      background: #2563eb;
+      opacity: 0.8;
+    }
+    /* Override Tailwind defaults for dark theme */
+    .text-blue-600 {
+      color: #00c4ff;
+    }
+    .bg-blue-500 {
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
+    }
+    .hover:bg-blue-600 {
+      background: none;
+    }
+    .hover:bg-blue-600:hover {
+      opacity: 0.8;
+    }
+    .bg-gray-500 {
+      background: linear-gradient(90deg, #6b7280, #4b5563);
+    }
+    .hover:bg-gray-600:hover {
+      opacity: 0.8;
+    }
+    .bg-blue-50 {
+      background: #2c2f3e;
     }
   </style>
 </head>
@@ -51,7 +78,7 @@
     
     <textarea
       id="inputText"
-      class="w-full h-32 border-2 border-blue-500 rounded-lg p-3 text-base resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="w-full h-32 border-2 border-blue-500 rounded-lg p-3 text-base resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
       placeholder="Type or paste your text here..."
     ></textarea>
     
@@ -84,7 +111,7 @@
     
     <div
       id="output"
-      class="border-2 border-blue-500 rounded-lg p-3 min-h-[100px] bg-blue-50 text-base whitespace-pre-wrap mb-4"
+      class="border-2 border-blue-500 rounded-lg p-3 min-h-[100px] bg-blue-50 text-base whitespace-pre-wrap mb-4 text-white"
     ></div>
     
     <button
@@ -92,7 +119,6 @@
       class="w-full bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition text-sm"
     >Copy Output</button>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       function convertText(type) {
