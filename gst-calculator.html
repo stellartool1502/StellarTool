@@ -1,34 +1,34 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GST Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4faff;
+      background: #1a1f2e;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      color: #e0e6f0;
     }
 
     .container {
-      background: #fff;
+      background: #2c2f3e;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
       text-align: center;
       width: 90%;
       max-width: 400px;
     }
 
     h1 {
-      color: #007bff;
+      color: #00c4ff;
       margin-bottom: 20px;
     }
 
@@ -37,12 +37,14 @@
       padding: 10px;
       margin: 10px 0;
       font-size: 16px;
-      border: 1px solid #ccc;
+      border: 1px solid #40445a;
       border-radius: 10px;
+      background: #333854;
+      color: #e0e6f0;
     }
 
     button {
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: #fff;
       padding: 12px 20px;
       border: none;
@@ -51,16 +53,18 @@
       cursor: pointer;
       margin-top: 10px;
       width: 100%;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
 
     .result {
       margin-top: 20px;
       font-weight: bold;
       font-size: 18px;
+      color: #e0e6f0;
     }
 
     @media (max-width: 500px) {
@@ -71,7 +75,6 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <h1>GST Calculator</h1>
     <input type="number" id="amount" placeholder="Enter Amount (₹)" />
@@ -79,7 +82,6 @@
     <button onclick="calculateGST()">Calculate GST</button>
     <div class="result" id="result"></div>
   </div>
-
   <script>
     function calculateGST() {
       const amount = parseFloat(document.getElementById("amount").value);
@@ -99,18 +101,15 @@
       `;
     }
   </script>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
-  
