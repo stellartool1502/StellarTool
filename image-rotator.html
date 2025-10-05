@@ -1,16 +1,15 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Image Rotator/Flipper Tool</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
+      background-color: #1a1f2e;
+      color: #00c4ff;
       margin: 0;
       padding: 0;
     }
@@ -20,10 +19,13 @@
       margin: 0 auto;
       text-align: center;
       padding: 20px;
+      background: #2c2f3e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
     }
 
     h1 {
-      color: #007bff;
+      color: #00c4ff;
     }
 
     .upload-section {
@@ -38,7 +40,7 @@
     }
 
     button {
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border: none;
       padding: 10px 20px;
@@ -47,18 +49,20 @@
       border-radius: 5px;
       flex: 1 1 40%;
       max-width: 180px;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
 
     .preview {
       margin: 20px 0;
       max-height: 300px;
       overflow: auto;
-      border: 1px solid #ddd;
+      border: 1px solid #40445a;
       padding: 10px;
+      background: #333854;
     }
 
     #image-preview {
@@ -105,7 +109,6 @@
       </a>
     </div>
   </div>
-
   <script>
     let imagePreview = document.getElementById('image-preview');
     let imageUpload = document.getElementById('image-upload');
@@ -192,15 +195,14 @@
     }
   </script>
   <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-  
