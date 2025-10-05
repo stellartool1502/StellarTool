@@ -1,23 +1,23 @@
-  
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href=favicon-16x16.png" type="image/x-icon">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Encryptor/Decryptor Tool</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f8ff;
+      background: #1a1f2e;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: #e0e6f0;
     }
 
     h2 {
-      color: #007bff;
+      color: #00c4ff;
       text-align: center;
     }
 
@@ -28,54 +28,63 @@
       padding: 10px;
       font-size: 16px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      background: #fff;
+      border: 1px solid #40445a;
+      background: #2c2f3e;
       margin-bottom: 15px;
       outline: none;
       overflow-y: auto;
       white-space: pre-wrap;
+      color: #e0e6f0;
     }
 
     button {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
-      background-color: #007bff;
+      background: linear-gradient(90deg, #00c4ff, #8e2de2);
       color: white;
       border-radius: 8px;
       cursor: pointer;
       margin-bottom: 15px;
+      transition: opacity 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      opacity: 0.8;
     }
 
     #output {
       font-size: 16px;
       margin-top: 20px;
-      color: #333;
+      color: #e0e6f0;
     }
 
     .input-label {
       margin-bottom: 10px;
+      color: #e0e6f0;
+    }
+
+    input[type="number"] {
+      width: 90%;
+      max-width: 500px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #40445a;
+      background: #2c2f3e;
+      color: #e0e6f0;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
-
   <h2>Text Encryptor/Decryptor Tool</h2>
-
   <div id="textBox" contenteditable="true" placeholder="Paste or type text here..."></div>
-
   <label class="input-label" for="shift">Enter Shift Value (for Caesar Cipher):</label>
   <input type="number" id="shift" value="3" min="1" max="25" />
-
   <button onclick="encryptText()">Encrypt Text</button>
   <button onclick="decryptText()">Decrypt Text</button>
-
   <div id="output"></div>
-
   <script>
     function caesarCipher(str, shift) {
       return str.split('')
@@ -118,18 +127,15 @@
       document.getElementById("output").innerText = "Decrypted Text: " + decryptedText;
     }
   </script>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
-
-  
-  
