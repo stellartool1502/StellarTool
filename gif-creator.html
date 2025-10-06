@@ -214,6 +214,13 @@
             align-items: center;
             justify-content: center;
             color: var(--medium-text);
+            flex-direction: column;
+        }
+
+        .placeholder i {
+            font-size: 3rem;
+            color: var(--primary-neon);
+            margin-bottom: 15px;
         }
 
         .btn-group {
@@ -297,6 +304,52 @@
             transition: width 0.3s ease;
         }
 
+        .message {
+            padding: 10px;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background: rgba(81, 207, 102, 0.1);
+            color: #51cf66;
+            border: 1px solid #51cf66;
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+
+        .file-list {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-item .remove-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
         @media (max-width: 768px) {
             .gif-creator {
                 grid-template-columns: 1fr;
@@ -353,6 +406,11 @@
                         <input type="file" id="file-upload" multiple accept="image/*">
                         <input type="file" id="video-upload" accept="video/*" style="display: none;">
                     </div>
+
+                    <div class="file-list" id="file-list" style="display: none;">
+                        <h4>Selected Files:</h4>
+                        <div id="file-items"></div>
+                    </div>
                     
                     <div class="settings">
                         <h3 class="panel-title">GIF Settings</h3>
@@ -387,10 +445,8 @@
                     <h3 class="panel-title">Preview</h3>
                     <div class="gif-preview">
                         <div class="placeholder" id="preview-placeholder">
-                            <div>
-                                <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                                <p>Your GIF will appear here</p>
-                            </div>
+                            <i class="fas fa-film"></i>
+                            <p>Your GIF will appear here</p>
                         </div>
                         <img id="gif-preview" alt="GIF Preview">
                     </div>
@@ -398,6 +454,8 @@
                     <div class="progress" id="progress-bar">
                         <div class="progress-bar" id="progress-fill"></div>
                     </div>
+
+                    <div id="message" class="message"></div>
                 </div>
             </div>
 
@@ -409,7 +467,7 @@
                     <i class="fas fa-download"></i> Download GIF
                 </button>
                 <button class="btn btn-outline" onclick="clearAll()">
-                    <i class="fas fa-trash"></i> Clear
+                    <i class="fas fa-trash"></i> Clear All
                 </button>
             </div>
         </div>
@@ -463,6 +521,7 @@
                 
             // Reset files
             uploadedFiles = [];
+            updateFileList();
             updateCreateButton();
         }
 
@@ -478,17 +537,52 @@
         // Handle file upload
         document.getElementById('file-upload').addEventListener('change', function(e) {
             uploadedFiles = Array.from(e.target.files);
+            updateFileList();
             updateCreateButton();
-            showMessage(`Selected ${uploadedFiles.length} images`);
+            showMessage(`Selected ${uploadedFiles.length} images`, 'success');
         });
 
         document.getElementById('video-upload').addEventListener('change', function(e) {
             uploadedFiles = e.target.files[0] ? [e.target.files[0]] : [];
+            updateFileList();
             updateCreateButton();
             if (uploadedFiles.length > 0) {
-                showMessage('Video file selected');
+                showMessage('Video file selected', 'success');
             }
         });
+
+        // Update file list display
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            const fileItems = document.getElementById('file-items');
+            
+            fileItems.innerHTML = '';
+            
+            if (uploadedFiles.length > 0) {
+                fileList.style.display = 'block';
+                uploadedFiles.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span>${file.name}</span>
+                        <button class="remove-btn" onclick="removeFile(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    fileItems.appendChild(fileItem);
+                });
+            } else {
+                fileList.style.display = 'none';
+            }
+        }
+
+        // Remove file from list
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFileList();
+            updateCreateButton();
+            showMessage('File removed', 'success');
+        }
 
         // Update speed value display
         document.getElementById('gif-speed').addEventListener('input', function() {
@@ -504,7 +598,7 @@
         // Create GIF
         function createGIF() {
             if (uploadedFiles.length === 0) {
-                showMessage('Please upload files first!');
+                showMessage('Please upload files first!', 'error');
                 return;
             }
 
@@ -515,6 +609,7 @@
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating GIF...';
             progressBar.style.display = 'block';
+            showMessage('Creating your GIF... Please wait', 'success');
             
             // Simulate GIF creation process
             let progress = 0;
@@ -527,7 +622,28 @@
                     
                     // Show success and enable download
                     setTimeout(() => {
-                        generatedGIF = 'https://via.placeholder.com/400/00f0ff/1a1a2e?text=Generated+GIF';
+                        // Create a simple GIF preview using canvas (simulated)
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 400;
+                        canvas.height = 300;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Create a gradient background for demo
+                        const gradient = ctx.createLinearGradient(0, 0, 400, 300);
+                        gradient.addColorStop(0, '#00f0ff');
+                        gradient.addColorStop(1, '#ff00e6');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, 400, 300);
+                        
+                        // Add text
+                        ctx.fillStyle = '#1a1a2e';
+                        ctx.font = 'bold 24px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Generated GIF', 200, 150);
+                        
+                        // Convert to data URL for preview
+                        generatedGIF = canvas.toDataURL('image/png');
+                        
                         document.getElementById('gif-preview').src = generatedGIF;
                         document.getElementById('gif-preview').style.display = 'block';
                         document.getElementById('preview-placeholder').style.display = 'none';
@@ -537,7 +653,7 @@
                         createBtn.innerHTML = '<i class="fas fa-magic"></i> Create GIF';
                         progressBar.style.display = 'none';
                         
-                        showMessage('GIF created successfully!');
+                        showMessage('GIF created successfully! Click Download to save.', 'success');
                     }, 500);
                 }
             }, 100);
@@ -546,15 +662,15 @@
         // Download GIF
         function downloadGIF() {
             if (!generatedGIF) {
-                showMessage('Please create a GIF first!');
+                showMessage('Please create a GIF first!', 'error');
                 return;
             }
             
             const link = document.createElement('a');
-            link.download = 'created-gif.gif';
+            link.download = 'stellar-gif-' + Date.now() + '.png';
             link.href = generatedGIF;
             link.click();
-            showMessage('GIF download started!');
+            showMessage('GIF download started!', 'success');
         }
 
         // Clear all
@@ -566,15 +682,21 @@
             document.getElementById('gif-preview').style.display = 'none';
             document.getElementById('preview-placeholder').style.display = 'flex';
             document.getElementById('download-btn').disabled = true;
+            document.getElementById('file-list').style.display = 'none';
             updateCreateButton();
-            showMessage('Cleared all files and preview');
+            showMessage('Cleared all files and preview', 'success');
         }
 
         // Show message
-        function showMessage(text) {
-            // You can implement a proper message system here
-            console.log(text);
-            alert(text); // Temporary solution
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = 'message ' + type;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
         }
 
         // Initialize
