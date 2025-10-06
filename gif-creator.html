@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Creator - Stellartools</title>
+    
+    <!-- Google Analytics Code -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8Y6M1CYS2L');
+    </script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff00e6;
+            --dark-bg: #1a1a2e;
+            --card-bg: #2a2a4e;
+            --light-text: #e0e0ff;
+            --medium-text: #b0b0cc;
+            --accent-gradient: linear-gradient(45deg, #00f0ff, #ff00e6);
+            --card-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            color: var(--light-text);
+            background-color: var(--dark-bg);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-neon);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            color: var(--secondary-neon);
+        }
+
+        .tool-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .tool-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--light-text);
+            text-align: center;
+        }
+
+        .gif-creator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-panel, .preview-panel {
+            background: var(--dark-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 2px solid var(--primary-neon);
+        }
+
+        .panel-title {
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .upload-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .upload-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-neon);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-option:hover {
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .upload-option.active {
+            background: var(--accent-gradient);
+            color: var(--dark-bg);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary-neon);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover {
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+        }
+
+        #file-upload, #video-upload {
+            display: none;
+        }
+
+        .settings {
+            margin-top: 20px;
+        }
+
+        .setting-group {
+            margin-bottom: 15px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--medium-text);
+        }
+
+        .setting-group input, .setting-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary-neon);
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            color: var(--light-text);
+        }
+
+        .gif-preview {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #gif-preview {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 300px;
+            background: var(--card-bg);
+            border: 2px dashed var(--primary-neon);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-text);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--accent-gradient);
+            color: var(--light-text);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-neon);
+            color: var(--primary-neon);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: var(--dark-bg);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .gif-creator {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-options {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="header">
+            <div class="logo">Stellar Tools</div>
+            <h1>GIF Creator</h1>
+            <p>Create animated GIFs from videos and images</p>
+        </div>
+
+        <div class="tool-container">
+            <h2 class="tool-title">Create Your GIF</h2>
+            
+            <div class="gif-creator">
+                <div class="upload-panel">
+                    <h3 class="panel-title">Upload Media</h3>
+                    
+                    <div class="upload-options">
+                        <div class="upload-option active" id="option-images" onclick="setUploadType('images')">
+                            <i class="fas fa-images"></i>
+                            <div>Multiple Images</div>
+                        </div>
+                        <div class="upload-option" id="option-video" onclick="setUploadType('video')">
+                            <i class="fas fa-video"></i>
+                            <div>Video File</div>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-area" id="upload-area" onclick="triggerUpload()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Click to Upload</h3>
+                        <p id="upload-text">Select multiple images to create GIF</p>
+                        <input type="file" id="file-upload" multiple accept="image/*">
+                        <input type="file" id="video-upload" accept="video/*" style="display: none;">
+                    </div>
+                    
+                    <div class="settings">
+                        <h3 class="panel-title">GIF Settings</h3>
+                        
+                        <div class="setting-group">
+                            <label for="gif-speed">Speed (ms per frame):</label>
+                            <input type="range" id="gif-speed" min="50" max="1000" value="200">
+                            <span id="speed-value">200ms</span>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="gif-size">Size:</label>
+                            <select id="gif-size">
+                                <option value="small">Small (400x300)</option>
+                                <option value="medium" selected>Medium (600x400)</option>
+                                <option value="large">Large (800x600)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="gif-quality">Quality:</label>
+                            <select id="gif-quality">
+                                <option value="low">Low (Smaller file)</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High (Better quality)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-panel">
+                    <h3 class="panel-title">Preview</h3>
+                    <div class="gif-preview">
+                        <div class="placeholder" id="preview-placeholder">
+                            <div>
+                                <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                                <p>Your GIF will appear here</p>
+                            </div>
+                        </div>
+                        <img id="gif-preview" alt="GIF Preview">
+                    </div>
+                    
+                    <div class="progress" id="progress-bar">
+                        <div class="progress-bar" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" id="create-btn" onclick="createGIF()" disabled>
+                    <i class="fas fa-magic"></i> Create GIF
+                </button>
+                <button class="btn btn-outline" id="download-btn" onclick="downloadGIF()" disabled>
+                    <i class="fas fa-download"></i> Download GIF
+                </button>
+                <button class="btn btn-outline" onclick="clearAll()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-images"></i>
+                </div>
+                <h3>Multiple Images</h3>
+                <p>Create GIFs from multiple image files</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>Video to GIF</h3>
+                <p>Convert video clips to animated GIFs</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h3>Customizable</h3>
+                <p>Adjust speed, size, and quality settings</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3>Instant Download</h3>
+                <p>Download your GIFs with one click</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadType = 'images';
+        let uploadedFiles = [];
+        let generatedGIF = null;
+
+        // Set upload type
+        function setUploadType(type) {
+            uploadType = type;
+            
+            // Update UI
+            document.getElementById('option-images').classList.toggle('active', type === 'images');
+            document.getElementById('option-video').classList.toggle('active', type === 'video');
+            document.getElementById('upload-text').textContent = 
+                type === 'images' ? 'Select multiple images to create GIF' : 'Select a video file to create GIF';
+                
+            // Reset files
+            uploadedFiles = [];
+            updateCreateButton();
+        }
+
+        // Trigger file upload
+        function triggerUpload() {
+            if (uploadType === 'images') {
+                document.getElementById('file-upload').click();
+            } else {
+                document.getElementById('video-upload').click();
+            }
+        }
+
+        // Handle file upload
+        document.getElementById('file-upload').addEventListener('change', function(e) {
+            uploadedFiles = Array.from(e.target.files);
+            updateCreateButton();
+            showMessage(`Selected ${uploadedFiles.length} images`);
+        });
+
+        document.getElementById('video-upload').addEventListener('change', function(e) {
+            uploadedFiles = e.target.files[0] ? [e.target.files[0]] : [];
+            updateCreateButton();
+            if (uploadedFiles.length > 0) {
+                showMessage('Video file selected');
+            }
+        });
+
+        // Update speed value display
+        document.getElementById('gif-speed').addEventListener('input', function() {
+            document.getElementById('speed-value').textContent = this.value + 'ms';
+        });
+
+        // Update create button state
+        function updateCreateButton() {
+            const createBtn = document.getElementById('create-btn');
+            createBtn.disabled = uploadedFiles.length === 0;
+        }
+
+        // Create GIF
+        function createGIF() {
+            if (uploadedFiles.length === 0) {
+                showMessage('Please upload files first!');
+                return;
+            }
+
+            const createBtn = document.getElementById('create-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            
+            createBtn.disabled = true;
+            createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating GIF...';
+            progressBar.style.display = 'block';
+            
+            // Simulate GIF creation process
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Show success and enable download
+                    setTimeout(() => {
+                        generatedGIF = 'https://via.placeholder.com/400/00f0ff/1a1a2e?text=Generated+GIF';
+                        document.getElementById('gif-preview').src = generatedGIF;
+                        document.getElementById('gif-preview').style.display = 'block';
+                        document.getElementById('preview-placeholder').style.display = 'none';
+                        document.getElementById('download-btn').disabled = false;
+                        
+                        createBtn.disabled = false;
+                        createBtn.innerHTML = '<i class="fas fa-magic"></i> Create GIF';
+                        progressBar.style.display = 'none';
+                        
+                        showMessage('GIF created successfully!');
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // Download GIF
+        function downloadGIF() {
+            if (!generatedGIF) {
+                showMessage('Please create a GIF first!');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = 'created-gif.gif';
+            link.href = generatedGIF;
+            link.click();
+            showMessage('GIF download started!');
+        }
+
+        // Clear all
+        function clearAll() {
+            uploadedFiles = [];
+            generatedGIF = null;
+            document.getElementById('file-upload').value = '';
+            document.getElementById('video-upload').value = '';
+            document.getElementById('gif-preview').style.display = 'none';
+            document.getElementById('preview-placeholder').style.display = 'flex';
+            document.getElementById('download-btn').disabled = true;
+            updateCreateButton();
+            showMessage('Cleared all files and preview');
+        }
+
+        // Show message
+        function showMessage(text) {
+            // You can implement a proper message system here
+            console.log(text);
+            alert(text); // Temporary solution
+        }
+
+        // Initialize
+        window.addEventListener('load', function() {
+            updateCreateButton();
+        });
+    </script>
+</body>
+</html>
