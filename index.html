@@ -46,6 +46,7 @@
             color: var(--light-text);
             background-color: var(--dark-bg);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         a {
@@ -95,6 +96,7 @@
             color: var(--dark-bg);
         }
 
+        /* Header Animations */
         header {
             background: rgba(26, 26, 46, 0.95);
             backdrop-filter: blur(10px);
@@ -102,6 +104,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            animation: slideDown 0.8s ease-out;
         }
 
         .header-content {
@@ -117,6 +120,7 @@
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
         nav ul {
@@ -127,6 +131,22 @@
         nav a {
             font-weight: 500;
             transition: var(--transition);
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
 
         nav a:hover {
@@ -139,6 +159,7 @@
             align-items: center;
             gap: 10px;
             color: var(--medium-text);
+            animation: fadeIn 1s ease-out 0.5s both;
         }
 
         .contact-info i {
@@ -152,8 +173,14 @@
             font-size: 1.5rem;
             color: var(--primary-neon);
             cursor: pointer;
+            transition: var(--transition);
         }
 
+        .mobile-menu-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hero Section with Enhanced Animations */
         .hero {
             padding: 100px 0;
             background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
@@ -171,6 +198,7 @@
             height: 100%;
             background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
             z-index: 0;
+            animation: pulse 4s ease-in-out infinite;
         }
 
         .hero-content {
@@ -186,7 +214,7 @@
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: fadeIn 1s ease-out;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
 
         .hero p {
@@ -196,6 +224,11 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero .btn {
+            animation: fadeInUp 1s ease-out 0.9s both;
         }
 
         .tools-illustration {
@@ -218,16 +251,26 @@
             font-size: 1.8rem;
             color: var(--primary-neon);
             transition: var(--transition);
+            animation: bounceIn 1s ease-out;
         }
+
+        .tool-icon:nth-child(1) { animation-delay: 1.2s; }
+        .tool-icon:nth-child(2) { animation-delay: 1.4s; }
+        .tool-icon:nth-child(3) { animation-delay: 1.6s; }
+        .tool-icon:nth-child(4) { animation-delay: 1.8s; }
+        .tool-icon:nth-child(5) { animation-delay: 2.0s; }
 
         .tool-icon:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(5deg);
             box-shadow: var(--hover-shadow);
+            animation: float 3s ease-in-out infinite;
         }
 
+        /* Search Section Animation */
         .search-section {
             padding: 40px 0;
             background: var(--card-bg);
+            animation: fadeIn 1s ease-out 1s both;
         }
 
         .search-container {
@@ -251,6 +294,7 @@
             border-color: var(--secondary-neon);
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 0, 230, 0.2);
+            transform: scale(1.02);
         }
 
         .search-btn {
@@ -268,15 +312,27 @@
 
         .search-btn:hover {
             box-shadow: var(--hover-shadow);
+            transform: scale(1.05);
         }
 
+        /* Tools Sections with Staggered Animations */
         .tools-section {
             padding: 60px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out forwards;
         }
+
+        .tools-section:nth-child(1) { animation-delay: 1.2s; }
+        .tools-section:nth-child(2) { animation-delay: 1.4s; }
+        .tools-section:nth-child(3) { animation-delay: 1.6s; }
+        .tools-section:nth-child(4) { animation-delay: 1.8s; }
+        .tools-section:nth-child(5) { animation-delay: 2.0s; }
 
         .section-header {
             text-align: center;
             margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .section-header h2 {
@@ -307,10 +363,23 @@
             flex-direction: column;
             height: 100%;
             border: 1px solid rgba(0, 240, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
         }
 
+        .tool-card:nth-child(1) { animation-delay: 0.1s; }
+        .tool-card:nth-child(2) { animation-delay: 0.2s; }
+        .tool-card:nth-child(3) { animation-delay: 0.3s; }
+        .tool-card:nth-child(4) { animation-delay: 0.4s; }
+        .tool-card:nth-child(5) { animation-delay: 0.5s; }
+        .tool-card:nth-child(6) { animation-delay: 0.6s; }
+        .tool-card:nth-child(7) { animation-delay: 0.7s; }
+        .tool-card:nth-child(8) { animation-delay: 0.8s; }
+        .tool-card:nth-child(9) { animation-delay: 0.9s; }
+
         .tool-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: var(--hover-shadow);
             border-color: var(--primary-neon);
         }
@@ -326,11 +395,23 @@
             margin-bottom: 15px;
             color: var(--primary-neon);
             font-size: 1.3rem;
+            transition: var(--transition);
+        }
+
+        .tool-card:hover .tool-icon-small {
+            transform: scale(1.1) rotate(10deg);
+            background: var(--accent-gradient);
+            color: var(--light-text);
         }
 
         .tool-card h3 {
             margin-bottom: 10px;
             font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .tool-card:hover h3 {
+            color: var(--primary-neon);
         }
 
         .tool-card p {
@@ -345,10 +426,12 @@
             font-size: 0.9rem;
         }
 
+        /* Footer Animations */
         footer {
             background: #0f0f1a;
             color: var(--light-text);
             padding: 60px 0 30px;
+            animation: fadeIn 1s ease-out 2.2s both;
         }
 
         .footer-content {
@@ -366,6 +449,7 @@
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
         .footer-tagline {
@@ -382,6 +466,22 @@
         .footer-links a {
             color: var(--medium-text);
             transition: var(--transition);
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background: var(--primary-neon);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
         }
 
         .footer-links a:hover {
@@ -421,9 +521,133 @@
             color: var(--primary-neon);
         }
 
+        /* Floating Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-neon);
+            border-radius: 50%;
+            animation: floatParticle 20s infinite linear;
+        }
+
+        /* Keyframe Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 240, 255, 0.8), 0 0 30px rgba(255, 0, 230, 0.6);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Scroll Animation */
+        .fade-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @media (max-width: 992px) {
@@ -500,6 +724,9 @@
     </style>
 </head>
 <body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
     <!-- Header Section -->
     <header>
         <div class="container">
@@ -533,7 +760,7 @@
                 <h1>Your Daily Tools, All in One Place</h1>
                 <p>𝐂𝐨𝐧𝐯𝐞𝐫𝐭, 𝐜𝐚𝐥𝐜𝐮𝐥𝐚𝐭𝐞, 𝐜𝐨𝐦𝐩𝐫𝐞𝐬𝐬
 𝓹𝓵𝓾𝓼 𝓹𝓸𝔀𝓮𝓻𝓯𝓾𝓵 𝓷𝓮𝔀 𝓽𝓸𝓸𝓵𝓼 𝓽𝓸 𝓾𝓷𝓵𝓮𝓪𝓼𝓱 𝔂𝓸𝓾𝓻 𝓬𝓻𝓮𝓪𝓽𝓲𝓿𝓲𝓽𝔂
-𝕐𝕠𝕦𝕣 𝕔𝕠𝕞𝕡𝕝𝕖𝕥𝕖 𝕤𝕦𝕚𝕥𝕖 𝕠𝕗 𝕤𝕞𝕒𝕣𝕥 𝕠𝕟𝕝𝕚𝕟𝕖 𝕥𝕠𝕠𝕝𝕤
+𝕐𝕠𝕦𝕣 𝕔𝕠𝕞𝕡𝕝𝕖𝕥𝕖 𝕤𝕦𝕚𝕥𝕖 𝕠𝕗 𝕤𝕞𝕒𝕣𝕥 𝕠𝕟𝕝𝕚𝕟𝕖 𝕥𝕠𝕠𝓵𝓼
 
 𝙁𝙧𝙤𝙢 𝙚𝙨𝙨𝙚𝙣𝙩𝙞𝙖𝙡 𝙘𝙤𝙣𝙫𝙚𝙧𝙩𝙚𝙧𝙨 𝙩𝙤 𝙘𝙧𝙚𝙖𝙩𝙞𝙫𝙚 𝙚𝙙𝙞𝙩𝙤𝙧𝙨
 ⭐ 𝔼𝕍𝔼ℝ𝕐𝕋ℍ𝕀ℕ𝔾 𝕐𝕆𝕌 ℕ𝔼𝔼𝔻, ℂ𝕆𝕄ℙ𝕃𝔼𝕋𝔼𝕃𝕐 𝔽ℝ𝔼𝔼 ⭐</p>
@@ -573,7 +800,7 @@
     </section>
 
     <!-- Tools Sections -->
-    <section id="tools" class="tools-section">
+    <section id="tools" class="tools-section fade-on-scroll">
         <div class="container">
             <!-- Image Tools -->
             <div class="section-header">
@@ -642,7 +869,7 @@
     </section>
 
     <!-- Document Tools Section -->
-    <section class="tools-section" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
+    <section class="tools-section fade-on-scroll" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
         <div class="container">
             <div class="section-header">
                 <h2>📄 Document Tools</h2>
@@ -735,7 +962,7 @@
     </section>
 
     <!-- Calculator Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section fade-on-scroll">
         <div class="container">
             <div class="section-header">
                 <h2>🧮 Calculator Tools</h2>
@@ -795,7 +1022,7 @@
     </section>
 
     <!-- Text Tools Section -->
-    <section class="tools-section" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
+    <section class="tools-section fade-on-scroll" style="background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);">
         <div class="container">
             <div class="section-header">
                 <h2>🔤 Text Tools</h2>
@@ -855,7 +1082,7 @@
     </section>
 
     <!-- Content Creator Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section fade-on-scroll">
         <div class="container">
             <div class="section-header">
                 <h2>🎨 Content Creator Tools</h2>
@@ -965,6 +1192,59 @@
                     document.getElementById('main-nav').classList.remove('active');
                 }
             });
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}vw`;
+                particle.style.animationDuration = `${animationDuration}s`;
+                particle.style.animationDelay = `${animationDelay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Scroll animation
+        function checkScroll() {
+            const elements = document.querySelectorAll('.fade-on-scroll');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            checkScroll();
+            
+            // Check scroll on scroll
+            window.addEventListener('scroll', checkScroll);
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.overflow = 'auto';
         });
     </script>
     <script type="text/javascript">
