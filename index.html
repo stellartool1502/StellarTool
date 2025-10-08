@@ -345,6 +345,144 @@
             font-size: 0.9rem;
         }
 
+        /* New Testimonials Section Styles */
+        .testimonials-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #2a2a4e 0%, #1a1a2e 100%);
+        }
+
+        .testimonials-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--light-text);
+            position: relative;
+        }
+
+        .testimonial-content::before {
+            content: """;
+            font-size: 3rem;
+            color: var(--primary-neon);
+            opacity: 0.3;
+            position: absolute;
+            top: -15px;
+            left: -10px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-bg);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+
+        /* Tool Specialties Section */
+        .specialties-section {
+            padding: 80px 0;
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .specialty-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .specialty-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary-neon);
+            font-size: 1.5rem;
+        }
+
+        .specialty-card h3 {
+            margin-bottom: 15px;
+            color: var(--light-text);
+        }
+
+        .specialty-card ul {
+            margin-left: 20px;
+        }
+
+        .specialty-card li {
+            color: var(--medium-text);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .specialty-card li:before {
+            content: "•";
+            color: var(--primary-neon);
+            position: absolute;
+            left: -15px;
+        }
+
         footer {
             background: #0f0f1a;
             color: var(--light-text);
@@ -478,6 +616,10 @@
                 flex-direction: column;
                 gap: 30px;
             }
+
+            .specialties-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 576px) {
@@ -531,12 +673,8 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Your Daily Tools, All in One Place</h1>
-                <p>𝐂𝐨𝐧𝐯𝐞𝐫𝐭, 𝐜𝐚𝐥𝐜𝐮𝐥𝐚𝐭𝐞, 𝐜𝐨𝐦𝐩𝐫𝐞𝐬𝐬
-𝓹𝓵𝓾𝓼 𝓹𝓸𝔀𝓮𝓻𝓯𝓾𝓵 𝓷𝓮𝔀 𝓽𝓸𝓸𝓵𝓼 𝓽𝓸 𝓾𝓷𝓵𝓮𝓪𝓼𝓱 𝔂𝓸𝓾𝓻 𝓬𝓻𝓮𝓪𝓽𝓲𝓿𝓲𝓽𝔂
-𝕐𝕠𝕦𝕣 𝕔𝕠𝕞𝕡𝕝𝕖𝕥𝕖 𝕤𝕦𝕚𝕥𝕖 𝕠𝕗 𝕤𝕞𝕒𝕣𝕥 𝕠𝕟𝕝𝕚𝕟𝕖 𝕥𝕠𝕠𝕝𝕤
-
-𝙁𝙧𝙤𝙢 𝙚𝙨𝙨𝙚𝙣𝙩𝙞𝙖𝙡 𝙘𝙤𝙣𝙫𝙚𝙧𝙩𝙚𝙧𝙨 𝙩𝙤 𝙘𝙧𝙚𝙖𝙩𝙞𝙫𝙚 𝙚𝙙𝙞𝙩𝙤𝙧𝙨
-⭐ 𝔼𝕍𝔼ℝ𝕐𝕋ℍ𝕀ℕ𝔾 𝕐𝕆𝕌 ℕ𝔼𝔼𝔻, ℂ𝕆𝕄ℙ𝕃𝔼𝕋𝔼𝕃𝕐 𝔽ℝ𝔼𝔼 ⭐</p>
+                <p>Daily Problems? We Have 30+ FREE Solutions! 🚀
+Students, Professionals, Business Owners - Useful tools for everyone. No signup, no payment, forever free.</p>
                 <a href="#tools" class="btn">Explore Tools</a>
                
                 <div class="tools-illustration">
@@ -882,6 +1020,174 @@
         </div>
     </section>
 
+    <!-- Tool Specialties Section -->
+    <section class="specialties-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>✨ Tool Specialties</h2>
+                <p>Discover what makes our tools stand out from the rest</p>
+            </div>
+            <div class="specialties-grid">
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast Processing</h3>
+                    <ul>
+                        <li>All tools optimized for maximum speed</li>
+                        <li>Process large files in seconds</li>
+                        <li>No waiting in queues</li>
+                        <li>Instant results for most operations</li>
+                    </ul>
+                </div>
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy & Security</h3>
+                    <ul>
+                        <li>All processing happens in your browser</li>
+                        <li>Files never uploaded to our servers</li>
+                        <li>No data retention or tracking</li>
+                        <li>Complete user privacy protection</li>
+                    </ul>
+                </div>
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Advanced Features</h3>
+                    <ul>
+                        <li>AI-powered background removal</li>
+                        <li>Smart compression algorithms</li>
+                        <li>Batch processing capabilities</li>
+                        <li>Customizable output settings</li>
+                    </ul>
+                </div>
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Premium Quality</h3>
+                    <ul>
+                        <li>Lossless format conversions</li>
+                        <li>High-quality image processing</li>
+                        <li>Professional-grade PDF tools</li>
+                        <li>Crystal clear OCR results</li>
+                    </ul>
+                </div>
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h3>Unlimited Usage</h3>
+                    <ul>
+                        <li>No daily usage limits</li>
+                        <li>No file size restrictions</li>
+                        <li>No watermarks on outputs</li>
+                        <li>Completely free forever</li>
+                    </ul>
+                </div>
+                <div class="specialty-card">
+                    <div class="specialty-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Optimized</h3>
+                    <ul>
+                        <li>Works perfectly on all devices</li>
+                        <li>Touch-friendly interfaces</li>
+                        <li>Fast loading on mobile networks</li>
+                        <li>No app installation required</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🌟 User Testimonials</h2>
+                <p>See what our users are saying about Stellar Tools</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "The image converter saved me hours of work! I needed to convert hundreds of product images for my e-commerce store, and it handled everything perfectly."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">PS</div>
+                        <div class="author-info">
+                            <h4>Priya Sharma</h4>
+                            <p>E-commerce Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "As a student, I use the PDF tools constantly. The merger and compressor help me organize my research papers efficiently. Best of all, it's completely free!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RK</div>
+                        <div class="author-info">
+                            <h4>Rahul Kumar</h4>
+                            <p>University Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "The background remover is magical! I run a small business and need professional product photos. This tool gives me studio-quality results in seconds."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AP</div>
+                        <div class="author-info">
+                            <h4>Anjali Patel</h4>
+                            <p>Small Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "I've tried many online tools, but Stellar Tools stands out for its speed and reliability. The OCR feature accurately extracts text from even low-quality images."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SG</div>
+                        <div class="author-info">
+                            <h4>Suresh Gupta</h4>
+                            <p>Freelance Writer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "The meme generator is my favorite! It's so easy to create engaging content for my social media accounts. My engagement has increased significantly."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <h4>Meera Joshi</h4>
+                            <p>Social Media Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "The privacy aspect is what sold me. Knowing my files never leave my computer gives me peace of mind when working with sensitive documents."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">VS</div>
+                        <div class="author-info">
+                            <h4>Vikram Singh</h4>
+                            <p>Legal Assistant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
@@ -981,4 +1287,3 @@ atOptions = {
 <div id="container-35a64ab1615db732cc9c10f28fe0f636"></div>
 </body>
 </html>
-
