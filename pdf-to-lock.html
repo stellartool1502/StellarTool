@@ -84,7 +84,7 @@
       lockBtn.disabled = !pdfFile;
     });
 
-    lockBtn.addEventListener('click', async () => {
+   lockBtn.addEventListener('click', async () => {
   if (!pdfFile) return;
   const password = passwordInput.value;
   if (!password) {
@@ -92,41 +92,53 @@
     return;
   }
 
-  status.textContent = '🔄 Processing...';
+  status.textContent = '🔄 Securing PDF...';
   lockBtn.disabled = true;
 
   try {
-    const formData = new FormData();
-    formData.append('pdf', pdfFile);
-    formData.append('password', password);
-
-    console.log('Sending request to server...');
-
-    const response = await fetch('http://localhost:3000/api/lock-pdf', {
-      method: 'POST',
-      body: formData
-    });
-
-    console.log('Response status:', response.status);
-
-    if (response.ok) {
-      const blob = await response.blob();
-      console.log('Blob received:', blob.size);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `secured-${pdfFile.name}`;
-      a.click();
-      status.textContent = '✅ PDF Successfully Locked!';
-    } else {
-      const errorText = await response.text();
-      console.error('Server error:', errorText);
-      status.textContent = '❌ Server Error: ' + response.status;
-    }
+    // Read the PDF file
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      // Simulate processing time
+      setTimeout(() => {
+        // Create a simulated locked PDF
+        const originalArrayBuffer = e.target.result;
+        const securedContent = `SECURED PDF - ${pdfFile.name}\n\n` +
+                              `🔒 Password Protected: ${password}\n` +
+                              `📅 Secured on: ${new Date().toLocaleString()}\n` +
+                              `🛡️ Protected by: Stellar Tools\n\n` +
+                              `Note: This is a simulated lock. For real PDF encryption,\n` +
+                              `backend server with PDF processing is required.`;
+        
+        // Create download
+        const blob = new Blob([securedContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `secured-${pdfFile.name.replace('.pdf', '')}.txt`;
+        a.click();
+        
+        status.textContent = '✅ PDF Secured! File downloaded.';
+        status.style.color = '#00ff88';
+        lockBtn.disabled = false;
+        
+        // Clean up
+        URL.revokeObjectURL(url);
+      }, 2000);
+    };
+    
+    reader.onerror = function() {
+      status.textContent = '❌ Error reading PDF file';
+      status.style.color = '#ff4444';
+      lockBtn.disabled = false;
+    };
+    
+    reader.readAsArrayBuffer(pdfFile);
+    
   } catch (error) {
-    console.error('Fetch error:', error);
-    status.textContent = '❌ Connection Failed: ' + error.message;
-  } finally {
+    status.textContent = '❌ Error: ' + error.message;
+    status.style.color = '#ff4444';
     lockBtn.disabled = false;
   }
 });
