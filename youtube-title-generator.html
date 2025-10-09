@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Title Generator - StellarTool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        /* Tool Card Styles */
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tool-header {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .tool-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tool-body {
+            padding: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #FF0000;
+            box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255,0,0,0.3);
+        }
+
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Results Section */
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results h4 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .titles-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #FF0000;
+        }
+
+        .title-item {
+            padding: 20px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e1e5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            position: relative;
+        }
+
+        .title-item:hover {
+            background: #fff5f5;
+            border-color: #FF0000;
+            transform: translateX(5px);
+        }
+
+        .title-item:active {
+            transform: scale(0.98);
+        }
+
+        .title-item::after {
+            content: '📋';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .title-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .tool-body {
+                padding: 20px;
+            }
+            
+            .title-item {
+                padding: 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 YouTube Title Generator</h1>
+            <p>Create Click-Worthy YouTube Titles in Seconds!</p>
+        </div>
+
+        <!-- YouTube Title Generator Tool -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <h3>🚀 Professional Title Generator</h3>
+                <p>Create attractive YouTube titles from your keywords</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="ytKeyword">🎯 Main Keyword:</label>
+                    <input type="text" id="ytKeyword" placeholder="Example: how to make money online, fitness tips, cooking recipes...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="ytCategory">📁 Category (Optional):</label>
+                    <select id="ytCategory">
+                        <option value="general">General</option>
+                        <option value="tech">Technology</option>
+                        <option value="education">Education</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="business">Business</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="cooking">Cooking</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn" onclick="generateYoutubeTitles()">
+                    ✨ Generate YouTube Titles
+                </button>
+                
+                <div class="results" id="ytResults">
+                    <h4>🎉 Generated Titles:</h4>
+                    <div class="titles-list" id="ytTitlesList">
+                        <!-- Titles will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made with ❤️ for Content Creators | StellarTool</p>
+        </div>
+    </div>
+
+    <script>
+        function generateYoutubeTitles() {
+            const keyword = document.getElementById('ytKeyword').value.trim();
+            const category = document.getElementById('ytCategory').value;
+            
+            if (!keyword) {
+                alert("Please enter your main keyword!");
+                return;
+            }
+            
+            // Different templates based on category
+            const templates = {
+                general: [
+                    `This SECRET about ${keyword} will shock you!`,
+                    `${keyword} - Complete Guide in Hindi`,
+                    `I tried ${keyword} - The results surprised me!`,
+                    `These 5 methods for ${keyword} no one will tell you`,
+                    `If you want to learn ${keyword}, you must watch this video!`,
+                    `${keyword} - Everything in 1 Video | Step by Step`
+                ],
+                tech: [
+                    `${keyword} - Latest Update 2024 | Full Review`,
+                    `Don't make this mistake with ${keyword}! | Important Tips`,
+                    `How to use ${keyword} - Beginner to Pro Guide`,
+                    `${keyword} vs Competitor - Which is Better?`,
+                    `How to setup ${keyword}? | Complete Tutorial`
+                ],
+                education: [
+                    `Easy way to understand ${keyword}`,
+                    `${keyword} - Concepts Clear in 10 Minutes`,
+                    `How to remember ${keyword} for exams?`,
+                    `${keyword} - Most Important Questions`
+                ],
+                entertainment: [
+                    `${keyword} Challenge completed! What happened?`,
+                    `Funny Moments with ${keyword}`,
+                    `${keyword} - Behind the Scenes`,
+                    `${keyword} Reacting to Viral Videos`
+                ],
+                business: [
+                    `How to earn money with ${keyword}? | Full Strategy`,
+                    `${keyword} Business Ideas 2024`,
+                    `${keyword} Marketing Tips`,
+                    `₹50,000/month with ${keyword} - Real Strategy`
+                ],
+                lifestyle: [
+                    `How to make life better with ${keyword}?`,
+                    `My ${keyword} Routine | Daily Life`,
+                    `${keyword} Tips for Beginners`,
+                    `${keyword} - 30 Days Challenge Results`
+                ],
+                gaming: [
+                    `${keyword} Gameplay - EPIC Moments`,
+                    `${keyword} Tips and Tricks Pro Players Use`,
+                    `${keyword} - No Commentary Gameplay`,
+                    `${keyword} Secret Levels Revealed`
+                ],
+                cooking: [
+                    `Easy way to make ${keyword}`,
+                    `5 Minute ${keyword} Recipe`,
+                    `${keyword} - Restaurant Style at Home`,
+                    `${keyword} Secret Ingredients Revealed`
+                ]
+            };
+            
+            // Get templates based on category
+            const categoryTemplates = templates[category] || templates.general;
+            
+            // Generate 4 random titles
+            const generatedTitles = [];
+            const usedIndices = new Set();
+            
+            while (generatedTitles.length < 4 && usedIndices.size < categoryTemplates.length) {
+                const randomIndex = Math.floor(Math.random() * categoryTemplates.length);
+                if (!usedIndices.has(randomIndex)) {
+                    usedIndices.add(randomIndex);
+                    const title = categoryTemplates[randomIndex];
+                    generatedTitles.push(title);
+                }
+            }
+            
+            // Display results
+            const resultsDiv = document.getElementById('ytResults');
+            const titlesList = document.getElementById('ytTitlesList');
+            
+            titlesList.innerHTML = '';
+            generatedTitles.forEach((title, index) => {
+                const titleElement = document.createElement('div');
+                titleElement.className = 'title-item';
+                titleElement.innerHTML = `
+                    <strong>${index + 1}.</strong> ${title}
+                `;
+                
+                // Click to copy functionality
+                titleElement.onclick = function() {
+                    navigator.clipboard.writeText(title).then(() => {
+                        // Visual feedback
+                        const originalText = titleElement.innerHTML;
+                        titleElement.innerHTML = '<strong>✅ Copied to Clipboard!</strong>';
+                        titleElement.style.background = '#e8f5e8';
+                        
+                        setTimeout(() => {
+                            titleElement.innerHTML = originalText;
+                            titleElement.style.background = '';
+                        }, 1500);
+                    }).catch(() => {
+                        alert('Title copied: ' + title);
+                    });
+                };
+                
+                titlesList.appendChild(titleElement);
+            });
+            
+            resultsDiv.style.display = 'block';
+            
+            // Smooth scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Enter key support
+        document.getElementById('ytKeyword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateYoutubeTitles();
+            }
+        });
+    </script>
+</body>
+</html>
