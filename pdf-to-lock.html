@@ -85,41 +85,51 @@
     });
 
     lockBtn.addEventListener('click', async () => {
-      if (!pdfFile) return;
-      const password = passwordInput.value;
-      if (!password) {
-        alert('Please enter a password to lock the PDF.');
-        return;
-      }
+  if (!pdfFile) return;
+  const password = passwordInput.value;
+  if (!password) {
+    alert('Please enter a password to lock the PDF.');
+    return;
+  }
 
-      status.textContent = 'Processing...';
+  status.textContent = '🔄 Processing...';
+  lockBtn.disabled = true;
 
-      // Backend API call for real encryption
-      const formData = new FormData();
-      formData.append('pdf', pdfFile);
-      formData.append('password', password);
+  try {
+    const formData = new FormData();
+    formData.append('pdf', pdfFile);
+    formData.append('password', password);
 
-      try {
-        const response = await fetch('http://localhost:3000/api/lock-pdf', {
-          method: 'POST',
-          body: formData
-        });
+    console.log('Sending request to server...');
 
-        if (response.ok) {
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `secured-${pdfFile.name}`;
-          a.click();
-          status.textContent = '✅ PDF Successfully Locked!';
-        } else {
-          status.textContent = '❌ Error locking PDF';
-        }
-      } catch (error) {
-        status.textContent = '❌ Server connection failed';
-      }
+    const response = await fetch('http://localhost:3000/api/lock-pdf', {
+      method: 'POST',
+      body: formData
     });
+
+    console.log('Response status:', response.status);
+
+    if (response.ok) {
+      const blob = await response.blob();
+      console.log('Blob received:', blob.size);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `secured-${pdfFile.name}`;
+      a.click();
+      status.textContent = '✅ PDF Successfully Locked!';
+    } else {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      status.textContent = '❌ Server Error: ' + response.status;
+    }
+  } catch (error) {
+    console.error('Fetch error:', error);
+    status.textContent = '❌ Connection Failed: ' + error.message;
+  } finally {
+    lockBtn.disabled = false;
+  }
+});
   </script>
 </body>
 </html>
