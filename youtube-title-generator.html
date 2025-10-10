@@ -334,11 +334,11 @@
             // Get templates based on category
             const categoryTemplates = templates[category] || templates.general;
             
-            // Generate 4 random titles
+            // Generate 12 random titles
             const generatedTitles = [];
             const usedIndices = new Set();
             
-            while (generatedTitles.length < 4 && usedIndices.size < categoryTemplates.length) {
+            while (generatedTitles.length < 12 && usedIndices.size < categoryTemplates.length) {
                 const randomIndex = Math.floor(Math.random() * categoryTemplates.length);
                 if (!usedIndices.has(randomIndex)) {
                     usedIndices.add(randomIndex);
