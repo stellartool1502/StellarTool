@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Tools Suite - StellarTool</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8Y6M1CYS2L');
+</script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Tool Card Styles */
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .tool-card.active {
+            display: block;
+        }
+
+        .tool-header {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .tool-header.instagram {
+            background: linear-gradient(135deg, #E4405F, #C13584);
+        }
+
+        .tool-header.facebook {
+            background: linear-gradient(135deg, #1877F2, #0D5FD7);
+        }
+
+        .tool-header.twitter {
+            background: linear-gradient(135deg, #1DA1F2, #0D8BD9);
+        }
+
+        .tool-header.linkedin {
+            background: linear-gradient(135deg, #0A66C2, #084A8C);
+        }
+
+        .tool-header.general {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .tool-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tool-body {
+            padding: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #FF0000;
+            box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .generate-btn.instagram { background: linear-gradient(135deg, #E4405F, #C13584); }
+        .generate-btn.facebook { background: linear-gradient(135deg, #1877F2, #0D5FD7); }
+        .generate-btn.twitter { background: linear-gradient(135deg, #1DA1F2, #0D8BD9); }
+        .generate-btn.linkedin { background: linear-gradient(135deg, #0A66C2, #084A8C); }
+        .generate-btn.general { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Results Section */
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results h4 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .results-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #FF0000;
+        }
+
+        .result-item {
+            padding: 20px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e1e5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            position: relative;
+        }
+
+        .result-item:hover {
+            background: #fff5f5;
+            border-color: #FF0000;
+            transform: translateX(5px);
+        }
+
+        .result-item:active {
+            transform: scale(0.98);
+        }
+
+        .result-item::after {
+            content: '📋';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .tool-body {
+                padding: 20px;
+            }
+            
+            .result-item {
+                padding: 15px;
+                font-size: 1em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Social Media Tools Suite</h1>
+            <p>Generate engaging content for all platforms in one place!</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTool('youtube')">🎬 YouTube</button>
+            <button class="tab-btn" onclick="showTool('instagram')">📷 Instagram</button>
+            <button class="tab-btn" onclick="showTool('facebook')">👥 Facebook</button>
+            <button class="tab-btn" onclick="showTool('twitter')">🐦 Twitter/X</button>
+            <button class="tab-btn" onclick="showTool('linkedin')">💼 LinkedIn</button>
+            <button class="tab-btn" onclick="showTool('general')">🌟 General</button>
+        </div>
+
+        <!-- YouTube Tools -->
+        <div class="tool-card active" id="youtube-tool">
+            <div class="tool-header">
+                <h3>🎬 YouTube Content Generator</h3>
+                <p>Create viral YouTube titles, descriptions, and ideas</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="ytKeyword">🎯 Main Keyword/Topic:</label>
+                    <input type="text" id="ytKeyword" placeholder="Example: digital marketing, cooking recipes, tech reviews...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="ytContentType">📝 Content Type:</label>
+                    <select id="ytContentType">
+                        <option value="titles">Video Titles</option>
+                        <option value="descriptions">Video Descriptions</option>
+                        <option value="ideas">Video Ideas</option>
+                        <option value="tags">Video Tags</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn" onclick="generateYouTubeContent()">
+                    ✨ Generate YouTube Content
+                </button>
+                
+                <div class="results" id="ytResults">
+                    <h4>🎉 Generated Content:</h4>
+                    <div class="results-list" id="ytResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instagram Tools -->
+        <div class="tool-card" id="instagram-tool">
+            <div class="tool-header instagram">
+                <h3>📷 Instagram Content Generator</h3>
+                <p>Create engaging captions, hashtags, and story ideas</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="igTopic">📸 Post Topic/Image:</label>
+                    <input type="text" id="igTopic" placeholder="Example: morning coffee, workout, travel...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="igContentType">📱 Content Type:</label>
+                    <select id="igContentType">
+                        <option value="captions">Post Captions</option>
+                        <option value="hashtags">Hashtags</option>
+                        <option value="stories">Story Ideas</option>
+                        <option value="reels">Reels Ideas</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn instagram" onclick="generateInstagramContent()">
+                    ✨ Generate Instagram Content
+                </button>
+                
+                <div class="results" id="igResults">
+                    <h4>🌟 Generated Content:</h4>
+                    <div class="results-list" id="igResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facebook Tools -->
+        <div class="tool-card" id="facebook-tool">
+            <div class="tool-header facebook">
+                <h3>👥 Facebook Content Generator</h3>
+                <p>Create engaging posts and ad copies for Facebook</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="fbTopic">📝 Post Topic:</label>
+                    <input type="text" id="fbTopic" placeholder="Example: business update, product launch, event...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="fbContentType">📊 Content Type:</label>
+                    <select id="fbContentType">
+                        <option value="posts">Facebook Posts</option>
+                        <option value="ads">Ad Copies</option>
+                        <option value="groups">Group Posts</option>
+                        <option value="events">Event Descriptions</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn facebook" onclick="generateFacebookContent()">
+                    ✨ Generate Facebook Content
+                </button>
+                
+                <div class="results" id="fbResults">
+                    <h4>📈 Generated Content:</h4>
+                    <div class="results-list" id="fbResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Twitter Tools -->
+        <div class="tool-card" id="twitter-tool">
+            <div class="tool-header twitter">
+                <h3>🐦 Twitter/X Content Generator</h3>
+                <p>Create viral tweets and threads for Twitter/X</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="twTopic">💬 Tweet Topic:</label>
+                    <input type="text" id="twTopic" placeholder="Example: tech news, daily thoughts, announcements...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="twContentType">🐦 Content Type:</label>
+                    <select id="twContentType">
+                        <option value="tweets">Single Tweets</option>
+                        <option value="threads">Tweet Threads</option>
+                        <option value="trending">Trending Topics</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn twitter" onclick="generateTwitterContent()">
+                    ✨ Generate Twitter Content
+                </button>
+                
+                <div class="results" id="twResults">
+                    <h4>🔥 Generated Content:</h4>
+                    <div class="results-list" id="twResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LinkedIn Tools -->
+        <div class="tool-card" id="linkedin-tool">
+            <div class="tool-header linkedin">
+                <h3>💼 LinkedIn Content Generator</h3>
+                <p>Create professional posts and updates for LinkedIn</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="liTopic">💼 Professional Topic:</label>
+                    <input type="text" id="liTopic" placeholder="Example: career advice, industry insights, achievements...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="liContentType">📈 Content Type:</label>
+                    <select id="liContentType">
+                        <option value="posts">LinkedIn Posts</option>
+                        <option value="articles">Article Ideas</option>
+                        <option value="updates">Company Updates</option>
+                        <option value="jobs">Job Postings</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn linkedin" onclick="generateLinkedInContent()">
+                    ✨ Generate LinkedIn Content
+                </button>
+                
+                <div class="results" id="liResults">
+                    <h4>💼 Generated Content:</h4>
+                    <div class="results-list" id="liResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Tools -->
+        <div class="tool-card" id="general-tool">
+            <div class="tool-header general">
+                <h3>🌟 General Social Media Tools</h3>
+                <p>All-in-one tools for social media management</p>
+            </div>
+            
+            <div class="tool-body">
+                <div class="input-group">
+                    <label for="genTopic">🎯 Content Topic:</label>
+                    <input type="text" id="genTopic" placeholder="Example: brand promotion, content ideas, viral trends...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="genToolType">🛠️ Tool Type:</label>
+                    <select id="genToolType">
+                        <option value="calendar">Content Calendar</option>
+                        <option value="hashtags">Hashtag Generator</option>
+                        <option value="bio">Bio Generator</option>
+                        <option value="viral">Viral Ideas</option>
+                    </select>
+                </div>
+                
+                <button class="generate-btn general" onclick="generateGeneralContent()">
+                    ✨ Generate Content
+                </button>
+                
+                <div class="results" id="genResults">
+                    <h4>🚀 Generated Content:</h4>
+                    <div class="results-list" id="genResultsList">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made with ❤️ for Content Creators | StellarTool Social Media Suite</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation Function
+        function showTool(toolName) {
+            // Hide all tools
+            document.querySelectorAll('.tool-card').forEach(tool => {
+                tool.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tool
+            document.getElementById(`${toolName}-tool`).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // YouTube Content Generator
+        function generateYouTubeContent() {
+            const keyword = document.getElementById('ytKeyword').value.trim();
+            const contentType = document.getElementById('ytContentType').value;
+            
+            if (!keyword) {
+                alert("Please enter your main keyword!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // YouTube Titles Templates
+            const titleTemplates = [
+                `This SECRET about ${keyword} will shock you!`,
+                `${keyword} - Complete Guide in Hindi`,
+                `I tried ${keyword} - The results surprised me!`,
+                `These 5 methods for ${keyword} no one will tell you`,
+                `If you want to learn ${keyword}, you must watch this video!`,
+                `${keyword} - Everything in 1 Video | Step by Step`,
+                `${keyword} - Ultimate Beginner's Guide`,
+                `How to Master ${keyword} in 2024`,
+                `${keyword} Secrets Revealed | Pro Tips`,
+                `${keyword} - What They Don't Tell You`
+            ];
+            
+            // YouTube Descriptions Templates
+            const descriptionTemplates = [
+                `In this video, we explore everything about ${keyword}. Learn the best techniques and strategies that actually work!\n\n📌 What you'll learn:\n• Basic concepts of ${keyword}\n• Advanced tips and tricks\n• Common mistakes to avoid\n• Real-world examples\n\nDon't forget to LIKE 👍, SHARE 📤, and SUBSCRIBE 🔔 for more content!`,
+                
+                `Welcome to our complete guide on ${keyword}! In this comprehensive tutorial, we cover everything from basics to advanced concepts.\n\n💡 Key Topics Covered:\n• Introduction to ${keyword}\n• Step-by-step process\n• Best practices\n• Tools and resources\n\n#${keyword.replace(/\s+/g, '')} #YouTube #Tutorial`,
+                
+                `Ready to master ${keyword}? This video shows you exactly how to get started and become an expert!\n\n⭐ Video Highlights:\n• Easy-to-follow instructions\n• Practical examples\n• Time-saving tips\n• Professional advice\n\nSubscribe for more amazing content! 🚀`
+            ];
+            
+            // YouTube Ideas Templates
+            const ideasTemplates = [
+                `"5 Common ${keyword} Mistakes and How to Fix Them"`,
+                `"${keyword} Tutorial for Absolute Beginners"`,
+                `"Advanced ${keyword} Techniques That Professionals Use"`,
+                `"How I Mastered ${keyword} in 30 Days"`,
+                `"${keyword} vs Alternative - Which is Better?"`,
+                `"Secret ${keyword} Tips No One Tells You"`,
+                `"${keyword} Q&A - Answering Your Questions"`,
+                `"${keyword} Tools and Resources You Need"`
+            ];
+            
+            // YouTube Tags Templates
+            const tagsTemplates = [
+                `${keyword}, ${keyword} tutorial, ${keyword} tips, ${keyword} guide, how to ${keyword}`,
+                `${keyword} for beginners, ${keyword} advanced, ${keyword} techniques, ${keyword} 2024`,
+                `${keyword} hindi, ${keyword} tutorial hindi, ${keyword} tips and tricks, ${keyword} full course`,
+                `learn ${keyword}, ${keyword} mastery, ${keyword} secrets, ${keyword} professional`
+            ];
+            
+            // Select appropriate templates based on content type
+            switch(contentType) {
+                case 'titles':
+                    generatedContent = titleTemplates;
+                    break;
+                case 'descriptions':
+                    generatedContent = descriptionTemplates;
+                    break;
+                case 'ideas':
+                    generatedContent = ideasTemplates;
+                    break;
+                case 'tags':
+                    generatedContent = tagsTemplates;
+                    break;
+            }
+            
+            displayResults('ytResults', 'ytResultsList', generatedContent);
+        }
+
+        // Instagram Content Generator
+        function generateInstagramContent() {
+            const topic = document.getElementById('igTopic').value.trim();
+            const contentType = document.getElementById('igContentType').value;
+            
+            if (!topic) {
+                alert("Please enter your post topic!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // Instagram Captions Templates
+            const captionTemplates = [
+                `Living my best life with ${topic} 🌟\n\nWhat's your favorite ${topic} moment? 👇`,
+                `${topic} vibes only 💫\n\nSome days are just meant for ${topic} ✨`,
+                `Found my happy place with ${topic} 🏻\n\nTag someone who loves ${topic} too! 👥`,
+                `Creating magic with ${topic} ✨\n\nNever underestimate the power of good ${topic} 💪`,
+                `${topic} days are the best days 🌈\n\nDrop a ❤️ if you agree!`,
+                `Embracing the ${topic} lifestyle 🌟\n\nWhat's your go-to ${topic} activity? 👇`
+            ];
+            
+            // Instagram Hashtags Templates
+            const hashtagsTemplates = [
+                `#${topic.replace(/\s+/g, '')} #${topic.replace(/\s+/g, '')}Love #${topic.replace(/\s+/g, '')}Life #${topic.replace(/\s+/g, '')}Goals #SocialMedia #Instagram #ContentCreator`,
+                `#${topic.replace(/\s+/g, '')}Daily #${topic.replace(/\s+/g, '')}Community #${topic.replace(/\s+/g, '')}Addict #InstaGood #PhotoOfTheDay #Trending`,
+                `#${topic.replace(/\s+/g, '')}Inspiration #${topic.replace(/\s+/g, '')}Journey #${topic.replace(/\s+/g, '')}Passion #${topic.replace(/\s+/g, '')}Vibes #InstagramReels #Viral`
+            ];
+            
+            // Instagram Stories Templates
+            const storiesTemplates = [
+                `"Day in my life: ${topic} edition" with fun emojis and stickers`,
+                `"Ask me anything about ${topic}" with question sticker`,
+                `"Behind the scenes of ${topic}" with process photos/videos`,
+                `"My ${topic} routine" with step-by-step slides`,
+                `"${topic} tips and tricks" with helpful graphics`,
+                `"Rate my ${topic} setup 1-10" with poll sticker`
+            ];
+            
+            // Instagram Reels Templates
+            const reelsTemplates = [
+                `"3 ${topic} hacks you need to know" with quick transitions`,
+                `"How I do ${topic} in 60 seconds" with timer`,
+                `"${topic} transformation" with before/after effect`,
+                `"Common ${topic} mistakes to avoid" with text overlays`,
+                `"${topic} trend I'm loving right now" with popular audio`
+            ];
+            
+            switch(contentType) {
+                case 'captions':
+                    generatedContent = captionTemplates;
+                    break;
+                case 'hashtags':
+                    generatedContent = hashtagsTemplates;
+                    break;
+                case 'stories':
+                    generatedContent = storiesTemplates;
+                    break;
+                case 'reels':
+                    generatedContent = reelsTemplates;
+                    break;
+            }
+            
+            displayResults('igResults', 'igResultsList', generatedContent);
+        }
+
+        // Facebook Content Generator
+        function generateFacebookContent() {
+            const topic = document.getElementById('fbTopic').value.trim();
+            const contentType = document.getElementById('fbContentType').value;
+            
+            if (!topic) {
+                alert("Please enter your post topic!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // Facebook Posts Templates
+            const postsTemplates = [
+                `Excited to share some amazing insights about ${topic}! This has completely transformed my approach and I can't wait to hear your thoughts.\n\nWhat's your experience with ${topic}? Share in the comments below! 👇`,
+                `Just discovered something incredible about ${topic} that I had to share with you all! The results have been mind-blowing. 🤯\n\nHas anyone else tried this approach to ${topic}?`,
+                `Big news! We're diving deep into ${topic} today. Whether you're a beginner or expert, there's something here for everyone.\n\nTag a friend who needs to see this! 🔥`
+            ];
+            
+            // Facebook Ads Templates
+            const adsTemplates = [
+                `🚀 Discover the Secret to Amazing ${topic}!\n\nTransform your results with our proven method. Limited time offer - click to learn more! 👉 [Your Link]`,
+                `❤️ Love ${topic}? You Won't Believe This!\n\nJoin thousands who have revolutionized their approach. Free guide inside! 📥 [Your Link]`,
+                `⭐ Rated #1 in ${topic} Solutions!\n\nProfessional results guaranteed. See why everyone's talking about us! 🔥 [Your Link]`
+            ];
+            
+            // Facebook Groups Templates
+            const groupsTemplates = [
+                `Hey everyone! Let's talk about ${topic} today. What are your biggest challenges with ${topic}? Share your experiences and let's help each other! 🤝`,
+                `Weekly discussion: ${topic} tips and tricks! Drop your best advice in the comments and let's create the ultimate resource together. 💡`,
+                `Question of the day: What's the one thing you wish you knew about ${topic} when you started? Your answer could help a beginner! 🌟`
+            ];
+            
+            // Facebook Events Templates
+            const eventsTemplates = [
+                `🎉 You're Invited: Ultimate ${topic} Workshop!\n\nLearn from industry experts and connect with like-minded people. Reserve your spot now! 📅`,
+                `🌟 Don't Miss Out: ${topic} Masterclass\n\nTransform your skills in just 2 hours. Limited seats available! Register today! 🚀`,
+                `📢 Special Event: ${topic} Community Meetup\n\nNetwork, learn, and grow with fellow enthusiasts. Free to attend! 🤝`
+            ];
+            
+            switch(contentType) {
+                case 'posts':
+                    generatedContent = postsTemplates;
+                    break;
+                case 'ads':
+                    generatedContent = adsTemplates;
+                    break;
+                case 'groups':
+                    generatedContent = groupsTemplates;
+                    break;
+                case 'events':
+                    generatedContent = eventsTemplates;
+                    break;
+            }
+            
+            displayResults('fbResults', 'fbResultsList', generatedContent);
+        }
+
+        // Twitter Content Generator
+        function generateTwitterContent() {
+            const topic = document.getElementById('twTopic').value.trim();
+            const contentType = document.getElementById('twContentType').value;
+            
+            if (!topic) {
+                alert("Please enter your tweet topic!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // Single Tweets Templates
+            const tweetsTemplates = [
+                `Just discovered something amazing about ${topic}! Mind = blown 🤯\n\n#${topic.replace(/\s+/g, '')}`,
+                `The future of ${topic} is here and it's incredible! 🚀\n\nWho else is excited about this?`,
+                `3 things nobody tells you about ${topic}:\n\n1. First secret\n2. Second insight\n3. Game-changing tip\n\n#${topic.replace(/\s+/g, '')}Tips`,
+                `Why ${topic} is changing everything we know... 🧵👇`,
+                `Just leveled up my ${topic} game! The results? Absolutely worth it. 💪\n\n#${topic.replace(/\s+/g, '')}`
+            ];
+            
+            // Tweet Threads Templates
+            const threadsTemplates = [
+                `1/5 The Complete Guide to ${topic} 🧵\n\nLet me break down everything you need to know about ${topic} in this thread:\n\n#${topic.replace(/\s+/g, '')}Thread`,
+                `2/5 First, understand the basics of ${topic}. Most people skip this step and wonder why they struggle later.\n\nStart with foundation!`,
+                `3/5 Next, implement these practical strategies for ${topic}. They've worked for thousands of people:\n\n• Strategy 1\n• Strategy 2\n• Strategy 3`,
+                `4/5 Common mistakes to avoid with ${topic}:\n\n❌ Mistake 1\n❌ Mistake 2\n❌ Mistake 3\n\nLearn from others' errors!`,
+                `5/5 Finally, advanced techniques for ${topic} mastery. These will take your skills to the next level!\n\nThanks for reading! 👋\n\nFollow for more tips!`
+            ];
+            
+            // Trending Topics Templates
+            const trendingTemplates = [
+                `Hot take: ${topic} is the next big thing in 2024. Here's why 👇\n\n#${topic.replace(/\s+/g, '')} #Trending`,
+                `Everyone's talking about ${topic} but nobody's saying this... 🤫\n\nWhat's your unpopular opinion about ${topic}?`,
+                `Breaking: New developments in ${topic} are changing the game! 🎯\n\nStay ahead of the curve with these insights.`,
+                `Viral ${topic} moment happening right now! 🌊\n\nDon't get left behind - here's what you need to know.`
+            ];
+            
+            switch(contentType) {
+                case 'tweets':
+                    generatedContent = tweetsTemplates;
+                    break;
+                case 'threads':
+                    generatedContent = threadsTemplates;
+                    break;
+                case 'trending':
+                    generatedContent = trendingTemplates;
+                    break;
+            }
+            
+            displayResults('twResults', 'twResultsList', generatedContent);
+        }
+
+        // LinkedIn Content Generator
+        function generateLinkedInContent() {
+            const topic = document.getElementById('liTopic').value.trim();
+            const contentType = document.getElementById('liContentType').value;
+            
+            if (!topic) {
+                alert("Please enter your professional topic!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // LinkedIn Posts Templates
+            const postsTemplates = [
+                `Excited to share some key insights about ${topic} that I've gathered throughout my career. \n\nIn today's rapidly evolving landscape, understanding ${topic} has become more crucial than ever. Here are three fundamental principles that have consistently delivered results:\n\n1. Principle One\n2. Principle Two  \n3. Principle Three\n\nWhat strategies have you found most effective for ${topic}? I'd love to hear your experiences in the comments below. 👇\n\n#${topic.replace(/\s+/g, '')} #ProfessionalDevelopment #CareerGrowth`,
+                
+                `The landscape of ${topic} is transforming before our eyes. Having navigated these changes firsthand, I wanted to share some observations that might benefit fellow professionals.\n\nKey trends shaping ${topic} in 2024:\n• Trend One\n• Trend Two\n• Trend Three\n\nThese developments present both challenges and opportunities. How is your organization adapting to these changes in ${topic}?\n\n#BusinessStrategy #${topic.replace(/\s+/g, '')} #IndustryInsights`,
+                
+                `Just completed an intensive analysis on ${topic}, and the findings are quite revealing. \n\nMany organizations approach ${topic} from a traditional perspective, but the data suggests a more innovative approach yields significantly better outcomes.\n\nThree actionable takeaways:\n1. Takeaway One\n2. Takeaway Two\n3. Takeaway Three\n\nI'm curious to know how these align with your experiences in ${topic}. Let's discuss in the comments! 💡\n\n#DataAnalysis #${topic.replace(/\s+/g, '')} #ProfessionalNetwork`
+            ];
+            
+            // LinkedIn Article Ideas
+            const articlesTemplates = [
+                `"The Future of ${topic}: 5 Trends That Will Shape 2024 and Beyond" - Comprehensive analysis of emerging patterns`,
+                `"Breaking Down ${topic}: A Strategic Framework for Success" - Step-by-step methodology`,
+                `"${topic} Case Study: How Industry Leaders Are Achieving Remarkable Results" - Real-world examples`,
+                `"The Ultimate Guide to ${topic} for Professionals" - Complete resource compilation`,
+                `"Innovation in ${topic}: What's Next?" - Forward-looking perspective`
+            ];
+            
+            // Company Updates Templates
+            const updatesTemplates = [
+                `We're thrilled to announce our latest initiative in ${topic}! This represents a significant milestone in our commitment to innovation and excellence.\n\nOur team has worked tirelessly to develop solutions that address key challenges in ${topic}, and we're excited to see the impact this will have on our industry.\n\n#CompanyUpdate #${topic.replace(/\s+/g, '')} #BusinessGrowth`,
+                
+                `Proud moment for our organization as we launch our new ${topic} division! This strategic expansion aligns with our vision of delivering comprehensive solutions to our clients.\n\nWe're looking forward to pushing the boundaries of what's possible in ${topic} and creating new opportunities for growth and collaboration.\n\n#BusinessExpansion #${topic.replace(/\s+/g, '')} #Innovation`,
+                
+                `Exciting developments in our ${topic} services! We've enhanced our offerings based on extensive market research and client feedback.\n\nThese improvements reflect our dedication to staying at the forefront of ${topic} and providing exceptional value to our partners.\n\n#ServiceUpdate #${topic.replace(/\s+/g, '')} #ClientSuccess`
+            ];
+            
+            // Job Postings Templates
+            const jobsTemplates = [
+                `We're hiring! Join our dynamic team as a ${topic} Specialist and help us drive innovation in this exciting field.\n\nKey responsibilities:\n• Responsibility One\n• Responsibility Two\n• Responsibility Three\n\nRequired qualifications:\n• Qualification One\n• Qualification Two\n\nIf you're passionate about ${topic} and ready to make an impact, we'd love to hear from you! Apply now. 👇\n\n#Hiring #${topic.replace(/\s+/g, '')}Jobs #CareerOpportunity`,
+                
+                `Career opportunity: ${topic} Manager position now open! We're looking for an experienced professional to lead our initiatives in this crucial area.\n\nIdeal candidate profile:\n• Experience in ${topic} management\n• Strong leadership skills\n• Innovative problem-solving approach\n\nThis is a chance to shape the future of ${topic} within our organization. Interested candidates, please reach out!\n\n#JobOpening #${topic.replace(/\s+/g, '')} #ManagementRole`
+            ];
+            
+            switch(contentType) {
+                case 'posts':
+                    generatedContent = postsTemplates;
+                    break;
+                case 'articles':
+                    generatedContent = articlesTemplates;
+                    break;
+                case 'updates':
+                    generatedContent = updatesTemplates;
+                    break;
+                case 'jobs':
+                    generatedContent = jobsTemplates;
+                    break;
+            }
+            
+            displayResults('liResults', 'liResultsList', generatedContent);
+        }
+
+        // General Social Media Tools
+        function generateGeneralContent() {
+            const topic = document.getElementById('genTopic').value.trim();
+            const toolType = document.getElementById('genToolType').value;
+            
+            if (!topic) {
+                alert("Please enter your content topic!");
+                return;
+            }
+            
+            let generatedContent = [];
+            
+            // Content Calendar Templates
+            const calendarTemplates = [
+                `📅 Weekly Content Calendar for ${topic}:\n\nMonday: Educational post about ${topic} basics\nTuesday: Tips and tricks for ${topic}\nWednesday: Behind-the-scenes ${topic} content\nThursday: Q&A session about ${topic}\nFriday: Success stories in ${topic}\nSaturday: Interactive ${topic} poll/question\nSunday: Weekly ${topic} recap and insights`,
+                
+                `🎯 Monthly ${topic} Content Strategy:\n\nWeek 1: Foundation and basics of ${topic}\nWeek 2: Advanced techniques in ${topic}\nWeek 3: Case studies and success stories\nWeek 4: Future trends and predictions\n\nDaily engagement: Ask questions, run polls, share insights`,
+                
+                `✨ ${topic} Content Plan Template:\n\n• Educational Content (How-to guides, tutorials)\n• Inspirational Content (Success stories, motivation)\n• Interactive Content (Polls, questions, challenges)\n• Promotional Content (Offers, announcements)\n• Community Content (User features, collaborations)`
+            ];
+            
+            // Hashtag Generator Templates
+            const hashtagsTemplates = [
+                `Popular ${topic} Hashtags:\n#${topic.replace(/\s+/g, '')} #${topic.replace(/\s+/g, '')}Tips #${topic.replace(/\s+/g, '')}Community #${topic.replace(/\s+/g, '')}Life #${topic.replace(/\s+/g, '')}Goals #${topic.replace(/\s+/g, '')}Addict`,
+                
+                `Trending ${topic} Hashtags 2024:\n#${topic.replace(/\s+/g, '')}2024 #${topic.replace(/\s+/g, '')}Trend #${topic.replace(/\s+/g, '')}Viral #${topic.replace(/\s+/g, '')}Update #${topic.replace(/\s+/g, '')}News`,
+                
+                `Niche ${topic} Hashtags:\n#${topic.replace(/\s+/g, '')}Expert #${topic.replace(/\s+/g, '')}Pro #${topic.replace(/\s+/g, '')}Mastery #${topic.replace(/\s+/g, '')}Skills #${topic.replace(/\s+/g, '')}Advanced`
+            ];
+            
+            // Bio Generator Templates
+            const bioTemplates = [
+                `✨ ${topic} Enthusiast | Creating content that inspires and educates | Helping you master ${topic} | 📍 Your Location\n\n🔗 Link in bio | 📩 DM for collaborations`,
+                
+                `🌟 ${topic} Specialist | Sharing tips, tricks, and insights | Join our ${topic} community | Let's grow together! 🌱\n\n💼 Professional | 📚 Educator | 🎯 Results-driven`,
+                
+                `🚀 Your go-to ${topic} expert | Transforming beginners into pros | Daily ${topic} content | Featured in [Your Achievements]\n\n📬 DM for 1:1 coaching | 🔔 Turn on notifications`
+            ];
+            
+            // Viral Ideas Templates
+            const viralTemplates = [
+                `"The ${topic} Challenge" - Create a fun, engaging challenge that encourages user participation and sharing`,
+                `"${topic} Myth Busting" - Debunk common misconceptions in an entertaining, educational format`,
+                `"${topic} Transformation Timeline" - Show dramatic before/after results with compelling storytelling`,
+                `"Secret ${topic} Techniques" - Reveal little-known methods that deliver big results`,
+                `"${topic} Fail Compilation" - Share humorous but relatable failures with a positive, learning-focused message`
+            ];
+            
+            switch(toolType) {
+                case 'calendar':
+                    generatedContent = calendarTemplates;
+                    break;
+                case 'hashtags':
+                    generatedContent = hashtagsTemplates;
+                    break;
+                case 'bio':
+                    generatedContent = bioTemplates;
+                    break;
+                case 'viral':
+                    generatedContent = viralTemplates;
+                    break;
+            }
+            
+            displayResults('genResults', 'genResultsList', generatedContent);
+        }
+
+        // Display Results Function
+        function displayResults(resultsId, listId, contentArray) {
+            const resultsDiv = document.getElementById(resultsId);
+            const resultsList = document.getElementById(listId);
+            
+            resultsList.innerHTML = '';
+            contentArray.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'result-item';
+                itemElement.innerHTML = `
+                    <strong>${index + 1}.</strong> ${item}
+                `;
+                
+                // Click to copy functionality
+                itemElement.onclick = function() {
+                    navigator.clipboard.writeText(item).then(() => {
+                        // Visual feedback
+                        const originalText = itemElement.innerHTML;
+                        itemElement.innerHTML = '<strong>✅ Copied to Clipboard!</strong>';
+                        itemElement.style.background = '#e8f5e8';
+                        
+                        setTimeout(() => {
+                            itemElement.innerHTML = originalText;
+                            itemElement.style.background = '';
+                        }, 1500);
+                    }).catch(() => {
+                        alert('Content copied: ' + item);
+                    });
+                };
+                
+                resultsList.appendChild(itemElement);
+            });
+            
+            resultsDiv.style.display = 'block';
+            
+            // Smooth scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Enter key support for all input fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputFields = document.querySelectorAll('input[type="text"]');
+            inputFields.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        // Find the generate button in the same tool card and click it
+                        const toolCard = this.closest('.tool-card');
+                        const generateBtn = toolCard.querySelector('.generate-btn');
+                        if (generateBtn) {
+                            generateBtn.click();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+	atOptions = {
+		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+</body>
+</html>
