@@ -3,53 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Tools Suite - StellarTool</title>
+    <title>Social Media Tools Suite - Stellar Tools</title>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8Y6M1CYS2L');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-8Y6M1CYS2L');
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff00e6;
+            --dark-bg: #1a1a2e;
+            --card-bg: #2a2a4e;
+            --light-text: #e0e0ff;
+            --medium-text: #b0b0cc;
+            --accent-gradient: linear-gradient(45deg, #00f0ff, #ff00e6);
+            --card-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s ease-in-out;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: var(--light-text);
+            background-color: var(--dark-bg);
+            line-height: 1.6;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
         .container {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
         }
 
-        .header {
+        h1 {
+            font-size: 2.2rem;
             text-align: center;
             margin-bottom: 30px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .header h1 {
-            color: white;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1em;
-        }
-
-        /* Navigation Tabs */
         .tabs {
             display: flex;
             flex-wrap: wrap;
@@ -59,34 +76,29 @@
         }
 
         .tab-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--primary-neon);
             padding: 12px 24px;
             border-radius: 25px;
-            color: white;
+            color: var(--light-text);
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            transition: var(--transition);
         }
 
         .tab-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
             transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
         .tab-btn.active {
-            background: white;
-            color: #667eea;
+            background: var(--accent-gradient);
+            border-color: transparent;
             font-weight: bold;
         }
 
-        /* Tool Card Styles */
         .tool-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
             margin-bottom: 30px;
             display: none;
         }
@@ -96,10 +108,11 @@
         }
 
         .tool-header {
-            background: linear-gradient(135deg, #FF0000, #CC0000);
-            color: white;
-            padding: 30px;
+            background: var(--accent-gradient);
+            color: var(--light-text);
+            padding: 20px;
             text-align: center;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .tool-header.instagram {
@@ -134,6 +147,10 @@
 
         .tool-body {
             padding: 30px;
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-top: none;
         }
 
         .input-group {
@@ -144,18 +161,21 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
+            color: var(--light-text);
             font-size: 1.1em;
         }
 
-        .input-group input, .input-group select, .input-group textarea {
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
             width: 100%;
             padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
+            border: 2px solid var(--primary-neon);
+            border-radius: var(--border-radius);
+            background: var(--dark-bg);
+            color: var(--light-text);
             font-size: 16px;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            transition: var(--transition);
         }
 
         .input-group textarea {
@@ -163,24 +183,31 @@
             resize: vertical;
         }
 
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: var(--secondary-neon);
             outline: none;
-            border-color: #FF0000;
-            box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+            box-shadow: 0 0 0 3px rgba(255, 0, 230, 0.2);
         }
 
         .generate-btn {
-            background: linear-gradient(135deg, #FF0000, #CC0000);
-            color: white;
+            background: var(--accent-gradient);
+            color: var(--light-text);
             border: none;
-            padding: 18px 30px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: var(--transition);
             width: 100%;
-            transition: all 0.3s ease;
             margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
         .generate-btn.instagram { background: linear-gradient(135deg, #E4405F, #C13584); }
@@ -189,55 +216,42 @@
         .generate-btn.linkedin { background: linear-gradient(135deg, #0A66C2, #084A8C); }
         .generate-btn.general { background: linear-gradient(135deg, #667eea, #764ba2); }
 
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .generate-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Results Section */
         .results {
             margin-top: 30px;
             display: none;
         }
 
         .results h4 {
-            color: #333;
+            color: var(--primary-neon);
             margin-bottom: 20px;
             font-size: 1.3em;
             text-align: center;
         }
 
         .results-list {
-            background: #f8f9fa;
-            border-radius: 15px;
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: var(--border-radius);
             padding: 25px;
-            border-left: 5px solid #FF0000;
+            border: 1px solid rgba(0, 240, 255, 0.1);
         }
 
         .result-item {
-            padding: 20px;
-            margin: 15px 0;
-            background: white;
-            border-radius: 12px;
-            border: 2px solid #e1e5e9;
+            padding: 15px;
+            margin: 10px 0;
+            background: var(--dark-bg);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--primary-neon);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 1.1em;
             position: relative;
+            color: var(--light-text);
         }
 
         .result-item:hover {
-            background: #fff5f5;
-            border-color: #FF0000;
+            border-color: var(--secondary-neon);
             transform: translateX(5px);
-        }
-
-        .result-item:active {
-            transform: scale(0.98);
+            box-shadow: 0 0 0 3px rgba(255, 0, 230, 0.2);
         }
 
         .result-item::after {
@@ -254,77 +268,101 @@
             opacity: 1;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 40px;
-            opacity: 0.8;
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+            transition: var(--transition);
         }
 
-        /* Responsive Design */
+        .back-link:hover {
+            color: var(--secondary-neon);
+            text-shadow: 0 0 10px rgba(255, 0, 230, 0.5);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--medium-text);
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
-            .container {
+            body {
                 padding: 10px;
             }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .tool-body {
-                padding: 20px;
-            }
-            
-            .result-item {
+
+            .container {
                 padding: 15px;
-                font-size: 1em;
             }
-            
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .tab-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
             .tabs {
                 flex-direction: column;
                 align-items: center;
             }
-            
-            .tab-btn {
-                width: 100%;
-                max-width: 300px;
+
+            .tool-body {
+                padding: 20px;
+            }
+
+            .result-item {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .back-link {
+                position: static;
+                text-align: center;
+                margin-bottom: 20px;
+                display: block;
             }
         }
     </style>
 </head>
 <body>
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
     <div class="container">
-        <div class="header">
-            <h1>🚀 Social Media Tools Suite</h1>
-            <p>Generate engaging content for all platforms in one place!</p>
-        </div>
+        <h1><i class="fas fa-share-alt"></i> Social Media Tools Suite</h1>
 
         <!-- Navigation Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTool('youtube')">🎬 YouTube</button>
-            <button class="tab-btn" onclick="showTool('instagram')">📷 Instagram</button>
-            <button class="tab-btn" onclick="showTool('facebook')">👥 Facebook</button>
-            <button class="tab-btn" onclick="showTool('twitter')">🐦 Twitter/X</button>
-            <button class="tab-btn" onclick="showTool('linkedin')">💼 LinkedIn</button>
-            <button class="tab-btn" onclick="showTool('general')">🌟 General</button>
+            <button class="tab-btn active" onclick="showTool('youtube')"><i class="fab fa-youtube"></i> YouTube</button>
+            <button class="tab-btn" onclick="showTool('instagram')"><i class="fab fa-instagram"></i> Instagram</button>
+            <button class="tab-btn" onclick="showTool('facebook')"><i class="fab fa-facebook"></i> Facebook</button>
+            <button class="tab-btn" onclick="showTool('twitter')"><i class="fab fa-twitter"></i> Twitter/X</button>
+            <button class="tab-btn" onclick="showTool('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button>
+            <button class="tab-btn" onclick="showTool('general')"><i class="fas fa-globe"></i> General</button>
         </div>
 
         <!-- YouTube Tools -->
         <div class="tool-card active" id="youtube-tool">
             <div class="tool-header">
-                <h3>🎬 YouTube Content Generator</h3>
+                <h3><i class="fab fa-youtube"></i> YouTube Content Generator</h3>
                 <p>Create viral YouTube titles, descriptions, and ideas</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="ytKeyword">🎯 Main Keyword/Topic:</label>
+                    <label for="ytKeyword"><i class="fas fa-keyboard"></i> Main Keyword/Topic:</label>
                     <input type="text" id="ytKeyword" placeholder="Example: digital marketing, cooking recipes, tech reviews...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="ytContentType">📝 Content Type:</label>
+                    <label for="ytContentType"><i class="fas fa-list"></i> Content Type:</label>
                     <select id="ytContentType">
                         <option value="titles">Video Titles</option>
                         <option value="descriptions">Video Descriptions</option>
@@ -334,11 +372,11 @@
                 </div>
                 
                 <button class="generate-btn" onclick="generateYouTubeContent()">
-                    ✨ Generate YouTube Content
+                    <i class="fas fa-magic"></i> Generate YouTube Content
                 </button>
                 
                 <div class="results" id="ytResults">
-                    <h4>🎉 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="ytResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -349,18 +387,18 @@
         <!-- Instagram Tools -->
         <div class="tool-card" id="instagram-tool">
             <div class="tool-header instagram">
-                <h3>📷 Instagram Content Generator</h3>
+                <h3><i class="fab fa-instagram"></i> Instagram Content Generator</h3>
                 <p>Create engaging captions, hashtags, and story ideas</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="igTopic">📸 Post Topic/Image:</label>
+                    <label for="igTopic"><i class="fas fa-camera"></i> Post Topic/Image:</label>
                     <input type="text" id="igTopic" placeholder="Example: morning coffee, workout, travel...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="igContentType">📱 Content Type:</label>
+                    <label for="igContentType"><i class="fas fa-list"></i> Content Type:</label>
                     <select id="igContentType">
                         <option value="captions">Post Captions</option>
                         <option value="hashtags">Hashtags</option>
@@ -370,11 +408,11 @@
                 </div>
                 
                 <button class="generate-btn instagram" onclick="generateInstagramContent()">
-                    ✨ Generate Instagram Content
+                    <i class="fas fa-magic"></i> Generate Instagram Content
                 </button>
                 
                 <div class="results" id="igResults">
-                    <h4>🌟 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="igResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -385,18 +423,18 @@
         <!-- Facebook Tools -->
         <div class="tool-card" id="facebook-tool">
             <div class="tool-header facebook">
-                <h3>👥 Facebook Content Generator</h3>
+                <h3><i class="fab fa-facebook"></i> Facebook Content Generator</h3>
                 <p>Create engaging posts and ad copies for Facebook</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="fbTopic">📝 Post Topic:</label>
+                    <label for="fbTopic"><i class="fas fa-edit"></i> Post Topic:</label>
                     <input type="text" id="fbTopic" placeholder="Example: business update, product launch, event...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="fbContentType">📊 Content Type:</label>
+                    <label for="fbContentType"><i class="fas fa-list"></i> Content Type:</label>
                     <select id="fbContentType">
                         <option value="posts">Facebook Posts</option>
                         <option value="ads">Ad Copies</option>
@@ -406,11 +444,11 @@
                 </div>
                 
                 <button class="generate-btn facebook" onclick="generateFacebookContent()">
-                    ✨ Generate Facebook Content
+                    <i class="fas fa-magic"></i> Generate Facebook Content
                 </button>
                 
                 <div class="results" id="fbResults">
-                    <h4>📈 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="fbResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -421,18 +459,18 @@
         <!-- Twitter Tools -->
         <div class="tool-card" id="twitter-tool">
             <div class="tool-header twitter">
-                <h3>🐦 Twitter/X Content Generator</h3>
+                <h3><i class="fab fa-twitter"></i> Twitter/X Content Generator</h3>
                 <p>Create viral tweets and threads for Twitter/X</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="twTopic">💬 Tweet Topic:</label>
+                    <label for="twTopic"><i class="fas fa-comment-dots"></i> Tweet Topic:</label>
                     <input type="text" id="twTopic" placeholder="Example: tech news, daily thoughts, announcements...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="twContentType">🐦 Content Type:</label>
+                    <label for="twContentType"><i class="fas fa-list"></i> Content Type:</label>
                     <select id="twContentType">
                         <option value="tweets">Single Tweets</option>
                         <option value="threads">Tweet Threads</option>
@@ -441,11 +479,11 @@
                 </div>
                 
                 <button class="generate-btn twitter" onclick="generateTwitterContent()">
-                    ✨ Generate Twitter Content
+                    <i class="fas fa-magic"></i> Generate Twitter Content
                 </button>
                 
                 <div class="results" id="twResults">
-                    <h4>🔥 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="twResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -456,18 +494,18 @@
         <!-- LinkedIn Tools -->
         <div class="tool-card" id="linkedin-tool">
             <div class="tool-header linkedin">
-                <h3>💼 LinkedIn Content Generator</h3>
+                <h3><i class="fab fa-linkedin"></i> LinkedIn Content Generator</h3>
                 <p>Create professional posts and updates for LinkedIn</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="liTopic">💼 Professional Topic:</label>
+                    <label for="liTopic"><i class="fas fa-briefcase"></i> Professional Topic:</label>
                     <input type="text" id="liTopic" placeholder="Example: career advice, industry insights, achievements...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="liContentType">📈 Content Type:</label>
+                    <label for="liContentType"><i class="fas fa-list"></i> Content Type:</label>
                     <select id="liContentType">
                         <option value="posts">LinkedIn Posts</option>
                         <option value="articles">Article Ideas</option>
@@ -477,11 +515,11 @@
                 </div>
                 
                 <button class="generate-btn linkedin" onclick="generateLinkedInContent()">
-                    ✨ Generate LinkedIn Content
+                    <i class="fas fa-magic"></i> Generate LinkedIn Content
                 </button>
                 
                 <div class="results" id="liResults">
-                    <h4>💼 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="liResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -492,18 +530,18 @@
         <!-- General Tools -->
         <div class="tool-card" id="general-tool">
             <div class="tool-header general">
-                <h3>🌟 General Social Media Tools</h3>
+                <h3><i class="fas fa-globe"></i> General Social Media Tools</h3>
                 <p>All-in-one tools for social media management</p>
             </div>
             
             <div class="tool-body">
                 <div class="input-group">
-                    <label for="genTopic">🎯 Content Topic:</label>
+                    <label for="genTopic"><i class="fas fa-lightbulb"></i> Content Topic:</label>
                     <input type="text" id="genTopic" placeholder="Example: brand promotion, content ideas, viral trends...">
                 </div>
                 
                 <div class="input-group">
-                    <label for="genToolType">🛠️ Tool Type:</label>
+                    <label for="genToolType"><i class="fas fa-tools"></i> Tool Type:</label>
                     <select id="genToolType">
                         <option value="calendar">Content Calendar</option>
                         <option value="hashtags">Hashtag Generator</option>
@@ -513,11 +551,11 @@
                 </div>
                 
                 <button class="generate-btn general" onclick="generateGeneralContent()">
-                    ✨ Generate Content
+                    <i class="fas fa-magic"></i> Generate Content
                 </button>
                 
                 <div class="results" id="genResults">
-                    <h4>🚀 Generated Content:</h4>
+                    <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="genResultsList">
                         <!-- Results will appear here -->
                     </div>
@@ -526,7 +564,7 @@
         </div>
 
         <div class="footer">
-            <p>Made with ❤️ for Content Creators | StellarTool Social Media Suite</p>
+            <p>Made with ❤️ for Content Creators | Stellar Tools</p>
         </div>
     </div>
 
@@ -763,7 +801,7 @@
             // Single Tweets Templates
             const tweetsTemplates = [
                 `Just discovered something amazing about ${topic}! Mind = blown 🤯\n\n#${topic.replace(/\s+/g, '')}`,
-                `The future of ${topic} is here and it's incredible! 🚀\n\nWho else is excited about this?`,
+                `The future of ${topic} is here and it's incredible! 🚀\n\nWho else is excited?`,
                 `3 things nobody tells you about ${topic}:\n\n1. First secret\n2. Second insight\n3. Game-changing tip\n\n#${topic.replace(/\s+/g, '')}Tips`,
                 `Why ${topic} is changing everything we know... 🧵👇`,
                 `Just leveled up my ${topic} game! The results? Absolutely worth it. 💪\n\n#${topic.replace(/\s+/g, '')}`
@@ -950,7 +988,7 @@
                         // Visual feedback
                         const originalText = itemElement.innerHTML;
                         itemElement.innerHTML = '<strong>✅ Copied to Clipboard!</strong>';
-                        itemElement.style.background = '#e8f5e8';
+                        itemElement.style.background = 'rgba(0, 240, 255, 0.1)';
                         
                         setTimeout(() => {
                             itemElement.innerHTML = originalText;
