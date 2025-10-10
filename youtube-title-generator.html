@@ -278,58 +278,121 @@
             
             // Different templates based on category
             const templates = {
-                general: [
-                    `This SECRET about ${keyword} will shock you!`,
-                    `${keyword} - Complete Guide in Hindi`,
-                    `I tried ${keyword} - The results surprised me!`,
-                    `These 5 methods for ${keyword} no one will tell you`,
-                    `If you want to learn ${keyword}, you must watch this video!`,
-                    `${keyword} - Everything in 1 Video | Step by Step`
-                ],
-                tech: [
-                    `${keyword} - Latest Update 2024 | Full Review`,
-                    `Don't make this mistake with ${keyword}! | Important Tips`,
-                    `How to use ${keyword} - Beginner to Pro Guide`,
-                    `${keyword} vs Competitor - Which is Better?`,
-                    `How to setup ${keyword}? | Complete Tutorial`
-                ],
-                education: [
-                    `Easy way to understand ${keyword}`,
-                    `${keyword} - Concepts Clear in 10 Minutes`,
-                    `How to remember ${keyword} for exams?`,
-                    `${keyword} - Most Important Questions`
-                ],
-                entertainment: [
-                    `${keyword} Challenge completed! What happened?`,
-                    `Funny Moments with ${keyword}`,
-                    `${keyword} - Behind the Scenes`,
-                    `${keyword} Reacting to Viral Videos`
-                ],
-                business: [
-                    `How to earn money with ${keyword}? | Full Strategy`,
-                    `${keyword} Business Ideas 2024`,
-                    `${keyword} Marketing Tips`,
-                    `₹50,000/month with ${keyword} - Real Strategy`
-                ],
-                lifestyle: [
-                    `How to make life better with ${keyword}?`,
-                    `My ${keyword} Routine | Daily Life`,
-                    `${keyword} Tips for Beginners`,
-                    `${keyword} - 30 Days Challenge Results`
-                ],
-                gaming: [
-                    `${keyword} Gameplay - EPIC Moments`,
-                    `${keyword} Tips and Tricks Pro Players Use`,
-                    `${keyword} - No Commentary Gameplay`,
-                    `${keyword} Secret Levels Revealed`
-                ],
-                cooking: [
-                    `Easy way to make ${keyword}`,
-                    `5 Minute ${keyword} Recipe`,
-                    `${keyword} - Restaurant Style at Home`,
-                    `${keyword} Secret Ingredients Revealed`
-                ]
-            };
+    general: [
+        `This SECRET about ${keyword} will shock you!`,
+        `${keyword} - Complete Guide in Hindi`,
+        `I tried ${keyword} - The results surprised me!`,
+        `These 5 methods for ${keyword} no one will tell you`,
+        `If you want to learn ${keyword}, you must watch this video!`,
+        `${keyword} - Everything in 1 Video | Step by Step`,
+        `${keyword} - Ultimate Beginner's Guide`,
+        `How to Master ${keyword} in 2024`,
+        `${keyword} Secrets Revealed | Pro Tips`,
+        `${keyword} - What They Don't Tell You`,
+        `${keyword} Tutorial Step by Step`,
+        `${keyword} - Game Changing Techniques`,
+        `${keyword} for Beginners | Easy Method`,
+        `${keyword} - Expert Level Tips`
+    ],
+    tech: [
+        `${keyword} - Latest Update 2024 | Full Review`,
+        `Don't make this mistake with ${keyword}! | Important Tips`,
+        `How to use ${keyword} - Beginner to Pro Guide`,
+        `${keyword} vs Competitor - Which is Better?`,
+        `How to setup ${keyword}? | Complete Tutorial`,
+        `${keyword} - Hidden Features You Didn't Know`,
+        `${keyword} Troubleshooting Guide | Common Problems`,
+        `${keyword} - Best Settings for Maximum Performance`,
+        `${keyword} Review - Is It Worth It?`,
+        `${keyword} - Future Technology Explained`,
+        `${keyword} Tips and Tricks 2024`,
+        `${keyword} - Complete Setup Guide`
+    ],
+    education: [
+        `Easy way to understand ${keyword}`,
+        `${keyword} - Concepts Clear in 10 Minutes`,
+        `How to remember ${keyword} for exams?`,
+        `${keyword} - Most Important Questions`,
+        `${keyword} - Full Chapter Explained`,
+        `${keyword} - Study Techniques That Work`,
+        `${keyword} - Exam Preparation Guide`,
+        `${keyword} - Quick Revision Notes`,
+        `${keyword} - Common Mistakes to Avoid`,
+        `${keyword} - Learning Made Easy`,
+        `${keyword} - Advanced Concepts`,
+        `${keyword} - Practical Applications`
+    ],
+    entertainment: [
+        `${keyword} Challenge completed! What happened?`,
+        `Funny Moments with ${keyword}`,
+        `${keyword} - Behind the Scenes`,
+        `${keyword} Reacting to Viral Videos`,
+        `${keyword} - Epic Fails Compilation`,
+        `${keyword} - Try Not to Laugh Challenge`,
+        `${keyword} - Most Viral Moments`,
+        `${keyword} - Unexpected Results`,
+        `${keyword} - Comedy Special`,
+        `${keyword} - Going Viral in 24 Hours`,
+        `${keyword} - Top 10 Moments`,
+        `${keyword} - Hilarious Bloopers`
+    ],
+    business: [
+        `How to earn money with ${keyword}? | Full Strategy`,
+        `${keyword} Business Ideas 2024`,
+        `${keyword} Marketing Tips`,
+        `₹50,000/month with ${keyword} - Real Strategy`,
+        `${keyword} - Startup Success Guide`,
+        `${keyword} - Passive Income Ideas`,
+        `${keyword} - Digital Marketing Strategies`,
+        `${keyword} - Business Growth Tips`,
+        `${keyword} - Investment Opportunities`,
+        `${keyword} - Entrepreneur Success Story`,
+        `${keyword} - Market Analysis 2024`,
+        `${keyword} - Revenue Generation Methods`
+    ],
+    lifestyle: [
+        `How to make life better with ${keyword}?`,
+        `My ${keyword} Routine | Daily Life`,
+        `${keyword} Tips for Beginners`,
+        `${keyword} - 30 Days Challenge Results`,
+        `${keyword} - Healthy Lifestyle Guide`,
+        `${keyword} - Productivity Hacks`,
+        `${keyword} - Self Improvement Tips`,
+        `${keyword} - Morning Routine Ideas`,
+        `${keyword} - Work Life Balance`,
+        `${keyword} - Happiness Techniques`,
+        `${keyword} - Minimalist Approach`,
+        `${keyword} - Wellness and Fitness`
+    ],
+    gaming: [
+        `${keyword} Gameplay - EPIC Moments`,
+        `${keyword} Tips and Tricks Pro Players Use`,
+        `${keyword} - No Commentary Gameplay`,
+        `${keyword} Secret Levels Revealed`,
+        `${keyword} - Boss Fight Strategy`,
+        `${keyword} - Multiplayer Gameplay`,
+        `${keyword} - Hidden Easter Eggs`,
+        `${keyword} - Speedrun Challenge`,
+        `${keyword} - Graphics Comparison`,
+        `${keyword} - Story Mode Complete`,
+        `${keyword} - Online Gaming Tips`,
+        `${keyword} - Weapon Guide and Review`
+    ],
+    cooking: [
+        `Easy way to make ${keyword}`,
+        `5 Minute ${keyword} Recipe`,
+        `${keyword} - Restaurant Style at Home`,
+        `${keyword} Secret Ingredients Revealed`,
+        `${keyword} - Traditional Method`,
+        `${keyword} - Healthy Version`,
+        `${keyword} - Quick and Easy Recipe`,
+        `${keyword} - Cooking Tips for Beginners`,
+        `${keyword} - Special Occasion Recipe`,
+        `${keyword} - International Cuisine`,
+        `${keyword} - Dessert Recipe`,
+        `${keyword} - Cooking Hacks and Tips`
+    ]
+};
             
             // Get templates based on category
             const categoryTemplates = templates[category] || templates.general;
