@@ -224,19 +224,19 @@
             box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
         }
 
-        /* ===== MODERN RESUME TEMPLATE STYLES ===== */
+        /* ===== RESUME TEMPLATE STYLES ===== */
         .resume-preview {
             line-height: 1.6;
             transition: all 0.3s ease;
             height: 100%;
         }
 
-        /* Template 1: Modern Professional (Like your screenshot) */
+        /* Template 1: Modern (Sidebar Layout) */
         .template-modern {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: grid;
             grid-template-columns: 300px 1fr;
-            gap: 30px;
+            gap: 0;
             min-height: 100%;
         }
 
@@ -249,6 +249,7 @@
 
         .template-modern .main-content {
             padding: 40px 30px;
+            background: white;
         }
 
         .template-modern .contact-info {
@@ -288,13 +289,10 @@
             font-size: 14px;
         }
 
-        .template-modern .skill-item {
-            background: none;
-            border: none;
-            padding: 0;
-            margin: 5px 0;
+        .template-modern .skill-items {
             color: #bdc3c7;
             font-size: 13px;
+            line-height: 1.4;
         }
 
         .template-modern .header-main {
@@ -316,10 +314,7 @@
             font-weight: 600;
         }
 
-        .template-modern .experience-item {
-            background: none;
-            border: none;
-            padding: 0;
+        .template-modern .experience-preview {
             margin-bottom: 25px;
         }
 
@@ -372,6 +367,7 @@
             color: white;
             border-bottom: 1px solid rgba(255,255,255,0.3);
             margin: 30px 0 20px 0;
+            font-size: 18px;
         }
 
         /* Template 3: Executive */
@@ -401,6 +397,13 @@
             font-style: italic;
         }
 
+        .template-executive .section-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #2c3e50;
+            margin: 25px 0 15px 0;
+            font-size: 18px;
+        }
+
         /* Template 4: Tech */
         .template-tech {
             font-family: 'Consolas', 'Courier New', monospace;
@@ -412,13 +415,130 @@
         .template-tech .section-title {
             color: #00ff00;
             border-bottom: 1px solid #00ff00;
+            margin: 25px 0 15px 0;
+            font-size: 18px;
         }
 
-        /* Common styles for all templates */
-        .resume-section {
-            margin-bottom: 25px;
+        .template-tech .name {
+            color: #00ff00;
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
+        /* Template 5: Minimal */
+        .template-minimal {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 40px;
+            background: white;
+        }
+
+        .template-minimal .header-main {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .template-minimal .name {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .template-minimal .title {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        .template-minimal .section-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            margin: 20px 0 15px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Template 6: Professional */
+        .template-professional {
+            font-family: 'Arial', sans-serif;
+            padding: 40px;
+            background: white;
+        }
+
+        .template-professional .header-main {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .template-professional .name {
+            font-size: 34px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .template-professional .title {
+            font-size: 18px;
+            color: #3498db;
+        }
+
+        /* Template 7: Corporate */
+        .template-corporate {
+            font-family: 'Georgia', serif;
+            padding: 40px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .template-corporate .header-main {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .template-corporate .name {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        /* Template 8: Modern Blue */
+        .template-modern-blue {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #3498db;
+            color: white;
+            padding: 40px;
+        }
+
+        .template-modern-blue .section-title {
+            border-bottom: 2px solid white;
+        }
+
+        /* Template 9: Elegant */
+        .template-elegant {
+            font-family: 'Garamond', serif;
+            padding: 40px;
+            background: #fafafa;
+        }
+
+        .template-elegant .name {
+            font-size: 38px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        /* Template 10: Bold */
+        .template-bold {
+            font-family: 'Montserrat', Arial, sans-serif;
+            padding: 40px;
+            background: #2c3e50;
+            color: white;
+        }
+
+        .template-bold .section-title {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+
+        /* Common styles */
         .skills-preview {
             display: flex;
             flex-wrap: wrap;
@@ -526,7 +646,6 @@
             color: #00b894;
         }
 
-        /* Form improvements */
         .form-section::-webkit-scrollbar {
             width: 6px;
         }
@@ -563,7 +682,7 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-robot"></i> AI Resume Maker</h1>
-            <p>Create professional resumes in minutes with modern templates and AI-powered suggestions</p>
+            <p>Create professional resumes in minutes with 10+ modern templates</p>
         </div>
 
         <div class="resume-builder">
@@ -662,7 +781,7 @@
                 </div>
                 <div id="skillsContainer" class="skills-preview"></div>
 
-                <h2 class="section-title">Choose Template</h2>
+                <h2 class="section-title">Choose Template (10 Options)</h2>
                 <div class="template-selector">
                     <div class="template-option active" data-template="modern">
                         <i class="fas fa-columns"></i>
@@ -683,6 +802,26 @@
                     <div class="template-option" data-template="minimal">
                         <i class="fas fa-minimize"></i>
                         <div class="template-name">Minimal</div>
+                    </div>
+                    <div class="template-option" data-template="professional">
+                        <i class="fas fa-briefcase"></i>
+                        <div class="template-name">Professional</div>
+                    </div>
+                    <div class="template-option" data-template="corporate">
+                        <i class="fas fa-building"></i>
+                        <div class="template-name">Corporate</div>
+                    </div>
+                    <div class="template-option" data-template="modern-blue">
+                        <i class="fas fa-file-code"></i>
+                        <div class="template-name">Modern Blue</div>
+                    </div>
+                    <div class="template-option" data-template="elegant">
+                        <i class="fas fa-gem"></i>
+                        <div class="template-name">Elegant</div>
+                    </div>
+                    <div class="template-option" data-template="bold">
+                        <i class="fas fa-bold"></i>
+                        <div class="template-name">Bold</div>
                     </div>
                 </div>
 
@@ -707,61 +846,7 @@
                     <button class="zoom-btn" onclick="zoomIn()"><i class="fas fa-search-plus"></i></button>
                 </div>
                 <div class="resume-preview template-modern" id="resumePreview">
-                    <!-- Modern Template Structure -->
-                    <div class="sidebar">
-                        <div class="contact-info">
-                            <h3 class="section-title">CONTACT</h3>
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <span id="previewEmail">info@resumekraft.com</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span id="previewPhone">202-555-0120</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span id="previewLocation">Chicago, Illinois, US</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fab fa-linkedin"></i>
-                                <span id="previewLinkedin">linkedin.com/resumekraft</span>
-                            </div>
-                        </div>
-                        
-                        <div class="skills-section">
-                            <h3 class="section-title">SKILLS</h3>
-                            <div id="previewSkillsCategories">
-                                <!-- Skill categories will be added here -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="main-content">
-                        <div class="header-main">
-                            <h1 class="name" id="previewName">RYAN FRANK</h1>
-                            <h2 class="title" id="previewTitle">ARTIFICIAL INTELLIGENCE ENGINEER</h2>
-                        </div>
-                        
-                        <div class="resume-section">
-                            <h3 class="section-title">SUMMARY</h3>
-                            <p id="previewSummary">Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques.</p>
-                        </div>
-                        
-                        <div class="resume-section">
-                            <h3 class="section-title">EXPERIENCE</h3>
-                            <div id="previewExperience">
-                                <!-- Experience items will be added here -->
-                            </div>
-                        </div>
-                        
-                        <div class="resume-section">
-                            <h3 class="section-title">EDUCATION</h3>
-                            <div id="previewEducation">
-                                <!-- Education items will be added here -->
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Content will be generated by JavaScript -->
                 </div>
 
                 <button class="download-btn" onclick="downloadResume()" id="downloadBtn" style="display: none;">
@@ -774,13 +859,13 @@
             <h3><i class="fas fa-lightbulb"></i> AI Template Suggestions</h3>
             <div id="aiSuggestions">
                 <div class="suggestion-item">
-                    <strong>📄 Modern Template:</strong> Best for tech roles and modern industries. Features sidebar layout with clean design.
+                    <strong>📄 Modern Template:</strong> Best for tech roles with sidebar layout
                 </div>
                 <div class="suggestion-item">
-                    <strong>🎨 Creative Template:</strong> Perfect for designers and creative professionals with gradient backgrounds.
+                    <strong>🎨 Creative Template:</strong> Perfect for designers with gradient design
                 </div>
                 <div class="suggestion-item">
-                    <strong>👔 Executive Template:</strong> Ideal for senior management with formal, professional layout.
+                    <strong>👔 Executive Template:</strong> Ideal for senior management positions
                 </div>
             </div>
         </div>
@@ -904,40 +989,218 @@
                 return;
             }
 
-            // Show loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('successAlert').style.display = 'none';
 
-            // Simulate AI processing
             setTimeout(() => {
                 updatePreview();
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('successAlert').style.display = 'block';
                 document.getElementById('downloadBtn').style.display = 'inline-flex';
-                
-                // Generate AI suggestions
                 generateAISuggestions();
             }, 1500);
         }
 
         function updatePreview() {
-            // Personal Info
-            document.getElementById('previewName').textContent = document.getElementById('fullName').value.toUpperCase() || 'YOUR NAME';
-            document.getElementById('previewTitle').textContent = document.getElementById('jobTitle').value.toUpperCase() || 'PROFESSIONAL TITLE';
-            document.getElementById('previewEmail').textContent = document.getElementById('email').value || 'email@example.com';
-            document.getElementById('previewPhone').textContent = document.getElementById('phone').value || 'Phone number';
-            document.getElementById('previewLocation').textContent = document.getElementById('location').value || 'City, Country';
-            
+            applyTemplateStructure();
+        }
+
+        function applyTemplateStructure() {
+            const preview = document.getElementById('resumePreview');
+            const fullName = document.getElementById('fullName').value || 'Your Name';
+            const jobTitle = document.getElementById('jobTitle').value || 'Professional Title';
+            const email = document.getElementById('email').value || 'email@example.com';
+            const phone = document.getElementById('phone').value || 'Phone number';
+            const location = document.getElementById('location').value || 'City, Country';
             const linkedin = document.getElementById('linkedin').value;
-            document.getElementById('previewLinkedin').textContent = linkedin ? linkedin.replace('https://', '') : 'linkedin.com/in/yourprofile';
+            const summary = document.getElementById('summary').value || 'Experienced professional with a strong background in...';
+            const skillCategories = document.getElementById('skillCategories').value.split(',').filter(cat => cat.trim());
 
-            // Summary
-            document.getElementById('previewSummary').textContent = 
-                document.getElementById('summary').value || 'Experienced professional with a strong background in...';
+            let templateHTML = '';
 
-            // Experience
-            const expContainer = document.getElementById('previewExperience');
-            expContainer.innerHTML = '';
+            switch(selectedTemplate) {
+                case 'modern':
+                    templateHTML = `
+                        <div class="sidebar">
+                            <div class="contact-info">
+                                <h3 class="section-title">CONTACT</h3>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>${email}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>${phone}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${location}</span>
+                                </div>
+                                ${linkedin ? `<div class="contact-item">
+                                    <i class="fab fa-linkedin"></i>
+                                    <span>${linkedin.replace('https://', '')}</span>
+                                </div>` : ''}
+                            </div>
+                            <div class="skills-section">
+                                <h3 class="section-title">SKILLS</h3>
+                                ${skillCategories.length > 0 ? skillCategories.map(category => `
+                                    <div class="skills-category">
+                                        <h4>${category.trim()}</h4>
+                                        <div class="skill-items">${skills.slice(0, 4).join(' • ')}</div>
+                                    </div>
+                                `).join('') : `
+                                    <div class="skills-category">
+                                        <h4>Technical Skills</h4>
+                                        <div class="skill-items">${skills.slice(0, 6).join(' • ')}</div>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                        <div class="main-content">
+                            <div class="header-main">
+                                <h1 class="name">${fullName.toUpperCase()}</h1>
+                                <h2 class="title">${jobTitle.toUpperCase()}</h2>
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">SUMMARY</h3>
+                                <p>${summary}</p>
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">EXPERIENCE</h3>
+                                ${getExperienceHTML()}
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">EDUCATION</h3>
+                                ${getEducationHTML()}
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'creative':
+                    templateHTML = `
+                        <div class="header-main">
+                            <h1 class="name">${fullName}</h1>
+                            <h2 class="title">${jobTitle}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">CONTACT</h3>
+                            <p>${email} | ${phone} | ${location}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p>${summary}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            ${getExperienceHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            ${getEducationHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SKILLS</h3>
+                            <div class="skills-preview">${skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}</div>
+                        </div>
+                    `;
+                    break;
+
+                case 'executive':
+                    templateHTML = `
+                        <div class="header-main">
+                            <h1 class="name">${fullName}</h1>
+                            <h2 class="title">${jobTitle}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">PROFESSIONAL SUMMARY</h3>
+                            <p>${summary}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">PROFESSIONAL EXPERIENCE</h3>
+                            ${getExperienceHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            ${getEducationHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">CONTACT</h3>
+                            <p>${email} | ${phone} | ${location}</p>
+                        </div>
+                    `;
+                    break;
+
+                // Add other templates similarly...
+                case 'tech':
+                    templateHTML = `
+                        <div class="header-main">
+                            <h1 class="name">${fullName}</h1>
+                            <h2 class="title">${jobTitle}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">CONTACT</h3>
+                            <p>${email} | ${phone} | ${location}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p>${summary}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            ${getExperienceHTML()}
+                        </div>
+                    `;
+                    break;
+
+                case 'minimal':
+                    templateHTML = `
+                        <div class="header-main">
+                            <h1 class="name">${fullName}</h1>
+                            <h2 class="title">${jobTitle}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p>${summary}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            ${getExperienceHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            ${getEducationHTML()}
+                        </div>
+                    `;
+                    break;
+
+                default:
+                    templateHTML = `
+                        <div class="header-main">
+                            <h1 class="name">${fullName}</h1>
+                            <h2 class="title">${jobTitle}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p>${summary}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            ${getExperienceHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            ${getEducationHTML()}
+                        </div>
+                    `;
+            }
+
+            preview.innerHTML = templateHTML;
+            preview.className = `resume-preview template-${selectedTemplate}`;
+        }
+
+        function getExperienceHTML() {
+            let experienceHTML = '';
             document.querySelectorAll('.experience-item').forEach(item => {
                 const title = item.querySelector('.exp-title').value;
                 const company = item.querySelector('.exp-company').value;
@@ -945,169 +1208,37 @@
                 const description = item.querySelector('.exp-description').value;
 
                 if (title && company) {
-                    const expDiv = document.createElement('div');
-                    expDiv.className = 'experience-item';
-                    expDiv.innerHTML = `
-                        <h4 class="job-title">${title}</h4>
-                        <p class="company">${company}</p>
-                        <p class="duration">${duration}</p>
-                        ${description ? `<p>${description}</p>` : ''}
+                    experienceHTML += `
+                        <div class="experience-preview">
+                            <h4 class="job-title">${title}</h4>
+                            <p class="company">${company}</p>
+                            <p class="duration">${duration}</p>
+                            ${description ? `<p>${description}</p>` : ''}
+                        </div>
                     `;
-                    expContainer.appendChild(expDiv);
                 }
             });
+            return experienceHTML || '<p>No experience added</p>';
+        }
 
-            // Education
-            const eduContainer = document.getElementById('previewEducation');
-            eduContainer.innerHTML = '';
+        function getEducationHTML() {
+            let educationHTML = '';
             document.querySelectorAll('.education-item').forEach(item => {
                 const degree = item.querySelector('.edu-degree').value;
                 const institution = item.querySelector('.edu-institution').value;
                 const duration = item.querySelector('.edu-duration').value;
 
                 if (degree && institution) {
-                    const eduDiv = document.createElement('div');
-                    eduDiv.className = 'experience-item';
-                    eduDiv.innerHTML = `
-                        <h4 class="job-title">${degree}</h4>
-                        <p class="company">${institution}</p>
-                        <p class="duration">${duration}</p>
+                    educationHTML += `
+                        <div class="experience-preview">
+                            <h4 class="job-title">${degree}</h4>
+                            <p class="company">${institution}</p>
+                            <p class="duration">${duration}</p>
+                        </div>
                     `;
-                    eduContainer.appendChild(eduDiv);
                 }
             });
-
-            // Skills Categories
-            const skillsCategoriesContainer = document.getElementById('previewSkillsCategories');
-            const skillCategories = document.getElementById('skillCategories').value.split(',').filter(cat => cat.trim());
-            
-            if (skillCategories.length > 0) {
-                skillsCategoriesContainer.innerHTML = skillCategories.map(category => `
-                    <div class="skills-category">
-                        <h4>${category.trim()}</h4>
-                        <div class="skill-item">${skills.slice(0, 3).join(' • ')}</div>
-                    </div>
-                `).join('');
-            } else {
-                // Default skill categories based on common skills
-                skillsCategoriesContainer.innerHTML = `
-                    <div class="skills-category">
-                        <h4>Technical Skills</h4>
-                        <div class="skill-item">${skills.slice(0, 5).join(' • ')}</div>
-                    </div>
-                `;
-            }
-
-            // Apply template styles
-            applyTemplateStyles();
-        }
-
-        function applyTemplateStyles() {
-            const preview = document.getElementById('resumePreview');
-            
-            // Remove all template classes
-            preview.className = 'resume-preview';
-            
-            // Add selected template class
-            preview.classList.add(`template-${selectedTemplate}`);
-            
-            // Apply template-specific HTML structure
-            applyTemplateStructure();
-        }
-
-        function applyTemplateStructure() {
-            const preview = document.getElementById('resumePreview');
-            
-            switch(selectedTemplate) {
-                case 'modern':
-                    preview.innerHTML = `
-                        <div class="sidebar">
-                            <div class="contact-info">
-                                <h3 class="section-title">CONTACT</h3>
-                                <div class="contact-item">
-                                    <i class="fas fa-envelope"></i>
-                                    <span id="previewEmail">${document.getElementById('email').value || 'email@example.com'}</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span id="previewPhone">${document.getElementById('phone').value || 'Phone number'}</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span id="previewLocation">${document.getElementById('location').value || 'City, Country'}</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fab fa-linkedin"></i>
-                                    <span id="previewLinkedin">${document.getElementById('linkedin').value ? document.getElementById('linkedin').value.replace('https://', '') : 'linkedin.com/in/yourprofile'}</span>
-                                </div>
-                            </div>
-                            <div class="skills-section">
-                                <h3 class="section-title">SKILLS</h3>
-                                <div id="previewSkillsCategories"></div>
-                            </div>
-                        </div>
-                        <div class="main-content">
-                            <div class="header-main">
-                                <h1 class="name" id="previewName">${document.getElementById('fullName').value.toUpperCase() || 'YOUR NAME'}</h1>
-                                <h2 class="title" id="previewTitle">${document.getElementById('jobTitle').value.toUpperCase() || 'PROFESSIONAL TITLE'}</h2>
-                            </div>
-                            <div class="resume-section">
-                                <h3 class="section-title">SUMMARY</h3>
-                                <p id="previewSummary">${document.getElementById('summary').value || 'Experienced professional with a strong background in...'}</p>
-                            </div>
-                            <div class="resume-section">
-                                <h3 class="section-title">EXPERIENCE</h3>
-                                <div id="previewExperience"></div>
-                            </div>
-                            <div class="resume-section">
-                                <h3 class="section-title">EDUCATION</h3>
-                                <div id="previewEducation"></div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'creative':
-                    preview.innerHTML = `
-                        <div class="header-main">
-                            <h1 class="name" id="previewName">${document.getElementById('fullName').value || 'Your Name'}</h1>
-                            <h2 class="title" id="previewTitle">${document.getElementById('jobTitle').value || 'Professional Title'}</h2>
-                        </div>
-                        <div class="resume-section">
-                            <h3 class="section-title">CONTACT</h3>
-                            <p>${document.getElementById('email').value} | ${document.getElementById('phone').value} | ${document.getElementById('location').value}</p>
-                        </div>
-                        <div class="resume-section">
-                            <h3 class="section-title">SUMMARY</h3>
-                            <p id="previewSummary">${document.getElementById('summary').value || 'Experienced professional...'}</p>
-                        </div>
-                        <div class="resume-section">
-                            <h3 class="section-title">EXPERIENCE</h3>
-                            <div id="previewExperience"></div>
-                        </div>
-                        <div class="resume-section">
-                            <h3 class="section-title">EDUCATION</h3>
-                            <div id="previewEducation"></div>
-                        </div>
-                        <div class="resume-section">
-                            <h3 class="section-title">SKILLS</h3>
-                            <div id="previewSkills" class="skills-preview"></div>
-                        </div>
-                    `;
-                    break;
-                    
-                // Add other template structures here...
-            }
-            
-            // Re-attach event listeners and update content
-            setTimeout(() => {
-                updatePreviewContent();
-            }, 100);
-        }
-
-        function updatePreviewContent() {
-            // This function will be called after template structure changes
-            // to ensure all dynamic content is properly displayed
+            return educationHTML || '<p>No education added</p>';
         }
 
         function generateAISuggestions() {
@@ -1116,33 +1247,19 @@
 
             let newSuggestions = [];
 
-            if (jobTitle.includes('engineer') || jobTitle.includes('developer') || jobTitle.includes('technical')) {
-                newSuggestions.push({
-                    title: "💻 Tech Role Detected",
-                    text: "The 'Modern' template works best for technical roles with its clean, professional layout."
-                });
+            if (jobTitle.includes('engineer') || jobTitle.includes('developer')) {
+                newSuggestions.push('💻 Try "Tech" template for technical roles');
+            }
+            if (jobTitle.includes('design') || jobTitle.includes('creative')) {
+                newSuggestions.push('🎨 "Creative" template works best for design roles');
+            }
+            if (jobTitle.includes('manager') || jobTitle.includes('director')) {
+                newSuggestions.push('👔 "Executive" template is perfect for management');
             }
 
-            if (jobTitle.includes('design') || jobTitle.includes('creative') || jobTitle.includes('artist')) {
-                newSuggestions.push({
-                    title: "🎨 Creative Role Detected", 
-                    text: "Try the 'Creative' template to showcase your design skills effectively."
-                });
-            }
-
-            if (jobTitle.includes('manager') || jobTitle.includes('director') || jobTitle.includes('executive')) {
-                newSuggestions.push({
-                    title: "👔 Leadership Role Detected",
-                    text: "The 'Executive' template is perfect for management positions with its formal design."
-                });
-            }
-
-            // Update suggestions
             if (newSuggestions.length > 0) {
                 suggestions.innerHTML = newSuggestions.map(sugg => `
-                    <div class="suggestion-item">
-                        <strong>${sugg.title}:</strong> ${sugg.text}
-                    </div>
+                    <div class="suggestion-item">${sugg}</div>
                 `).join('');
             }
         }
@@ -1179,14 +1296,15 @@
             element.addEventListener('input', updatePreview);
         });
 
-        // Initialize with sample data for demo
+        // Initialize with sample data
         document.getElementById('fullName').value = 'Ryan Frank';
         document.getElementById('jobTitle').value = 'Artificial Intelligence Engineer';
         document.getElementById('email').value = 'info@resumekraft.com';
         document.getElementById('phone').value = '202-555-0120';
         document.getElementById('location').value = 'Chicago, Illinois, US';
         document.getElementById('linkedin').value = 'https://linkedin.com/in/resumekraft';
-        document.getElementById('summary').value = 'Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques. Proficient in programming languages such as Python and R. Strong problem-solving abilities and a track record of successful project delivery. Seeking to leverage my expertise to drive innovation and advance AI technologies.';
+        document.getElementById('summary').value = 'Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques.';
+        document.getElementById('skillCategories').value = 'Machine Learning Algorithms, Programming Languages, Tools & Technologies';
 
         // Initialize
         updatePreview();
