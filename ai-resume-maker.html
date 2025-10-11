@@ -4,17 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Maker - Stellar Tools</title>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8Y6M1CYS2L');
-</script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
-     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -46,7 +35,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -76,12 +65,12 @@
 
         .resume-builder {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1.2fr;
             gap: 30px;
             margin-bottom: 40px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .resume-builder {
                 grid-template-columns: 1fr;
             }
@@ -93,15 +82,20 @@
             border-radius: var(--border-radius);
             box-shadow: var(--card-shadow);
             border: 1px solid rgba(0, 240, 255, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .preview-section {
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: var(--border-radius);
             box-shadow: var(--card-shadow);
             color: #333;
-            min-height: 800px;
+            min-height: 1122px;
+            max-height: 1122px;
+            overflow-y: auto;
+            position: relative;
         }
 
         .form-group {
@@ -175,6 +169,7 @@
             cursor: pointer;
             margin-left: 10px;
             transition: var(--transition);
+            font-size: 12px;
         }
 
         .remove-btn:hover {
@@ -229,72 +224,213 @@
             box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
         }
 
+        /* ===== MODERN RESUME TEMPLATE STYLES ===== */
         .resume-preview {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
+            transition: all 0.3s ease;
+            height: 100%;
         }
 
-        .resume-header {
-            text-align: center;
+        /* Template 1: Modern Professional (Like your screenshot) */
+        .template-modern {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            min-height: 100%;
+        }
+
+        .template-modern .sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 25px;
+            height: 100%;
+        }
+
+        .template-modern .main-content {
+            padding: 40px 30px;
+        }
+
+        .template-modern .contact-info {
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #2d3436;
         }
 
-        .resume-header h2 {
-            font-size: 2.2rem;
-            color: #2d3436;
-            margin-bottom: 5px;
+        .template-modern .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
         }
 
-        .resume-header p {
-            color: #636e72;
-            font-size: 1.1rem;
+        .template-modern .contact-item i {
+            margin-right: 10px;
+            width: 16px;
+            color: #3498db;
         }
 
-        .resume-section {
-            margin-bottom: 25px;
-        }
-
-        .resume-section h3 {
-            color: #00a8ff;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #00a8ff;
+        .template-modern .section-title {
+            color: #3498db;
+            font-size: 18px;
+            margin: 25px 0 15px 0;
+            border-bottom: 2px solid #3498db;
             padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .experience-preview, .education-preview {
+        .template-modern .skills-category {
             margin-bottom: 20px;
         }
 
-        .experience-preview h4, .education-preview h4 {
-            color: #2d3436;
-            margin-bottom: 5px;
+        .template-modern .skills-category h4 {
+            color: #ecf0f1;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
 
-        .experience-preview .company, .education-preview .institution {
-            color: #636e72;
+        .template-modern .skill-item {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 5px 0;
+            color: #bdc3c7;
+            font-size: 13px;
+        }
+
+        .template-modern .header-main {
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .template-modern .name {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .template-modern .title {
+            font-size: 18px;
+            color: #3498db;
             font-weight: 600;
         }
 
-        .experience-preview .duration, .education-preview .duration {
-            color: #636e72;
+        .template-modern .experience-item {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 25px;
+        }
+
+        .template-modern .job-title {
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .template-modern .company {
+            color: #3498db;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .template-modern .duration {
+            color: #7f8c8d;
             font-style: italic;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Template 2: Creative */
+        .template-creative {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+        }
+
+        .template-creative .header-main {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .template-creative .name {
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .template-creative .title {
+            font-size: 20px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .template-creative .section-title {
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            margin: 30px 0 20px 0;
+        }
+
+        /* Template 3: Executive */
+        .template-executive {
+            font-family: 'Times New Roman', serif;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .template-executive .header-main {
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .template-executive .name {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .template-executive .title {
+            font-size: 18px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Template 4: Tech */
+        .template-tech {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 40px;
+        }
+
+        .template-tech .section-title {
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+        }
+
+        /* Common styles for all templates */
+        .resume-section {
+            margin-bottom: 25px;
         }
 
         .skills-preview {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .skill-tag {
-            background: #00a8ff;
+            background: #3498db;
             color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
         }
 
         .ai-suggestions {
@@ -320,20 +456,14 @@
 
         .template-selector {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .template-selector {
-                grid-template-columns: 1fr;
-            }
         }
 
         .template-option {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 15px 10px;
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
@@ -352,9 +482,14 @@
         }
 
         .template-option i {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
             color: var(--primary-neon);
+        }
+
+        .template-name {
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         .loading {
@@ -391,10 +526,36 @@
             color: #00b894;
         }
 
-        .alert-error {
-            background: rgba(255, 71, 87, 0.1);
-            border: 1px solid #ff4757;
-            color: #ff4757;
+        /* Form improvements */
+        .form-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-section::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        .form-section::-webkit-scrollbar-thumb {
+            background: var(--primary-neon);
+            border-radius: 3px;
+        }
+
+        .preview-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .zoom-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -402,7 +563,7 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-robot"></i> AI Resume Maker</h1>
-            <p>Create professional resumes in minutes with AI-powered suggestions</p>
+            <p>Create professional resumes in minutes with modern templates and AI-powered suggestions</p>
         </div>
 
         <div class="resume-builder">
@@ -411,7 +572,11 @@
                 <h2 class="section-title">Personal Information</h2>
                 <div class="form-group">
                     <label for="fullName">Full Name *</label>
-                    <input type="text" id="fullName" placeholder="Enter your full name">
+                    <input type="text" id="fullName" placeholder="e.g., Ryan Frank">
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Job Title *</label>
+                    <input type="text" id="jobTitle" placeholder="e.g., Artificial Intelligence Engineer">
                 </div>
                 <div class="form-group">
                     <label for="email">Email *</label>
@@ -423,7 +588,7 @@
                 </div>
                 <div class="form-group">
                     <label for="location">Location</label>
-                    <input type="text" id="location" placeholder="City, Country">
+                    <input type="text" id="location" placeholder="City, State, Country">
                 </div>
                 <div class="form-group">
                     <label for="linkedin">LinkedIn Profile</label>
@@ -445,15 +610,15 @@
                     <div class="experience-item">
                         <div class="form-group">
                             <label>Job Title *</label>
-                            <input type="text" class="exp-title" placeholder="e.g., Software Engineer">
+                            <input type="text" class="exp-title" placeholder="e.g., Senior Associate Software Engineer">
                         </div>
                         <div class="form-group">
                             <label>Company *</label>
-                            <input type="text" class="exp-company" placeholder="e.g., Google">
+                            <input type="text" class="exp-company" placeholder="e.g., Oracle Cerner Healthcare Solutions">
                         </div>
                         <div class="form-group">
                             <label>Duration *</label>
-                            <input type="text" class="exp-duration" placeholder="e.g., Jan 2020 - Present">
+                            <input type="text" class="exp-duration" placeholder="e.g., Dec 2022 - Present">
                         </div>
                         <div class="form-group">
                             <label>Description</label>
@@ -489,23 +654,35 @@
                 <h2 class="section-title">Skills</h2>
                 <div class="form-group">
                     <label>Add Skills (comma separated)</label>
-                    <input type="text" id="skillsInput" placeholder="e.g., JavaScript, React, Node.js, Python">
+                    <input type="text" id="skillsInput" placeholder="e.g., Machine Learning, Python, Java, React">
+                </div>
+                <div class="form-group">
+                    <label>Skill Categories (optional)</label>
+                    <input type="text" id="skillCategories" placeholder="e.g., Machine Learning Algorithms, Programming Languages">
                 </div>
                 <div id="skillsContainer" class="skills-preview"></div>
 
                 <h2 class="section-title">Choose Template</h2>
                 <div class="template-selector">
-                    <div class="template-option active" data-template="professional">
-                        <i class="fas fa-briefcase"></i>
-                        <div>Professional</div>
-                    </div>
-                    <div class="template-option" data-template="modern">
-                        <i class="fas fa-rocket"></i>
-                        <div>Modern</div>
+                    <div class="template-option active" data-template="modern">
+                        <i class="fas fa-columns"></i>
+                        <div class="template-name">Modern</div>
                     </div>
                     <div class="template-option" data-template="creative">
                         <i class="fas fa-palette"></i>
-                        <div>Creative</div>
+                        <div class="template-name">Creative</div>
+                    </div>
+                    <div class="template-option" data-template="executive">
+                        <i class="fas fa-user-tie"></i>
+                        <div class="template-name">Executive</div>
+                    </div>
+                    <div class="template-option" data-template="tech">
+                        <i class="fas fa-laptop-code"></i>
+                        <div class="template-name">Tech</div>
+                    </div>
+                    <div class="template-option" data-template="minimal">
+                        <i class="fas fa-minimize"></i>
+                        <div class="template-name">Minimal</div>
                     </div>
                 </div>
 
@@ -525,47 +702,64 @@
 
             <!-- Right Side - Preview -->
             <div class="preview-section">
-                <div class="resume-preview" id="resumePreview">
-                    <div class="resume-header">
-                        <h2 id="previewName">Your Name</h2>
-                        <p id="previewContact">email@example.com | +1 (555) 123-4567 | City, Country</p>
-                        <p id="previewLinks"></p>
-                    </div>
-
-                    <div class="resume-section">
-                        <h3>Professional Summary</h3>
-                        <p id="previewSummary">Experienced professional with a strong background in...</p>
-                    </div>
-
-                    <div class="resume-section">
-                        <h3>Work Experience</h3>
-                        <div id="previewExperience">
-                            <div class="experience-preview">
-                                <h4>Software Engineer</h4>
-                                <p class="company">Google</p>
-                                <p class="duration">Jan 2020 - Present</p>
-                                <p>Developed and maintained web applications using modern technologies.</p>
+                <div class="preview-controls">
+                    <button class="zoom-btn" onclick="zoomOut()"><i class="fas fa-search-minus"></i></button>
+                    <button class="zoom-btn" onclick="zoomIn()"><i class="fas fa-search-plus"></i></button>
+                </div>
+                <div class="resume-preview template-modern" id="resumePreview">
+                    <!-- Modern Template Structure -->
+                    <div class="sidebar">
+                        <div class="contact-info">
+                            <h3 class="section-title">CONTACT</h3>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span id="previewEmail">info@resumekraft.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span id="previewPhone">202-555-0120</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="previewLocation">Chicago, Illinois, US</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fab fa-linkedin"></i>
+                                <span id="previewLinkedin">linkedin.com/resumekraft</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skills-section">
+                            <h3 class="section-title">SKILLS</h3>
+                            <div id="previewSkillsCategories">
+                                <!-- Skill categories will be added here -->
                             </div>
                         </div>
                     </div>
-
-                    <div class="resume-section">
-                        <h3>Education</h3>
-                        <div id="previewEducation">
-                            <div class="education-preview">
-                                <h4>Bachelor of Science in Computer Science</h4>
-                                <p class="institution">University of Technology</p>
-                                <p class="duration">2016 - 2020</p>
+                    
+                    <div class="main-content">
+                        <div class="header-main">
+                            <h1 class="name" id="previewName">RYAN FRANK</h1>
+                            <h2 class="title" id="previewTitle">ARTIFICIAL INTELLIGENCE ENGINEER</h2>
+                        </div>
+                        
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p id="previewSummary">Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques.</p>
+                        </div>
+                        
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            <div id="previewExperience">
+                                <!-- Experience items will be added here -->
                             </div>
                         </div>
-                    </div>
-
-                    <div class="resume-section">
-                        <h3>Skills</h3>
-                        <div id="previewSkills" class="skills-preview">
-                            <span class="skill-tag">JavaScript</span>
-                            <span class="skill-tag">React</span>
-                            <span class="skill-tag">Node.js</span>
+                        
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            <div id="previewEducation">
+                                <!-- Education items will be added here -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -577,16 +771,16 @@
         </div>
 
         <div class="ai-suggestions">
-            <h3><i class="fas fa-lightbulb"></i> AI Suggestions</h3>
+            <h3><i class="fas fa-lightbulb"></i> AI Template Suggestions</h3>
             <div id="aiSuggestions">
                 <div class="suggestion-item">
-                    <strong>💡 Professional Summary Tip:</strong> Start with your most significant achievement and include relevant keywords from the job description.
+                    <strong>📄 Modern Template:</strong> Best for tech roles and modern industries. Features sidebar layout with clean design.
                 </div>
                 <div class="suggestion-item">
-                    <strong>🚀 Experience Enhancement:</strong> Use action verbs like "developed", "managed", "implemented" to start each bullet point.
+                    <strong>🎨 Creative Template:</strong> Perfect for designers and creative professionals with gradient backgrounds.
                 </div>
                 <div class="suggestion-item">
-                    <strong>🎯 Skills Optimization:</strong> Include both technical and soft skills. Match them with the requirements of your target role.
+                    <strong>👔 Executive Template:</strong> Ideal for senior management with formal, professional layout.
                 </div>
             </div>
         </div>
@@ -595,7 +789,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let skills = [];
-        let selectedTemplate = 'professional';
+        let selectedTemplate = 'modern';
+        let zoomLevel = 1;
 
         // Template selection
         document.querySelectorAll('.template-option').forEach(option => {
@@ -654,11 +849,11 @@
             newItem.innerHTML = `
                 <div class="form-group">
                     <label>Job Title *</label>
-                    <input type="text" class="exp-title" placeholder="e.g., Software Engineer">
+                    <input type="text" class="exp-title" placeholder="e.g., Senior Software Engineer">
                 </div>
                 <div class="form-group">
                     <label>Company *</label>
-                    <input type="text" class="exp-company" placeholder="e.g., Google">
+                    <input type="text" class="exp-company" placeholder="e.g., Tech Company Inc.">
                 </div>
                 <div class="form-group">
                     <label>Duration *</label>
@@ -722,29 +917,19 @@
                 
                 // Generate AI suggestions
                 generateAISuggestions();
-            }, 2000);
+            }, 1500);
         }
 
         function updatePreview() {
             // Personal Info
-            document.getElementById('previewName').textContent = document.getElementById('fullName').value || 'Your Name';
+            document.getElementById('previewName').textContent = document.getElementById('fullName').value.toUpperCase() || 'YOUR NAME';
+            document.getElementById('previewTitle').textContent = document.getElementById('jobTitle').value.toUpperCase() || 'PROFESSIONAL TITLE';
+            document.getElementById('previewEmail').textContent = document.getElementById('email').value || 'email@example.com';
+            document.getElementById('previewPhone').textContent = document.getElementById('phone').value || 'Phone number';
+            document.getElementById('previewLocation').textContent = document.getElementById('location').value || 'City, Country';
             
-            const contactInfo = [
-                document.getElementById('email').value,
-                document.getElementById('phone').value,
-                document.getElementById('location').value
-            ].filter(Boolean).join(' | ');
-            document.getElementById('previewContact').textContent = contactInfo;
-
-            // Links
-            const links = [];
-            if (document.getElementById('linkedin').value) {
-                links.push(`LinkedIn: ${document.getElementById('linkedin').value}`);
-            }
-            if (document.getElementById('portfolio').value) {
-                links.push(`Portfolio: ${document.getElementById('portfolio').value}`);
-            }
-            document.getElementById('previewLinks').textContent = links.join(' | ');
+            const linkedin = document.getElementById('linkedin').value;
+            document.getElementById('previewLinkedin').textContent = linkedin ? linkedin.replace('https://', '') : 'linkedin.com/in/yourprofile';
 
             // Summary
             document.getElementById('previewSummary').textContent = 
@@ -761,9 +946,9 @@
 
                 if (title && company) {
                     const expDiv = document.createElement('div');
-                    expDiv.className = 'experience-preview';
+                    expDiv.className = 'experience-item';
                     expDiv.innerHTML = `
-                        <h4>${title}</h4>
+                        <h4 class="job-title">${title}</h4>
                         <p class="company">${company}</p>
                         <p class="duration">${duration}</p>
                         ${description ? `<p>${description}</p>` : ''}
@@ -782,21 +967,36 @@
 
                 if (degree && institution) {
                     const eduDiv = document.createElement('div');
-                    eduDiv.className = 'education-preview';
+                    eduDiv.className = 'experience-item';
                     eduDiv.innerHTML = `
-                        <h4>${degree}</h4>
-                        <p class="institution">${institution}</p>
+                        <h4 class="job-title">${degree}</h4>
+                        <p class="company">${institution}</p>
                         <p class="duration">${duration}</p>
                     `;
                     eduContainer.appendChild(eduDiv);
                 }
             });
 
-            // Skills
-            const skillsContainer = document.getElementById('previewSkills');
-            skillsContainer.innerHTML = skills.map(skill => 
-                `<span class="skill-tag">${skill}</span>`
-            ).join('');
+            // Skills Categories
+            const skillsCategoriesContainer = document.getElementById('previewSkillsCategories');
+            const skillCategories = document.getElementById('skillCategories').value.split(',').filter(cat => cat.trim());
+            
+            if (skillCategories.length > 0) {
+                skillsCategoriesContainer.innerHTML = skillCategories.map(category => `
+                    <div class="skills-category">
+                        <h4>${category.trim()}</h4>
+                        <div class="skill-item">${skills.slice(0, 3).join(' • ')}</div>
+                    </div>
+                `).join('');
+            } else {
+                // Default skill categories based on common skills
+                skillsCategoriesContainer.innerHTML = `
+                    <div class="skills-category">
+                        <h4>Technical Skills</h4>
+                        <div class="skill-item">${skills.slice(0, 5).join(' • ')}</div>
+                    </div>
+                `;
+            }
 
             // Apply template styles
             applyTemplateStyles();
@@ -804,49 +1004,136 @@
 
         function applyTemplateStyles() {
             const preview = document.getElementById('resumePreview');
+            
+            // Remove all template classes
             preview.className = 'resume-preview';
+            
+            // Add selected template class
+            preview.classList.add(`template-${selectedTemplate}`);
+            
+            // Apply template-specific HTML structure
+            applyTemplateStructure();
+        }
+
+        function applyTemplateStructure() {
+            const preview = document.getElementById('resumePreview');
             
             switch(selectedTemplate) {
                 case 'modern':
-                    preview.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+                    preview.innerHTML = `
+                        <div class="sidebar">
+                            <div class="contact-info">
+                                <h3 class="section-title">CONTACT</h3>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span id="previewEmail">${document.getElementById('email').value || 'email@example.com'}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span id="previewPhone">${document.getElementById('phone').value || 'Phone number'}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="previewLocation">${document.getElementById('location').value || 'City, Country'}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fab fa-linkedin"></i>
+                                    <span id="previewLinkedin">${document.getElementById('linkedin').value ? document.getElementById('linkedin').value.replace('https://', '') : 'linkedin.com/in/yourprofile'}</span>
+                                </div>
+                            </div>
+                            <div class="skills-section">
+                                <h3 class="section-title">SKILLS</h3>
+                                <div id="previewSkillsCategories"></div>
+                            </div>
+                        </div>
+                        <div class="main-content">
+                            <div class="header-main">
+                                <h1 class="name" id="previewName">${document.getElementById('fullName').value.toUpperCase() || 'YOUR NAME'}</h1>
+                                <h2 class="title" id="previewTitle">${document.getElementById('jobTitle').value.toUpperCase() || 'PROFESSIONAL TITLE'}</h2>
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">SUMMARY</h3>
+                                <p id="previewSummary">${document.getElementById('summary').value || 'Experienced professional with a strong background in...'}</p>
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">EXPERIENCE</h3>
+                                <div id="previewExperience"></div>
+                            </div>
+                            <div class="resume-section">
+                                <h3 class="section-title">EDUCATION</h3>
+                                <div id="previewEducation"></div>
+                            </div>
+                        </div>
+                    `;
                     break;
+                    
                 case 'creative':
-                    preview.style.fontFamily = "'Georgia', serif";
+                    preview.innerHTML = `
+                        <div class="header-main">
+                            <h1 class="name" id="previewName">${document.getElementById('fullName').value || 'Your Name'}</h1>
+                            <h2 class="title" id="previewTitle">${document.getElementById('jobTitle').value || 'Professional Title'}</h2>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">CONTACT</h3>
+                            <p>${document.getElementById('email').value} | ${document.getElementById('phone').value} | ${document.getElementById('location').value}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SUMMARY</h3>
+                            <p id="previewSummary">${document.getElementById('summary').value || 'Experienced professional...'}</p>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EXPERIENCE</h3>
+                            <div id="previewExperience"></div>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">EDUCATION</h3>
+                            <div id="previewEducation"></div>
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SKILLS</h3>
+                            <div id="previewSkills" class="skills-preview"></div>
+                        </div>
+                    `;
                     break;
-                default:
-                    preview.style.fontFamily = "'Arial', sans-serif";
+                    
+                // Add other template structures here...
             }
+            
+            // Re-attach event listeners and update content
+            setTimeout(() => {
+                updatePreviewContent();
+            }, 100);
+        }
+
+        function updatePreviewContent() {
+            // This function will be called after template structure changes
+            // to ensure all dynamic content is properly displayed
         }
 
         function generateAISuggestions() {
             const suggestions = document.getElementById('aiSuggestions');
-            const summary = document.getElementById('summary').value.toLowerCase();
-            const skillsText = skills.join(' ').toLowerCase();
+            const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
 
             let newSuggestions = [];
 
-            // Summary suggestions
-            if (summary.length < 50) {
+            if (jobTitle.includes('engineer') || jobTitle.includes('developer') || jobTitle.includes('technical')) {
                 newSuggestions.push({
-                    title: "📝 Summary Length",
-                    text: "Your professional summary seems short. Consider expanding it to 3-4 lines highlighting key achievements."
+                    title: "💻 Tech Role Detected",
+                    text: "The 'Modern' template works best for technical roles with its clean, professional layout."
                 });
             }
 
-            // Skills suggestions
-            if (skills.length < 5) {
+            if (jobTitle.includes('design') || jobTitle.includes('creative') || jobTitle.includes('artist')) {
                 newSuggestions.push({
-                    title: "🛠️ Skills Diversity",
-                    text: "Consider adding more skills. Include both technical and soft skills relevant to your target role."
+                    title: "🎨 Creative Role Detected", 
+                    text: "Try the 'Creative' template to showcase your design skills effectively."
                 });
             }
 
-            // Experience suggestions
-            const expItems = document.querySelectorAll('.experience-item');
-            if (expItems.length === 0) {
+            if (jobTitle.includes('manager') || jobTitle.includes('director') || jobTitle.includes('executive')) {
                 newSuggestions.push({
-                    title: "💼 Experience Missing",
-                    text: "Add your work experience. Even internships and freelance work count!"
+                    title: "👔 Leadership Role Detected",
+                    text: "The 'Executive' template is perfect for management positions with its formal design."
                 });
             }
 
@@ -860,11 +1147,25 @@
             }
         }
 
+        function zoomIn() {
+            if (zoomLevel < 1.5) {
+                zoomLevel += 0.1;
+                document.getElementById('resumePreview').style.transform = `scale(${zoomLevel})`;
+            }
+        }
+
+        function zoomOut() {
+            if (zoomLevel > 0.8) {
+                zoomLevel -= 0.1;
+                document.getElementById('resumePreview').style.transform = `scale(${zoomLevel})`;
+            }
+        }
+
         function downloadResume() {
             const element = document.getElementById('resumePreview');
             const options = {
                 margin: 10,
-                filename: 'resume.pdf',
+                filename: 'professional-resume.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -878,9 +1179,17 @@
             element.addEventListener('input', updatePreview);
         });
 
+        // Initialize with sample data for demo
+        document.getElementById('fullName').value = 'Ryan Frank';
+        document.getElementById('jobTitle').value = 'Artificial Intelligence Engineer';
+        document.getElementById('email').value = 'info@resumekraft.com';
+        document.getElementById('phone').value = '202-555-0120';
+        document.getElementById('location').value = 'Chicago, Illinois, US';
+        document.getElementById('linkedin').value = 'https://linkedin.com/in/resumekraft';
+        document.getElementById('summary').value = 'Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques. Proficient in programming languages such as Python and R. Strong problem-solving abilities and a track record of successful project delivery. Seeking to leverage my expertise to drive innovation and advance AI technologies.';
+
         // Initialize
         updatePreview();
     </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
