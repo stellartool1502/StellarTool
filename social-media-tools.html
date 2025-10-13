@@ -10,20 +10,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
       gtag('config', 'G-8Y6M1CYS2L');
     </script>
-	 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8Y6M1CYS2L');
-</script>
-  <style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-neon: #00f0ff;
@@ -285,6 +275,7 @@
             color: var(--primary-neon);
             font-size: 1.2rem;
             transition: var(--transition);
+            text-decoration: none;
         }
 
         .back-link:hover {
@@ -297,6 +288,26 @@
             color: var(--medium-text);
             margin-top: 40px;
             font-size: 0.9rem;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background: rgba(81, 207, 102, 0.1);
+            color: #51cf66;
+            border: 1px solid #51cf66;
+        }
+
+        .error {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border: 1px solid #ff4757;
         }
 
         @media (max-width: 768px) {
@@ -350,12 +361,12 @@
 
         <!-- Navigation Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTool('youtube')"><i class="fab fa-youtube"></i> YouTube</button>
-            <button class="tab-btn" onclick="showTool('instagram')"><i class="fab fa-instagram"></i> Instagram</button>
-            <button class="tab-btn" onclick="showTool('facebook')"><i class="fab fa-facebook"></i> Facebook</button>
-            <button class="tab-btn" onclick="showTool('twitter')"><i class="fab fa-twitter"></i> Twitter/X</button>
-            <button class="tab-btn" onclick="showTool('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</button>
-            <button class="tab-btn" onclick="showTool('general')"><i class="fas fa-globe"></i> General</button>
+            <button class="tab-btn active" data-tool="youtube"><i class="fab fa-youtube"></i> YouTube</button>
+            <button class="tab-btn" data-tool="instagram"><i class="fab fa-instagram"></i> Instagram</button>
+            <button class="tab-btn" data-tool="facebook"><i class="fab fa-facebook"></i> Facebook</button>
+            <button class="tab-btn" data-tool="twitter"><i class="fab fa-twitter"></i> Twitter/X</button>
+            <button class="tab-btn" data-tool="linkedin"><i class="fab fa-linkedin"></i> LinkedIn</button>
+            <button class="tab-btn" data-tool="general"><i class="fas fa-globe"></i> General</button>
         </div>
 
         <!-- YouTube Tools -->
@@ -384,6 +395,8 @@
                 <button class="generate-btn" onclick="generateYouTubeContent()">
                     <i class="fas fa-magic"></i> Generate YouTube Content
                 </button>
+                
+                <div class="message error" id="ytError"></div>
                 
                 <div class="results" id="ytResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
@@ -421,6 +434,8 @@
                     <i class="fas fa-magic"></i> Generate Instagram Content
                 </button>
                 
+                <div class="message error" id="igError"></div>
+                
                 <div class="results" id="igResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="igResultsList">
@@ -457,6 +472,8 @@
                     <i class="fas fa-magic"></i> Generate Facebook Content
                 </button>
                 
+                <div class="message error" id="fbError"></div>
+                
                 <div class="results" id="fbResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="fbResultsList">
@@ -491,6 +508,8 @@
                 <button class="generate-btn twitter" onclick="generateTwitterContent()">
                     <i class="fas fa-magic"></i> Generate Twitter Content
                 </button>
+                
+                <div class="message error" id="twError"></div>
                 
                 <div class="results" id="twResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
@@ -528,6 +547,8 @@
                     <i class="fas fa-magic"></i> Generate LinkedIn Content
                 </button>
                 
+                <div class="message error" id="liError"></div>
+                
                 <div class="results" id="liResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="liResultsList">
@@ -564,6 +585,8 @@
                     <i class="fas fa-magic"></i> Generate Content
                 </button>
                 
+                <div class="message error" id="genError"></div>
+                
                 <div class="results" id="genResults">
                     <h4><i class="fas fa-list"></i> Generated Content:</h4>
                     <div class="results-list" id="genResultsList">
@@ -598,13 +621,50 @@
             event.target.classList.add('active');
         }
 
+        // Add event listeners to tab buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const toolName = this.getAttribute('data-tool');
+                    showTool(toolName);
+                });
+            });
+
+            // Enter key support for all input fields
+            const inputFields = document.querySelectorAll('input[type="text"]');
+            inputFields.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        // Find the generate button in the same tool card and click it
+                        const toolCard = this.closest('.tool-card');
+                        const generateBtn = toolCard.querySelector('.generate-btn');
+                        if (generateBtn) {
+                            generateBtn.click();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Show error message
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 3000);
+        }
+
         // YouTube Content Generator
         function generateYouTubeContent() {
             const keyword = document.getElementById('ytKeyword').value.trim();
             const contentType = document.getElementById('ytContentType').value;
             
             if (!keyword) {
-                alert("Please enter your main keyword!");
+                showError('ytError', "Please enter your main keyword!");
                 return;
             }
             
@@ -678,7 +738,7 @@
             const contentType = document.getElementById('igContentType').value;
             
             if (!topic) {
-                alert("Please enter your post topic!");
+                showError('igError', "Please enter your post topic!");
                 return;
             }
             
@@ -744,7 +804,7 @@
             const contentType = document.getElementById('fbContentType').value;
             
             if (!topic) {
-                alert("Please enter your post topic!");
+                showError('fbError', "Please enter your post topic!");
                 return;
             }
             
@@ -802,7 +862,7 @@
             const contentType = document.getElementById('twContentType').value;
             
             if (!topic) {
-                alert("Please enter your tweet topic!");
+                showError('twError', "Please enter your tweet topic!");
                 return;
             }
             
@@ -855,7 +915,7 @@
             const contentType = document.getElementById('liContentType').value;
             
             if (!topic) {
-                alert("Please enter your professional topic!");
+                showError('liError', "Please enter your professional topic!");
                 return;
             }
             
@@ -919,7 +979,7 @@
             const toolType = document.getElementById('genToolType').value;
             
             if (!topic) {
-                alert("Please enter your content topic!");
+                showError('genError', "Please enter your content topic!");
                 return;
             }
             
@@ -1017,23 +1077,6 @@
             // Smooth scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
-
-        // Enter key support for all input fields
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputFields = document.querySelectorAll('input[type="text"]');
-            inputFields.forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        // Find the generate button in the same tool card and click it
-                        const toolCard = this.closest('.tool-card');
-                        const generateBtn = toolCard.querySelector('.generate-btn');
-                        if (generateBtn) {
-                            generateBtn.click();
-                        }
-                    }
-                });
-            });
-        });
     </script>
     <script type="text/javascript">
 	atOptions = {
