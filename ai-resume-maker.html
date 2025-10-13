@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Maker - Stellar Tools</title>
-      <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8Y6M1CYS2L');
-</script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
-     crossorigin="anonymous"></script>
-  <style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8Y6M1CYS2L');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-neon: #00f0ff;
@@ -165,6 +163,9 @@
             font-weight: 600;
             transition: var(--transition);
             margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .add-btn:hover {
@@ -194,6 +195,7 @@
             border-radius: 8px;
             margin-bottom: 15px;
             border-left: 4px solid var(--primary-neon);
+            position: relative;
         }
 
         .generate-btn {
@@ -208,6 +210,10 @@
             width: 100%;
             transition: var(--transition);
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .generate-btn:hover {
@@ -563,6 +569,9 @@
             padding: 4px 12px;
             border-radius: 12px;
             font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .ai-suggestions {
@@ -688,9 +697,27 @@
             cursor: pointer;
             font-size: 14px;
         }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary-neon);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--secondary-neon);
+        }
     </style>
 </head>
 <body>
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-robot"></i> AI Resume Maker</h1>
@@ -889,28 +916,40 @@
         let selectedTemplate = 'modern';
         let zoomLevel = 1;
 
-        // Template selection
-        document.querySelectorAll('.template-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.template-option').forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                selectedTemplate = this.dataset.template;
-                updatePreview();
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Template selection
+            document.querySelectorAll('.template-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.template-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedTemplate = this.dataset.template;
+                    updatePreview();
+                });
             });
-        });
 
-        // Skills input
-        document.getElementById('skillsInput').addEventListener('input', function(e) {
-            if (e.inputType === 'insertText' && e.data === ',') {
-                addSkill();
-            }
-        });
+            // Skills input
+            document.getElementById('skillsInput').addEventListener('input', function(e) {
+                if (e.inputType === 'insertText' && e.data === ',') {
+                    addSkill();
+                }
+            });
 
-        document.getElementById('skillsInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addSkill();
-            }
+            document.getElementById('skillsInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+
+            // Real-time preview updates
+            document.querySelectorAll('input, textarea').forEach(element => {
+                element.addEventListener('input', updatePreview);
+            });
+
+            // Initialize with sample data
+            initializeSampleData();
+            updatePreview();
         });
 
         function addSkill() {
@@ -960,11 +999,16 @@
                     <label>Description</label>
                     <textarea class="exp-description" placeholder="Describe your responsibilities and achievements..." rows="3"></textarea>
                 </div>
-                <button class="remove-btn" onclick="this.parentElement.remove()">
+                <button class="remove-btn" onclick="this.parentElement.remove(); updatePreview();">
                     <i class="fas fa-trash"></i> Remove
                 </button>
             `;
             container.appendChild(newItem);
+            
+            // Add event listeners to new inputs
+            newItem.querySelectorAll('input, textarea').forEach(element => {
+                element.addEventListener('input', updatePreview);
+            });
         }
 
         function addEducation() {
@@ -984,11 +1028,16 @@
                     <label>Duration *</label>
                     <input type="text" class="edu-duration" placeholder="e.g., 2016 - 2020">
                 </div>
-                <button class="remove-btn" onclick="this.parentElement.remove()">
+                <button class="remove-btn" onclick="this.parentElement.remove(); updatePreview();">
                     <i class="fas fa-trash"></i> Remove
                 </button>
             `;
             container.appendChild(newItem);
+            
+            // Add event listeners to new inputs
+            newItem.querySelectorAll('input, textarea').forEach(element => {
+                element.addEventListener('input', updatePreview);
+            });
         }
 
         // Generate Resume
@@ -1025,6 +1074,7 @@
             const phone = document.getElementById('phone').value || 'Phone number';
             const location = document.getElementById('location').value || 'City, Country';
             const linkedin = document.getElementById('linkedin').value;
+            const portfolio = document.getElementById('portfolio').value;
             const summary = document.getElementById('summary').value || 'Experienced professional with a strong background in...';
             const skillCategories = document.getElementById('skillCategories').value.split(',').filter(cat => cat.trim());
 
@@ -1051,6 +1101,10 @@
                                 ${linkedin ? `<div class="contact-item">
                                     <i class="fab fa-linkedin"></i>
                                     <span>${linkedin.replace('https://', '')}</span>
+                                </div>` : ''}
+                                ${portfolio ? `<div class="contact-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>${portfolio.replace('https://', '')}</span>
                                 </div>` : ''}
                             </div>
                             <div class="skills-section">
@@ -1143,7 +1197,6 @@
                     `;
                     break;
 
-                // Add other templates similarly...
                 case 'tech':
                     templateHTML = `
                         <div class="header-main">
@@ -1161,6 +1214,10 @@
                         <div class="resume-section">
                             <h3 class="section-title">EXPERIENCE</h3>
                             ${getExperienceHTML()}
+                        </div>
+                        <div class="resume-section">
+                            <h3 class="section-title">SKILLS</h3>
+                            <div class="skills-preview">${skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}</div>
                         </div>
                     `;
                     break;
@@ -1213,7 +1270,13 @@
 
         function getExperienceHTML() {
             let experienceHTML = '';
-            document.querySelectorAll('.experience-item').forEach(item => {
+            const items = document.querySelectorAll('.experience-item');
+            
+            if (items.length === 0) {
+                return '<p>No experience added</p>';
+            }
+
+            items.forEach(item => {
                 const title = item.querySelector('.exp-title').value;
                 const company = item.querySelector('.exp-company').value;
                 const duration = item.querySelector('.exp-duration').value;
@@ -1235,7 +1298,13 @@
 
         function getEducationHTML() {
             let educationHTML = '';
-            document.querySelectorAll('.education-item').forEach(item => {
+            const items = document.querySelectorAll('.education-item');
+            
+            if (items.length === 0) {
+                return '<p>No education added</p>';
+            }
+
+            items.forEach(item => {
                 const degree = item.querySelector('.edu-degree').value;
                 const institution = item.querySelector('.edu-institution').value;
                 const duration = item.querySelector('.edu-duration').value;
@@ -1303,23 +1372,21 @@
             html2pdf().set(options).from(element).save();
         }
 
-        // Real-time preview updates
-        document.querySelectorAll('input, textarea').forEach(element => {
-            element.addEventListener('input', updatePreview);
-        });
-
-        // Initialize with sample data
-        document.getElementById('fullName').value = 'Ryan Frank';
-        document.getElementById('jobTitle').value = 'Artificial Intelligence Engineer';
-        document.getElementById('email').value = 'info@resumekraft.com';
-        document.getElementById('phone').value = '202-555-0120';
-        document.getElementById('location').value = 'Chicago, Illinois, US';
-        document.getElementById('linkedin').value = 'https://linkedin.com/in/resumekraft';
-        document.getElementById('summary').value = 'Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques.';
-        document.getElementById('skillCategories').value = 'Machine Learning Algorithms, Programming Languages, Tools & Technologies';
-
-        // Initialize
-        updatePreview();
+        function initializeSampleData() {
+            document.getElementById('fullName').value = 'Ryan Frank';
+            document.getElementById('jobTitle').value = 'Artificial Intelligence Engineer';
+            document.getElementById('email').value = 'info@resumekraft.com';
+            document.getElementById('phone').value = '202-555-0120';
+            document.getElementById('location').value = 'Chicago, Illinois, US';
+            document.getElementById('linkedin').value = 'https://linkedin.com/in/resumekraft';
+            document.getElementById('portfolio').value = 'https://github.com/resumekraft';
+            document.getElementById('summary').value = 'Results-driven Artificial Intelligence Engineer with a solid background in machine learning and deep learning algorithms. Skilled in developing AI and ML models, analyzing complex data sets, and implementing natural language processing techniques.';
+            document.getElementById('skillCategories').value = 'Machine Learning Algorithms, Programming Languages, Tools & Technologies';
+            
+            // Add sample skills
+            skills = ['Python', 'TensorFlow', 'Machine Learning', 'Deep Learning', 'NLP', 'Data Analysis'];
+            updateSkillsDisplay();
+        }
     </script>
     <script type="text/javascript">
 	atOptions = {
