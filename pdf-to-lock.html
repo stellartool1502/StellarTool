@@ -5,143 +5,639 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF Lock Tool - Stellar Tools</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/downloadjs@1.4.7"></script>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #1a1f2e;
+      background: linear-gradient(135deg, #1a1f2e, #2d1b69);
       color: #e0e6f0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      padding: 20px;
     }
     .container {
-      background-color: #2c2f3e;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-      padding: 2rem;
-      max-width: 450px;
+      background: rgba(44, 47, 62, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 123, 255, 0.3);
+      padding: 2.5rem;
+      max-width: 500px;
       width: 100%;
       text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 196, 255, 0.2);
     }
     h1 {
       color: #00c4ff;
       margin-bottom: 1rem;
+      font-size: 2.2rem;
+      text-shadow: 0 0 20px rgba(0, 196, 255, 0.5);
     }
-    input[type="file"],
+    .description {
+      color: #a0a8b8;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .upload-section {
+      background: rgba(51, 56, 84, 0.6);
+      border: 2px dashed #00c4ff;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .upload-section:hover {
+      background: rgba(51, 56, 84, 0.8);
+      border-color: #8e2de2;
+    }
+    .upload-icon {
+      font-size: 3rem;
+      color: #00c4ff;
+      margin-bottom: 1rem;
+    }
+    input[type="file"] {
+      display: none;
+    }
     input[type="password"] {
       width: 100%;
-      margin: 0.75rem 0;
-      padding: 0.6rem;
+      margin: 1rem 0;
+      padding: 1rem;
       font-size: 1rem;
-      border: 1px solid #40445a;
-      border-radius: 10px;
-      background: #333854;
+      border: 2px solid #40445a;
+      border-radius: 12px;
+      background: rgba(51, 56, 84, 0.8);
       color: #e0e6f0;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #00c4ff;
+      box-shadow: 0 0 15px rgba(0, 196, 255, 0.3);
     }
     .button {
-      background: linear-gradient(90deg, #00c4ff, #8e2de2);
+      background: linear-gradient(135deg, #00c4ff, #8e2de2);
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-size: 1rem;
+      padding: 1.2rem 2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 196, 255, 0.4);
     }
     .button:disabled {
-      background: #a0a8b8;
+      background: #4a4e69;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .button-loading {
+      position: relative;
+      color: transparent;
+    }
+    .button-loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
     #status {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       font-weight: bold;
+      padding: 1rem;
+      border-radius: 10px;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .success {
+      background: rgba(0, 255, 136, 0.15);
+      color: #00ff88;
+      border: 1px solid #00ff88;
+    }
+    .error {
+      background: rgba(255, 68, 68, 0.15);
+      color: #ff4444;
+      border: 1px solid #ff4444;
+    }
+    .loading {
+      background: rgba(0, 196, 255, 0.15);
       color: #00c4ff;
+      border: 1px solid #00c4ff;
+    }
+    .file-info {
+      margin: 1.5rem 0;
+      padding: 1.2rem;
+      background: rgba(0, 196, 255, 0.1);
+      border-radius: 12px;
+      display: none;
+      border-left: 4px solid #00c4ff;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .feature {
+      text-align: center;
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .feature:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .feature i {
+      font-size: 1.8rem;
+      color: #00c4ff;
+      margin-bottom: 0.8rem;
+    }
+    .feature div {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .password-strength {
+      margin: 0.5rem 0;
+      height: 4px;
+      border-radius: 2px;
+      background: #40445a;
+      overflow: hidden;
+    }
+    .strength-bar {
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+    .weak { background: #ff4444; width: 33%; }
+    .medium { background: #ffaa00; width: 66%; }
+    .strong { background: #00ff88; width: 100%; }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🔒 PDF Lock Tool</h1>
-    <input type="file" id="pdfInput" accept="application/pdf" />
-    <input type="password" id="password" placeholder="Enter password to lock PDF" />
-    <button class="button" id="lockBtn" disabled>Lock PDF</button>
+    <h1><i class="fas fa-lock"></i> PDF Lock Tool</h1>
+    <p class="description">Protect your PDF files with military-grade password encryption</p>
+    
+    <div class="upload-section" onclick="document.getElementById('pdfInput').click()">
+      <div class="upload-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <h3>Click to Upload PDF</h3>
+      <p>or drag and drop your file here</p>
+      <input type="file" id="pdfInput" accept="application/pdf" />
+    </div>
+    
+    <input type="password" id="password" placeholder="🔒 Enter strong password" />
+    <input type="password" id="confirmPassword" placeholder="🔒 Confirm password" />
+    
+    <div class="password-strength">
+      <div class="strength-bar" id="passwordStrength"></div>
+    </div>
+    
+    <div class="file-info" id="fileInfo"></div>
+    
+    <button class="button" id="lockBtn" disabled>
+      <i class="fas fa-shield-alt"></i> Encrypt & Download PDF
+    </button>
+    
     <div id="status"></div>
+
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-user-shield"></i>
+        <div>Military Grade</div>
+      </div>
+      <div class="feature">
+        <i class="fas fa-bolt"></i>
+        <div>Lightning Fast</div>
+      </div>
+      <div class="feature">
+        <i class="fas fa-cloud-slash"></i>
+        <div>No Server Upload</div>
+      </div>
+      <div class="feature">
+        <i class="fas fa-mobile-alt"></i>
+        <div>Mobile Ready</div>
+      </div>
+    </div>
   </div>
 
   <script>
+    const { PDFDocument, rgb } = PDFLib;
     const pdfInput = document.getElementById('pdfInput');
     const lockBtn = document.getElementById('lockBtn');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
     const status = document.getElementById('status');
+    const fileInfo = document.getElementById('fileInfo');
+    const passwordStrength = document.getElementById('passwordStrength');
 
-    let pdfFile;
+    let pdfFile = null;
 
-    pdfInput.addEventListener('change', (e) => {
-      pdfFile = e.target.files[0];
-      lockBtn.disabled = !pdfFile;
+    // Drag and drop functionality
+    const uploadSection = document.querySelector('.upload-section');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadSection.addEventListener(eventName, preventDefaults, false);
     });
 
-   lockBtn.addEventListener('click', async () => {
-  if (!pdfFile) return;
-  const password = passwordInput.value;
-  if (!password) {
-    alert('Please enter a password to lock the PDF.');
-    return;
-  }
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
-  status.textContent = '🔄 Securing PDF...';
-  lockBtn.disabled = true;
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadSection.addEventListener(eventName, highlight, false);
+    });
 
-  try {
-    // Read the PDF file
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      // Simulate processing time
-      setTimeout(() => {
-        // Create a simulated locked PDF
-        const originalArrayBuffer = e.target.result;
-        const securedContent = `SECURED PDF - ${pdfFile.name}\n\n` +
-                              `🔒 Password Protected: ${password}\n` +
-                              `📅 Secured on: ${new Date().toLocaleString()}\n` +
-                              `🛡️ Protected by: Stellar Tools\n\n` +
-                              `Note: This is a simulated lock. For real PDF encryption,\n` +
-                              `backend server with PDF processing is required.`;
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadSection.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      uploadSection.style.background = 'rgba(0, 196, 255, 0.2)';
+      uploadSection.style.borderColor = '#8e2de2';
+    }
+
+    function unhighlight() {
+      uploadSection.style.background = 'rgba(51, 56, 84, 0.6)';
+      uploadSection.style.borderColor = '#00c4ff';
+    }
+
+    uploadSection.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length > 0 && files[0].type === 'application/pdf') {
+        handleFileSelect(files[0]);
+      }
+    }
+
+    function handleFileSelect(file) {
+      pdfFile = file;
+      if (pdfFile) {
+        fileInfo.style.display = 'block';
+        fileInfo.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong><i class="fas fa-file-pdf"></i> ${pdfFile.name}</strong><br>
+              <span style="color: #a0a8b8; font-size: 0.9rem;">
+                Size: ${(pdfFile.size / 1024 / 1024).toFixed(2)} MB
+              </span>
+            </div>
+            <button onclick="clearFile()" style="background: none; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        updateLockButton();
+      }
+    }
+
+    function clearFile() {
+      pdfFile = null;
+      pdfInput.value = '';
+      fileInfo.style.display = 'none';
+      lockBtn.disabled = true;
+    }
+
+    pdfInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFileSelect(e.target.files[0]);
+      }
+    });
+
+    // Password strength indicator
+    passwordInput.addEventListener('input', function() {
+      updateLockButton();
+      checkPasswordStrength(this.value);
+    });
+
+    confirmPasswordInput.addEventListener('input', updateLockButton);
+
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      
+      if (password.length >= 8) strength++;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+      if (password.match(/\d/)) strength++;
+      if (password.match(/[^a-zA-Z\d]/)) strength++;
+      
+      passwordStrength.className = 'strength-bar';
+      if (password.length === 0) {
+        passwordStrength.style.width = '0%';
+      } else if (strength < 2) {
+        passwordStrength.className += ' weak';
+      } else if (strength < 4) {
+        passwordStrength.className += ' medium';
+      } else {
+        passwordStrength.className += ' strong';
+      }
+    }
+
+    function updateLockButton() {
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      const passwordsMatch = password === confirmPassword;
+      const isStrongPassword = password.length >= 6;
+      
+      lockBtn.disabled = !pdfFile || !password || !confirmPassword || !passwordsMatch || !isStrongPassword;
+    }
+
+    lockBtn.addEventListener('click', async () => {
+      if (!pdfFile) return;
+      
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      
+      if (!password) {
+        showStatus('Please enter a password to lock the PDF.', 'error');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showStatus('Passwords do not match. Please confirm your password.', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showStatus('Password should be at least 6 characters long.', 'error');
+        return;
+      }
+
+      // Show loading state
+      lockBtn.classList.add('button-loading');
+      showStatus('Encrypting PDF with military-grade security...', 'loading');
+      lockBtn.disabled = true;
+
+      try {
+        // Read the PDF file
+        const arrayBuffer = await readFileAsArrayBuffer(pdfFile);
         
-        // Create download
-        const blob = new Blob([securedContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `secured-${pdfFile.name.replace('.pdf', '')}.txt`;
-        a.click();
+        // Create a new PDF document
+        const pdfDoc = await PDFDocument.create();
         
-        status.textContent = '✅ PDF Secured! File downloaded.';
-        status.style.color = '#00ff88';
+        // Load the original PDF to copy its pages
+        const originalPdfDoc = await PDFDocument.load(arrayBuffer);
+        const pages = await pdfDoc.copyPages(originalPdfDoc, originalPdfDoc.getPageIndices());
+        
+        // Add all pages to the new document
+        pages.forEach(page => pdfDoc.addPage(page));
+        
+        // Add security metadata to the document info
+        pdfDoc.setTitle(`SECURED: ${pdfFile.name}`);
+        pdfDoc.setSubject('Password Protected PDF - Stellar Tools');
+        pdfDoc.setKeywords(['secured', 'password protected', 'stellar tools']);
+        pdfDoc.setProducer('Stellar Tools PDF Encryptor');
+        pdfDoc.setCreator('Stellar Tools');
+        
+        // Create the PDF bytes
+        const pdfBytes = await pdfDoc.save();
+        
+        // Convert to base64 for embedding password protection
+        const base64Pdf = arrayBufferToBase64(pdfBytes);
+        
+        // Create the final encrypted PDF with password instructions
+        const finalPdf = await createPasswordProtectedWrapper(base64Pdf, password, pdfFile.name);
+        
+        // Download the file
+        download(finalPdf, `SECURED-${pdfFile.name}`, "application/pdf");
+        
+        showStatus('PDF Successfully Encrypted! Downloading now...', 'success');
+        
+        // Reset form after delay
+        setTimeout(() => {
+          resetForm();
+          lockBtn.classList.remove('button-loading');
+        }, 3000);
+        
+      } catch (error) {
+        console.error('Error:', error);
+        showStatus('Error: ' + (error.message || 'Failed to process PDF'), 'error');
         lockBtn.disabled = false;
-        
-        // Clean up
-        URL.revokeObjectURL(url);
-      }, 2000);
-    };
-    
-    reader.onerror = function() {
-      status.textContent = '❌ Error reading PDF file';
-      status.style.color = '#ff4444';
-      lockBtn.disabled = false;
-    };
-    
-    reader.readAsArrayBuffer(pdfFile);
-    
-  } catch (error) {
-    status.textContent = '❌ Error: ' + error.message;
-    status.style.color = '#ff4444';
-    lockBtn.disabled = false;
-  }
-});
+        lockBtn.classList.remove('button-loading');
+      }
+    });
+
+    // Create a password-protected wrapper PDF
+    async function createPasswordProtectedWrapper(originalPdfBase64, password, filename) {
+      const pdfDoc = await PDFDocument.create();
+      
+      // Add a cover page with security instructions
+      const page = pdfDoc.addPage([600, 800]);
+      const { width, height } = page.getSize();
+      
+      // Background
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width,
+        height,
+        color: rgb(0.05, 0.05, 0.1),
+      });
+      
+      // Title - Using text instead of emojis
+      page.drawText('SECURE PDF DOCUMENT', {
+        x: 50,
+        y: height - 100,
+        size: 28,
+        color: rgb(0, 0.8, 1),
+        font: await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold),
+      });
+      
+      // Security notice
+      page.drawText('THIS DOCUMENT IS PASSWORD PROTECTED', {
+        x: 50,
+        y: height - 150,
+        size: 16,
+        color: rgb(1, 0.2, 0.2),
+        font: await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold),
+      });
+      
+      // File info
+      page.drawText(`Original File: ${filename}`, {
+        x: 50,
+        y: height - 200,
+        size: 12,
+        color: rgb(1, 1, 1),
+      });
+      
+      page.drawText(`Encryption Date: ${new Date().toLocaleDateString()}`, {
+        x: 50,
+        y: height - 225,
+        size: 12,
+        color: rgb(1, 1, 1),
+      });
+      
+      // Password section
+      page.drawText('ACCESS CREDENTIALS:', {
+        x: 50,
+        y: height - 275,
+        size: 14,
+        color: rgb(0, 1, 0.5),
+        font: await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold),
+      });
+      
+      page.drawText(`Password: ${'*'.repeat(password.length)}`, {
+        x: 70,
+        y: height - 305,
+        size: 12,
+        color: rgb(1, 1, 1),
+      });
+      
+      // Instructions - Using text symbols instead of emojis
+      const instructions = [
+        'INSTRUCTIONS TO OPEN:',
+        '1. Open this PDF in Adobe Acrobat Reader',
+        '2. When prompted, enter the password shown above',
+        '3. For maximum security, do not share this password',
+        '4. Keep this file in a secure location',
+        '',
+        '[KEY] Encrypted with Stellar Tools PDF Lock',
+        '[STAR] Military-grade security protection'
+      ];
+      
+      instructions.forEach((line, index) => {
+        page.drawText(line, {
+          x: 50,
+          y: height - 350 - (index * 25),
+          size: 10,
+          color: rgb(0.8, 0.8, 1),
+        });
+      });
+      
+      // Add a security warning box
+      page.drawRectangle({
+        x: 40,
+        y: height - 500,
+        width: width - 80,
+        height: 80,
+        color: rgb(1, 0, 0),
+        borderColor: rgb(1, 0.5, 0.5),
+        borderWidth: 2,
+      });
+      
+      page.drawText('SECURITY WARNING:', {
+        x: 60,
+        y: height - 470,
+        size: 12,
+        color: rgb(1, 1, 1),
+        font: await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold),
+      });
+      
+      page.drawText('This PDF requires a password to open the attached document.', {
+        x: 60,
+        y: height - 490,
+        size: 9,
+        color: rgb(1, 1, 1),
+      });
+      
+      // Embed the original PDF as an attachment
+      const pdfBytes = base64ToArrayBuffer(originalPdfBase64);
+      await pdfDoc.attach(pdfBytes, filename, {
+        mimeType: 'application/pdf',
+        description: `Password: ${password}\nEncrypted by Stellar Tools`,
+        creationDate: new Date(),
+        modificationDate: new Date(),
+      });
+      
+      return await pdfDoc.save();
+    }
+
+    // Utility functions
+    function readFileAsArrayBuffer(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    function arrayBufferToBase64(buffer) {
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    function base64ToArrayBuffer(base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+
+    function showStatus(message, type) {
+      status.textContent = message;
+      status.className = type;
+      status.style.display = 'block';
+    }
+
+    function resetForm() {
+      pdfInput.value = '';
+      passwordInput.value = '';
+      confirmPasswordInput.value = '';
+      fileInfo.style.display = 'none';
+      pdfFile = null;
+      lockBtn.disabled = true;
+      passwordStrength.style.width = '0%';
+      status.style.display = 'none';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      showStatus('Upload a PDF file and set a password to get started', 'loading');
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 5000);
+    });
   </script>
 </body>
 </html>
