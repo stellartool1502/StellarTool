@@ -501,114 +501,151 @@
                 <h3>Instant Download</h3>
                 <p>Download your GIFs with one click</p>
             </div>
-        </div>
+             </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/gifshot@0.4.5/dist/gifshot.min.js"></script>
     <script>
         let uploadType = 'images';
         let uploadedFiles = [];
-        let generatedGIF = null;
-
-        // Set upload type
-        function setUploadType(type) {
-            uploadType = type;
-            
-            // Update UI
-            document.getElementById('option-images').classList.toggle('active', type === 'images');
-            document.getElementById('option-video').classList.toggle('active', type === 'video');
-            document.getElementById('upload-text').textContent = 
-                type === 'images' ? 'Select multiple images to create GIF' : 'Select a video file to create GIF';
-                
-            // Reset files
-            uploadedFiles = [];
-            updateFileList();
-            updateCreateButton();
-        }
-
-        // Trigger file upload
-        function triggerUpload() {
-            if (uploadType === 'images') {
-                document.getElementById('file-upload').click();
-            } else {
-                document.getElementById('video-upload').click();
-            }
-        }
-
-        // Handle file upload
-        document.getElementById('file-upload').addEventListener('change', function(e) {
-            uploadedFiles = Array.from(e.target.files);
-            updateFileList();
-            updateCreateButton();
-            showMessage(`Selected ${uploadedFiles.length} images`, 'success');
-        });
-
-        document.getElementById('video-upload').addEventListener('change', function(e) {
-            uploadedFiles = e.target.files[0] ? [e.target.files[0]] : [];
-            updateFileList();
-            updateCreateButton();
-            if (uploadedFiles.length > 0) {
-                showMessage('Video file selected', 'success');
-            }
-        });
-
-        // Update file list display
-        function updateFileList() {
-            const fileList = document.getElementById('file-list');
-            const fileItems = document.getElementById('file-items');
-            
-            fileItems.innerHTML = '';
-            
-            if (uploadedFiles.length > 0) {
-                fileList.style.display = 'block';
-                uploadedFiles.forEach((file, index) => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <span>${file.name}</span>
-                        <button class="remove-btn" onclick="removeFile(${index})">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
-                    fileItems.appendChild(fileItem);
-                });
-            } else {
-                fileList.style.display = 'none';
-            }
-        }
-
-        // Remove file from list
-        function removeFile(index) {
-            uploadedFiles.splice(index, 1);
-            updateFileList();
-            updateCreateButton();
-            showMessage('File removed', 'success');
-        }
-
-        // Update speed value display
-        document.getElementById('gif-speed').addEventListener('input', function() {
-            document.getElementById('speed-value').textContent = this.value + 'ms';
-        });
-
-        // Update create button state
-        function updateCreateButton() {
-            const createBtn = document.getElementById('create-btn');
+-0
++128
             createBtn.disabled = uploadedFiles.length === 0;
         }
-
+        // Create GIF from images
+        async function createGIFFromImages() {
+            const speed = parseInt(document.getElementById('gif-speed').value);
+            const size = document.getElementById('gif-size').value;
+            const quality = document.getElementById('gif-quality').value;
+            
+            // Size mapping
+            const sizeMap = {
+                'small': { width: 400, height: 300 },
+                'medium': { width: 600, height: 400 },
+                'large': { width: 800, height: 600 }
+            };
+            
+            // Quality mapping (sample interval)
+            const qualityMap = {
+                'low': 5,
+                'medium': 3,
+                'high': 1
+            };
+            
+            const dimensions = sizeMap[size];
+            const sampleInterval = qualityMap[quality];
+            
+            // Convert files to image URLs
+            const imagePromises = uploadedFiles.map(file => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            try {
+                const images = await Promise.all(imagePromises);
+                
+                gifshot.createGIF({
+                    images: images,
+                    gifWidth: dimensions.width,
+                    gifHeight: dimensions.height,
+                    interval: speed / 1000,
+                    numFrames: images.length,
+                    frameDuration: 1,
+                    sampleInterval: sampleInterval,
+                    numWorkers: 2
+                }, function(obj) {
+                    if (!obj.error) {
+                        generatedGIF = obj.image;
+                        document.getElementById('gif-preview').src = generatedGIF;
+                        document.getElementById('gif-preview').style.display = 'block';
+                        document.getElementById('preview-placeholder').style.display = 'none';
+                        document.getElementById('download-btn').disabled = false;
+                        showMessage('GIF created successfully! Click Download to save.', 'success');
+                    } else {
+                        showMessage('Error creating GIF: ' + obj.error, 'error');
+                    }
+                    
+                    document.getElementById('create-btn').disabled = false;
+                    document.getElementById('create-btn').innerHTML = '<i class="fas fa-magic"></i> Create GIF';
+                    document.getElementById('progress-bar').style.display = 'none';
+                });
+            } catch (error) {
+                showMessage('Error loading images: ' + error.message, 'error');
+                document.getElementById('create-btn').disabled = false;
+                document.getElementById('create-btn').innerHTML = '<i class="fas fa-magic"></i> Create GIF';
+                document.getElementById('progress-bar').style.display = 'none';
+            }
+        }
+        // Create GIF from video
+        async function createGIFFromVideo() {
+            const speed = parseInt(document.getElementById('gif-speed').value);
+            const size = document.getElementById('gif-size').value;
+            const quality = document.getElementById('gif-quality').value;
+            
+            const sizeMap = {
+                'small': { width: 400, height: 300 },
+                'medium': { width: 600, height: 400 },
+                'large': { width: 800, height: 600 }
+            };
+            
+            const qualityMap = {
+                'low': 5,
+                'medium': 3,
+                'high': 1
+            };
+            
+            const dimensions = sizeMap[size];
+            const sampleInterval = qualityMap[quality];
+            
+            try {
+                const videoURL = URL.createObjectURL(uploadedFiles[0]);
+                
+                gifshot.createGIF({
+                    video: [videoURL],
+                    gifWidth: dimensions.width,
+                    gifHeight: dimensions.height,
+                    interval: speed / 1000,
+                    numFrames: 10,
+                    frameDuration: 1,
+                    sampleInterval: sampleInterval,
+                    numWorkers: 2
+                }, function(obj) {
+                    if (!obj.error) {
+                        generatedGIF = obj.image;
+                        document.getElementById('gif-preview').src = generatedGIF;
+                        document.getElementById('gif-preview').style.display = 'block';
+                        document.getElementById('preview-placeholder').style.display = 'none';
+                        document.getElementById('download-btn').disabled = false;
+                        showMessage('GIF created successfully! Click Download to save.', 'success');
+                    } else {
+                        showMessage('Error creating GIF from video: ' + obj.error, 'error');
+                    }
+                    
+                    document.getElementById('create-btn').disabled = false;
+                    document.getElementById('create-btn').innerHTML = '<i class="fas fa-magic"></i> Create GIF';
+                    document.getElementById('progress-bar').style.display = 'none';
+                    
+                    URL.revokeObjectURL(videoURL);
+                });
+            } catch (error) {
+                showMessage('Error processing video: ' + error.message, 'error');
+                document.getElementById('create-btn').disabled = false;
+                document.getElementById('create-btn').innerHTML = '<i class="fas fa-magic"></i> Create GIF';
+                document.getElementById('progress-bar').style.display = 'none';
+            }
+        }
         // Create GIF
         function createGIF() {
             if (uploadedFiles.length === 0) {
-                showMessage('Please upload files first!', 'error');
-                return;
-            }
-
-            const createBtn = document.getElementById('create-btn');
-            const progressBar = document.getElementById('progress-bar');
-            const progressFill = document.getElementById('progress-fill');
-            
+-46
++6
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating GIF...';
             progressBar.style.display = 'block';
+            progressFill.style.width = '50%';
             showMessage('Creating your GIF... Please wait', 'success');
             
             // Simulate GIF creation process
@@ -657,62 +694,20 @@
                     }, 500);
                 }
             }, 100);
+            if (uploadType === 'images') {
+                createGIFFromImages();
+            } else {
+                createGIFFromVideo();
+            }
         }
-
         // Download GIF
-        function downloadGIF() {
-            if (!generatedGIF) {
-                showMessage('Please create a GIF first!', 'error');
-                return;
+-1
++1
             }
             
             const link = document.createElement('a');
             link.download = 'stellar-gif-' + Date.now() + '.png';
+            link.download = 'stellar-gif-' + Date.now() + '.gif';
             link.href = generatedGIF;
             link.click();
             showMessage('GIF download started!', 'success');
-        }
-
-        // Clear all
-        function clearAll() {
-            uploadedFiles = [];
-            generatedGIF = null;
-            document.getElementById('file-upload').value = '';
-            document.getElementById('video-upload').value = '';
-            document.getElementById('gif-preview').style.display = 'none';
-            document.getElementById('preview-placeholder').style.display = 'flex';
-            document.getElementById('download-btn').disabled = true;
-            document.getElementById('file-list').style.display = 'none';
-            updateCreateButton();
-            showMessage('Cleared all files and preview', 'success');
-        }
-
-        // Show message
-        function showMessage(text, type) {
-            const message = document.getElementById('message');
-            message.textContent = text;
-            message.className = 'message ' + type;
-            message.style.display = 'block';
-            
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 5000);
-        }
-
-        // Initialize
-        window.addEventListener('load', function() {
-            updateCreateButton();
-        });
-    </script>
-    <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
-</body>
-</html>
