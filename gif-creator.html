@@ -501,16 +501,135 @@
                 <h3>Instant Download</h3>
                 <p>Download your GIFs with one click</p>
             </div>
-             </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/gifshot@0.4.5/dist/gifshot.min.js"></script>
     <script>
         let uploadType = 'images';
         let uploadedFiles = [];
--0
-+128
+        let generatedGIF = null;
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Speed slider update
+            const speedSlider = document.getElementById('gif-speed');
+            const speedValue = document.getElementById('speed-value');
+            
+            speedSlider.addEventListener('input', function() {
+                speedValue.textContent = this.value + 'ms';
+            });
+
+            // File upload handlers
+            document.getElementById('file-upload').addEventListener('change', handleFileUpload);
+            document.getElementById('video-upload').addEventListener('change', handleFileUpload);
+        });
+
+        // Set upload type (images or video)
+        function setUploadType(type) {
+            uploadType = type;
+            
+            // Update active option
+            document.getElementById('option-images').classList.toggle('active', type === 'images');
+            document.getElementById('option-video').classList.toggle('active', type === 'video');
+            
+            // Update upload text
+            const uploadText = document.getElementById('upload-text');
+            if (type === 'images') {
+                uploadText.textContent = 'Select multiple images to create GIF';
+            } else {
+                uploadText.textContent = 'Select a video file to create GIF';
+            }
+            
+            // Clear previous files
+            uploadedFiles = [];
+            updateFileList();
+            updateCreateButton();
+        }
+
+        // Trigger file upload
+        function triggerUpload() {
+            if (uploadType === 'images') {
+                document.getElementById('file-upload').click();
+            } else {
+                document.getElementById('video-upload').click();
+            }
+        }
+
+        // Handle file upload
+        function handleFileUpload(event) {
+            const files = Array.from(event.target.files);
+            
+            if (uploadType === 'images') {
+                // For images, add all selected files
+                uploadedFiles = [...uploadedFiles, ...files];
+            } else {
+                // For video, only allow one file
+                if (files.length > 0) {
+                    uploadedFiles = [files[0]];
+                }
+            }
+            
+            updateFileList();
+            updateCreateButton();
+        }
+
+        // Update file list display
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            const fileItems = document.getElementById('file-items');
+            
+            fileItems.innerHTML = '';
+            
+            if (uploadedFiles.length === 0) {
+                fileList.style.display = 'none';
+                return;
+            }
+            
+            fileList.style.display = 'block';
+            
+            uploadedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = () => removeFile(index);
+                
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeBtn);
+                fileItems.appendChild(fileItem);
+            });
+        }
+
+        // Remove file from list
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFileList();
+            updateCreateButton();
+        }
+
+        // Update create button state
+        function updateCreateButton() {
+            const createBtn = document.getElementById('create-btn');
             createBtn.disabled = uploadedFiles.length === 0;
         }
+
+        // Show message
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
         // Create GIF from images
         async function createGIFFromImages() {
             const speed = parseInt(document.getElementById('gif-speed').value);
@@ -579,6 +698,7 @@
                 document.getElementById('progress-bar').style.display = 'none';
             }
         }
+
         // Create GIF from video
         async function createGIFFromVideo() {
             const speed = parseInt(document.getElementById('gif-speed').value);
@@ -637,77 +757,67 @@
                 document.getElementById('progress-bar').style.display = 'none';
             }
         }
+
         // Create GIF
         function createGIF() {
             if (uploadedFiles.length === 0) {
--46
-+6
+                showMessage('Please upload files first', 'error');
+                return;
+            }
+            
+            const createBtn = document.getElementById('create-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating GIF...';
             progressBar.style.display = 'block';
             progressFill.style.width = '50%';
-            showMessage('Creating your GIF... Please wait', 'success');
             
-            // Simulate GIF creation process
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                progressFill.style.width = progress + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    
-                    // Show success and enable download
-                    setTimeout(() => {
-                        // Create a simple GIF preview using canvas (simulated)
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 400;
-                        canvas.height = 300;
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Create a gradient background for demo
-                        const gradient = ctx.createLinearGradient(0, 0, 400, 300);
-                        gradient.addColorStop(0, '#00f0ff');
-                        gradient.addColorStop(1, '#ff00e6');
-                        ctx.fillStyle = gradient;
-                        ctx.fillRect(0, 0, 400, 300);
-                        
-                        // Add text
-                        ctx.fillStyle = '#1a1a2e';
-                        ctx.font = 'bold 24px Arial';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('Generated GIF', 200, 150);
-                        
-                        // Convert to data URL for preview
-                        generatedGIF = canvas.toDataURL('image/png');
-                        
-                        document.getElementById('gif-preview').src = generatedGIF;
-                        document.getElementById('gif-preview').style.display = 'block';
-                        document.getElementById('preview-placeholder').style.display = 'none';
-                        document.getElementById('download-btn').disabled = false;
-                        
-                        createBtn.disabled = false;
-                        createBtn.innerHTML = '<i class="fas fa-magic"></i> Create GIF';
-                        progressBar.style.display = 'none';
-                        
-                        showMessage('GIF created successfully! Click Download to save.', 'success');
-                    }, 500);
-                }
-            }, 100);
+            // Disable download button during creation
+            document.getElementById('download-btn').disabled = true;
+            
             if (uploadType === 'images') {
                 createGIFFromImages();
             } else {
                 createGIFFromVideo();
             }
         }
+
         // Download GIF
--1
-+1
+        function downloadGIF() {
+            if (!generatedGIF) {
+                showMessage('No GIF to download', 'error');
+                return;
             }
             
             const link = document.createElement('a');
-            link.download = 'stellar-gif-' + Date.now() + '.png';
             link.download = 'stellar-gif-' + Date.now() + '.gif';
             link.href = generatedGIF;
             link.click();
             showMessage('GIF download started!', 'success');
+        }
+
+        // Clear all
+        function clearAll() {
+            uploadedFiles = [];
+            generatedGIF = null;
+            
+            // Reset UI
+            document.getElementById('file-list').style.display = 'none';
+            document.getElementById('file-items').innerHTML = '';
+            document.getElementById('gif-preview').style.display = 'none';
+            document.getElementById('preview-placeholder').style.display = 'flex';
+            document.getElementById('create-btn').disabled = true;
+            document.getElementById('download-btn').disabled = true;
+            document.getElementById('progress-bar').style.display = 'none';
+            
+            // Reset file inputs
+            document.getElementById('file-upload').value = '';
+            document.getElementById('video-upload').value = '';
+            
+            showMessage('All cleared!', 'success');
+        }
+    </script>
+</body>
+</html>
