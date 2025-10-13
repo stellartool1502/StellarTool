@@ -203,6 +203,62 @@
             border-color: var(--secondary-neon);
         }
 
+        .text-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .color-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-control label {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+            min-width: 80px;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary-neon);
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .font-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .font-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .font-control label {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+            min-width: 60px;
+        }
+
+        .font-control select {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid var(--primary-neon);
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            color: var(--light-text);
+        }
+
         .meme-preview {
             width: 100%;
             max-width: 400px;
@@ -311,6 +367,10 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             
+            .text-controls, .font-controls {
+                grid-template-columns: 1fr;
+            }
+            
             .btn-group {
                 flex-direction: column;
             }
@@ -362,6 +422,40 @@
                         <h3 class="panel-title">Add Text</h3>
                         <input type="text" class="text-input" id="top-text" placeholder="Top text (e.g., When you see...)">
                         <input type="text" class="text-input" id="bottom-text" placeholder="Bottom text (e.g., Amazing content!)">
+                        
+                        <div class="text-controls">
+                            <div class="color-control">
+                                <label>Top Color:</label>
+                                <input type="color" class="color-picker" id="top-color" value="#ffffff">
+                            </div>
+                            <div class="color-control">
+                                <label>Bottom Color:</label>
+                                <input type="color" class="color-picker" id="bottom-color" value="#ffffff">
+                            </div>
+                        </div>
+                        
+                        <div class="font-controls">
+                            <div class="font-control">
+                                <label>Font:</label>
+                                <select id="font-family">
+                                    <option value="Impact">Impact</option>
+                                    <option value="Arial">Arial</option>
+                                    <option value="Comic Sans MS">Comic Sans</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                </select>
+                            </div>
+                            <div class="font-control">
+                                <label>Size:</label>
+                                <select id="font-size">
+                                    <option value="24">Small</option>
+                                    <option value="32" selected>Medium</option>
+                                    <option value="40">Large</option>
+                                    <option value="48">X-Large</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -585,22 +679,35 @@
             
             ctx.drawImage(currentImage, offsetX, offsetY, drawWidth, drawHeight);
             
-            // Text styling
-            ctx.font = 'bold 32px Impact';
-            ctx.fillStyle = 'white';
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 4;
+            // Get text styling options
+            const fontFamily = document.getElementById('font-family').value;
+            const fontSize = parseInt(document.getElementById('font-size').value);
+            const topColor = document.getElementById('top-color').value;
+            const bottomColor = document.getElementById('bottom-color').value;
+            
+            // Set font
+            ctx.font = `bold ${fontSize}px ${fontFamily}`;
             ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
+            ctx.lineWidth = Math.max(2, fontSize / 16); // Dynamic stroke width
             
             // Draw top text
             const topText = document.getElementById('top-text').value;
             if (topText) {
+                ctx.textBaseline = 'top';
+                ctx.strokeStyle = 'black';
+                ctx.fillStyle = topColor;
+                
                 const lines = wrapText(ctx, topText, canvas.width - 40);
+                const totalHeight = lines.length * fontSize * 1.2;
+                const startY = Math.max(10, offsetY + 10);
+                
                 lines.forEach((line, index) => {
-                    const y = 20 + (index * 40);
-                    ctx.strokeText(line, canvas.width / 2, y);
-                    ctx.fillText(line, canvas.width / 2, y);
+                    const y = startY + (index * fontSize * 1.2);
+                    // Don't draw if text goes beyond image boundaries
+                    if (y + fontSize <= offsetY + drawHeight - 10) {
+                        ctx.strokeText(line, canvas.width / 2, y);
+                        ctx.fillText(line, canvas.width / 2, y);
+                    }
                 });
             }
             
@@ -608,11 +715,20 @@
             const bottomText = document.getElementById('bottom-text').value;
             if (bottomText) {
                 ctx.textBaseline = 'bottom';
+                ctx.strokeStyle = 'black';
+                ctx.fillStyle = bottomColor;
+                
                 const lines = wrapText(ctx, bottomText, canvas.width - 40);
+                const totalHeight = lines.length * fontSize * 1.2;
+                const startY = Math.min(canvas.height - 10, offsetY + drawHeight - 10);
+                
                 lines.reverse().forEach((line, index) => {
-                    const y = canvas.height - 20 - (index * 40);
-                    ctx.strokeText(line, canvas.width / 2, y);
-                    ctx.fillText(line, canvas.width / 2, y);
+                    const y = startY - (index * fontSize * 1.2);
+                    // Don't draw if text goes beyond image boundaries
+                    if (y - fontSize >= offsetY + 10) {
+                        ctx.strokeText(line, canvas.width / 2, y);
+                        ctx.fillText(line, canvas.width / 2, y);
+                    }
                 });
             }
         }
@@ -666,6 +782,10 @@
             document.getElementById('top-text').value = '';
             document.getElementById('bottom-text').value = '';
             document.getElementById('image-upload').value = '';
+            document.getElementById('top-color').value = '#ffffff';
+            document.getElementById('bottom-color').value = '#ffffff';
+            document.getElementById('font-family').value = 'Impact';
+            document.getElementById('font-size').value = '32';
             document.querySelectorAll('.template-item').forEach(item => {
                 item.classList.remove('active');
             });
@@ -677,20 +797,14 @@
         // Initialize
         window.addEventListener('load', function() {
             loadTemplates();
-            // Auto-generate when text changes
+            // Auto-generate when text or settings change
             document.getElementById('top-text').addEventListener('input', drawMeme);
             document.getElementById('bottom-text').addEventListener('input', drawMeme);
+            document.getElementById('top-color').addEventListener('input', drawMeme);
+            document.getElementById('bottom-color').addEventListener('input', drawMeme);
+            document.getElementById('font-family').addEventListener('change', drawMeme);
+            document.getElementById('font-size').addEventListener('change', drawMeme);
         });
     </script>
-  <script type="text/javascript">
-	atOptions = {
-		'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
 </body>
 </html>
