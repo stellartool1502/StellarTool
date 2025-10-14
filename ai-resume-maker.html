@@ -711,6 +711,30 @@
         .back-link:hover {
             color: var(--secondary-neon);
         }
+
+        /* PDF specific styles */
+        .pdf-export {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+        }
+
+        .pdf-export .template-modern {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 0;
+            min-height: 100%;
+        }
+
+        .pdf-export .template-modern .sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .pdf-export .template-modern .main-content {
+            padding: 30px 25px;
+            background: white;
+        }
     </style>
 </head>
 <body>
@@ -1361,15 +1385,75 @@
 
         function downloadResume() {
             const element = document.getElementById('resumePreview');
+            
+            // Create a clone for PDF export
+            const elementClone = element.cloneNode(true);
+            
+            // Remove any interactive elements and fix styling for PDF
+            elementClone.querySelectorAll('button, .zoom-btn, .preview-controls').forEach(el => el.remove());
+            
+            // Add PDF-specific class
+            elementClone.classList.add('pdf-export');
+            
+            // Ensure proper dimensions for PDF
+            elementClone.style.width = '210mm';
+            elementClone.style.minHeight = '297mm';
+            elementClone.style.padding = '20px';
+            elementClone.style.margin = '0';
+            elementClone.style.boxSizing = 'border-box';
+            
+            // Create a temporary container for PDF generation
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.position = 'absolute';
+            pdfContainer.style.left = '-9999px';
+            pdfContainer.style.top = '0';
+            pdfContainer.appendChild(elementClone);
+            document.body.appendChild(pdfContainer);
+            
             const options = {
                 margin: 10,
                 filename: 'professional-resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                image: { 
+                    type: 'jpeg', 
+                    quality: 0.98 
+                },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: true,
+                    width: 800,
+                    windowWidth: 800
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                }
             };
 
-            html2pdf().set(options).from(element).save();
+            // Show loading state
+            const originalText = document.querySelector('.download-btn').innerHTML;
+            document.querySelector('.download-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+            document.querySelector('.download-btn').disabled = true;
+
+            html2pdf().set(options).from(pdfContainer).save().then(() => {
+                // Restore button state
+                document.querySelector('.download-btn').innerHTML = originalText;
+                document.querySelector('.download-btn').disabled = false;
+                
+                // Clean up
+                document.body.removeChild(pdfContainer);
+            }).catch(error => {
+                console.error('PDF generation error:', error);
+                alert('PDF generation failed. Please try again.');
+                
+                // Restore button state
+                document.querySelector('.download-btn').innerHTML = originalText;
+                document.querySelector('.download-btn').disabled = false;
+                
+                // Clean up
+                document.body.removeChild(pdfContainer);
+            });
         }
 
         function initializeSampleData() {
