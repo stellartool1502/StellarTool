@@ -406,8 +406,8 @@
                     
                     <div class="server-info">
                         <div class="server-details">
-                            <div class="server-name">Mumbai Server</div>
-                            <div class="server-location">Mumbai, India</div>
+                            <div class="server-name">Auto Server Selection</div>
+                            <div class="server-location">Nearest available server</div>
                         </div>
                         <div class="ping-value" id="pingValue">-- ms</div>
                     </div>
@@ -443,16 +443,16 @@
 
                     <div class="connection-info">
                         <div class="info-item">
-                            <div class="info-label">IP Address</div>
-                            <div class="info-value" id="ipAddress">Detecting...</div>
+                            <div class="info-label">Connection Type</div>
+                            <div class="info-value" id="connectionType">Browser Test</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">ISP</div>
-                            <div class="info-value" id="ispInfo">Unknown</div>
+                            <div class="info-label">Test Method</div>
+                            <div class="info-value" id="testMethod">Simulation</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Location</div>
-                            <div class="info-value" id="locationInfo">Detecting...</div>
+                            <div class="info-label">Accuracy</div>
+                            <div class="info-value" id="accuracyInfo">Approximate</div>
                         </div>
                     </div>
                 </div>
@@ -538,7 +538,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeTest();
             loadTestHistory();
-            detectIPAddress();
+            updateConnectionInfo();
         });
 
         function initializeTest() {
@@ -637,7 +637,7 @@
                 if (progress < 1) {
                     // Simulate speed fluctuations
                     const currentSpeed = targetSpeed * progress + (Math.random() * 10 - 5);
-                    element.textContent = currentSpeed.toFixed(1);
+                    element.textContent = Math.max(0, currentSpeed).toFixed(1);
                     
                     // Update quality indicator
                     updateQualityIndicator(currentSpeed, elementId === 'downloadSpeed');
@@ -744,13 +744,11 @@
             });
         }
 
-        function detectIPAddress() {
-            // Simulate IP detection
-            setTimeout(() => {
-                document.getElementById('ipAddress').textContent = '192.168.1.1';
-                document.getElementById('ispInfo').textContent = 'Local Network';
-                document.getElementById('locationInfo').textContent = 'Your Location';
-            }, 1000);
+        function updateConnectionInfo() {
+            // Set realistic connection information
+            document.getElementById('connectionType').textContent = 'Browser Test';
+            document.getElementById('testMethod').textContent = 'Simulation';
+            document.getElementById('accuracyInfo').textContent = 'Approximate';
         }
 
         function loadTestHistory() {
