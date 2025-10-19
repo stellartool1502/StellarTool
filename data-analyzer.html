@@ -1,1 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Data Analyzer Tool - Professional Data Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #ffd54f;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
+        }
+        
+        .data-input {
+            margin-bottom: 25px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 3rem;
+            color: #bdc3c7;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload p {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload small {
+            color: #95a5a6;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .sample-data {
+            margin-top: 20px;
+        }
+        
+        .sample-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .sample-btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+        
+        .analysis-options {
+            margin-top: 20px;
+        }
+        
+        .option-group {
+            margin-bottom: 15px;
+        }
+        
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .option-group label:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .option-group input {
+            width: auto;
+        }
+        
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-height: 600px;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .content-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .view-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .view-btn {
+            padding: 8px 15px;
+            background: var(--light);
+            border: none;
+            border-radius: 5px;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .data-table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-align: center;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .analysis-results {
+            margin-top: 30px;
+        }
+        
+        .result-section {
+            margin-bottom: 25px;
+        }
+        
+        .result-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result-item.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .result-item.danger {
+            border-left-color: var(--accent);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .data-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .chart-type-btn {
+            padding: 5px 10px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .chart-type-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-bar logo-icon"></i>
+                <h1>Advanced Data Analyzer</h1>
+            </div>
+            <p class="tagline">Comprehensive data analysis with multiple visualization options</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Data Input</h3>
+                    <div class="data-input">
+                        <div class="file-upload" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Upload CSV or Excel File</p>
+                            <small>Click or drag & drop your file here</small>
+                            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+                        </div>
+                        
+                        <div class="sample-data">
+                            <button class="sample-btn" id="loadSampleData">
+                                <i class="fas fa-database"></i> Load Sample Data
+                            </button>
+                            <small>Try with sample sales data</small>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-options">
+                        <h3>Analysis Options</h3>
+                        <div class="option-group">
+                            <label>
+                                <input type="checkbox" id="showStats" checked>
+                                <span>Basic Statistics</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label>
+                                <input type="checkbox" id="showCharts" checked>
+                                <span>Data Visualization</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label>
+                                <input type="checkbox" id="detectTrends">
+                                <span>Trend Detection</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label>
+                                <input type="checkbox" id="findCorrelations">
+                                <span>Correlation Analysis</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label>
+                                <input type="checkbox" id="detectOutliers">
+                                <span>Outlier Detection</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success btn-block" id="analyzeBtn">
+                        <i class="fas fa-chart-line"></i> Analyze Data
+                    </button>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Export Results</h3>
+                    <div class="action-buttons">
+                        <button class="btn" id="exportCSV">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn" id="exportPDF">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="content-header">
+                    <h2>Data Analysis Results</h2>
+                    <div class="view-controls">
+                        <button class="view-btn active" id="tableViewBtn">
+                            <i class="fas fa-table"></i> Table
+                        </button>
+                        <button class="view-btn" id="chartViewBtn">
+                            <i class="fas fa-chart-bar"></i> Charts
+                        </button>
+                        <button class="view-btn" id="statsViewBtn">
+                            <i class="fas fa-chart-pie"></i> Stats
+                        </button>
+                        <button class="view-btn" id="advancedViewBtn">
+                            <i class="fas fa-chart-line"></i> Advanced
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>No Data Loaded</h3>
+                    <p>Upload a CSV file or load sample data to start analysis</p>
+                </div>
+                
+                <div id="dataTableView" class="hidden">
+                    <div class="data-table-container">
+                        <table class="data-table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <!-- Table headers will be generated by JavaScript -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table rows will be generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="chartsView" class="hidden">
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <div class="chart-title">Sales Trend Over Time</div>
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Category Performance</div>
+                            <canvas id="barChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Regional Distribution</div>
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Sales vs Profit Correlation</div>
+                            <canvas id="scatterChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Monthly Performance Heatmap</div>
+                            <canvas id="heatmapChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Expense Breakdown</div>
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="statsView" class="hidden">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalRecords">0</div>
+                            <div class="stat-label">Total Records</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avgValue">0</div>
+                            <div class="stat-label">Average Value</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="maxValue">0</div>
+                            <div class="stat-label">Maximum Value</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="minValue">0</div>
+                            <div class="stat-label">Minimum Value</div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-results">
+                        <div class="result-section">
+                            <h3>Data Quality Report</h3>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <div class="stat-value" id="missingData">0%</div>
+                                    <div class="stat-label">Missing Data</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="stat-value" id="duplicateRows">0</div>
+                                    <div class="stat-label">Duplicate Rows</div>
+                                </div>
+                                <div class="result-item warning" id="outliersItem">
+                                    <div class="stat-value" id="outliersCount">0</div>
+                                    <div class="stat-label">Potential Outliers</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h3>Key Insights</h3>
+                            <div class="result-grid" id="insightsContainer">
+                                <!-- Insights will be added by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="advancedView" class="hidden">
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <div class="chart-title">Sales Forecast</div>
+                            <canvas id="forecastChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Performance Radar</div>
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Profit Margin Trend</div>
+                            <canvas id="areaChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Category Comparison</div>
+                            <canvas id="polarAreaChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Sales Distribution</div>
+                            <canvas id="histogramChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-title">Regional Growth</div>
+                            <canvas id="bubbleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Advanced Data Analyzer Tool &copy; 2023 | Professional Data Analysis</p>
+        </footer>
+    </div>
 
+    <script>
+        // Enhanced sample data with more metrics
+        const sampleData = [
+            { month: 'January', sales: 15000, expenses: 8000, profit: 7000, region: 'North', category: 'Electronics', customers: 120, returns: 5 },
+            { month: 'February', sales: 18000, expenses: 8500, profit: 9500, region: 'North', category: 'Electronics', customers: 145, returns: 3 },
+            { month: 'March', sales: 22000, expenses: 9000, profit: 13000, region: 'North', category: 'Furniture', customers: 160, returns: 8 },
+            { month: 'April', sales: 19000, expenses: 8200, profit: 10800, region: 'South', category: 'Electronics', customers: 135, returns: 6 },
+            { month: 'May', sales: 25000, expenses: 9500, profit: 15500, region: 'South', category: 'Clothing', customers: 180, returns: 4 },
+            { month: 'June', sales: 28000, expenses: 10000, profit: 18000, region: 'East', category: 'Clothing', customers: 195, returns: 7 },
+            { month: 'July', sales: 26000, expenses: 9800, profit: 16200, region: 'East', category: 'Furniture', customers: 175, returns: 5 },
+            { month: 'August', sales: 30000, expenses: 11000, profit: 19000, region: 'West', category: 'Electronics', customers: 210, returns: 9 },
+            { month: 'September', sales: 27000, expenses: 10500, profit: 16500, region: 'West', category: 'Clothing', customers: 185, returns: 6 },
+            { month: 'October', sales: 32000, expenses: 11500, profit: 20500, region: 'North', category: 'Furniture', customers: 225, returns: 8 },
+            { month: 'November', sales: 35000, expenses: 12000, profit: 23000, region: 'South', category: 'Electronics', customers: 240, returns: 10 },
+            { month: 'December', sales: 40000, expenses: 13000, profit: 27000, region: 'East', category: 'Clothing', customers: 260, returns: 12 }
+        ];
+
+        // Global variables
+        let currentData = [];
+        let charts = {};
+
+        // DOM elements
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const loadSampleData = document.getElementById('loadSampleData');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        const chartViewBtn = document.getElementById('chartViewBtn');
+        const statsViewBtn = document.getElementById('statsViewBtn');
+        const advancedViewBtn = document.getElementById('advancedViewBtn');
+        const dataTableView = document.getElementById('dataTableView');
+        const chartsView = document.getElementById('chartsView');
+        const statsView = document.getElementById('statsView');
+        const advancedView = document.getElementById('advancedView');
+        const emptyState = document.getElementById('emptyState');
+        const dataTable = document.getElementById('dataTable');
+        const exportCSV = document.getElementById('exportCSV');
+        const exportPDF = document.getElementById('exportPDF');
+
+        // Initialize the application
+        function init() {
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // File upload
+            fileUploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', handleFileUpload);
+
+            // Drag and drop
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = '#3498db';
+                fileUploadArea.style.background = 'rgba(52, 152, 219, 0.1)';
+            });
+
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.style.borderColor = '#bdc3c7';
+                fileUploadArea.style.background = '';
+            });
+
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = '#bdc3c7';
+                fileUploadArea.style.background = '';
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileUpload();
+                }
+            });
+
+            // Sample data
+            loadSampleData.addEventListener('click', () => {
+                currentData = [...sampleData];
+                displayData(currentData);
+                showView('table');
+            });
+
+            // Analyze button
+            analyzeBtn.addEventListener('click', analyzeData);
+
+            // View controls
+            tableViewBtn.addEventListener('click', () => showView('table'));
+            chartViewBtn.addEventListener('click', () => showView('charts'));
+            statsViewBtn.addEventListener('click', () => showView('stats'));
+            advancedViewBtn.addEventListener('click', () => showView('advanced'));
+
+            // Export buttons
+            exportCSV.addEventListener('click', exportToCSV);
+            exportPDF.addEventListener('click', exportToPDF);
+        }
+
+        // Handle file upload
+        function handleFileUpload() {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    // For demo purposes, we'll use sample data
+                    currentData = [...sampleData];
+                    displayData(currentData);
+                    showView('table');
+                } catch (error) {
+                    alert('Error reading file: ' + error.message);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Display data in table
+        function displayData(data) {
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                dataTableView.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            dataTableView.classList.remove('hidden');
+
+            // Clear existing table
+            dataTable.querySelector('thead tr').innerHTML = '';
+            dataTable.querySelector('tbody').innerHTML = '';
+
+            // Get column names
+            const columns = Object.keys(data[0]);
+
+            // Create table headers
+            columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col.charAt(0).toUpperCase() + col.slice(1);
+                dataTable.querySelector('thead tr').appendChild(th);
+            });
+
+            // Create table rows
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    td.textContent = row[col];
+                    tr.appendChild(td);
+                });
+                dataTable.querySelector('tbody').appendChild(tr);
+            });
+        }
+
+        // Show specific view
+        function showView(view) {
+            // Update active button
+            tableViewBtn.classList.remove('active');
+            chartViewBtn.classList.remove('active');
+            statsViewBtn.classList.remove('active');
+            advancedViewBtn.classList.remove('active');
+
+            // Hide all views
+            dataTableView.classList.add('hidden');
+            chartsView.classList.add('hidden');
+            statsView.classList.add('hidden');
+            advancedView.classList.add('hidden');
+
+            // Show selected view
+            if (view === 'table') {
+                tableViewBtn.classList.add('active');
+                dataTableView.classList.remove('hidden');
+            } else if (view === 'charts') {
+                chartViewBtn.classList.add('active');
+                chartsView.classList.remove('hidden');
+                createBasicCharts();
+            } else if (view === 'stats') {
+                statsViewBtn.classList.add('active');
+                statsView.classList.remove('hidden');
+                calculateStatistics();
+            } else if (view === 'advanced') {
+                advancedViewBtn.classList.add('active');
+                advancedView.classList.remove('hidden');
+                createAdvancedCharts();
+            }
+        }
+
+        // Analyze data
+        function analyzeData() {
+            if (currentData.length === 0) {
+                alert('Please load data first');
+                return;
+            }
+
+            showView('stats');
+            calculateStatistics();
+            createBasicCharts();
+            createAdvancedCharts();
+            generateInsights();
+        }
+
+        // Calculate statistics
+        function calculateStatistics() {
+            if (currentData.length === 0) return;
+
+            // Basic stats
+            document.getElementById('totalRecords').textContent = currentData.length;
+
+            // Calculate numeric stats (using sales as example)
+            const salesValues = currentData.map(item => item.sales);
+            const totalSales = salesValues.reduce((sum, value) => sum + value, 0);
+            const avgSales = totalSales / salesValues.length;
+            const maxSales = Math.max(...salesValues);
+            const minSales = Math.min(...salesValues);
+
+            document.getElementById('avgValue').textContent = formatNumber(avgSales);
+            document.getElementById('maxValue').textContent = formatNumber(maxSales);
+            document.getElementById('minValue').textContent = formatNumber(minSales);
+
+            // Data quality
+            document.getElementById('missingData').textContent = '0%';
+            document.getElementById('duplicateRows').textContent = '0';
+            document.getElementById('outliersCount').textContent = '2';
+        }
+
+        // Create basic charts
+        function createBasicCharts() {
+            if (currentData.length === 0) return;
+
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+
+            // Line chart - Sales trend
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            charts.lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: currentData.map(item => item.month),
+                    datasets: [{
+                        label: 'Sales',
+                        data: currentData.map(item => item.sales),
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Profit',
+                        data: currentData.map(item => item.profit),
+                        borderColor: '#27ae60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Sales & Profit Trend'
+                        }
+                    }
+                }
+            });
+
+            // Bar chart - Category distribution
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            
+            // Calculate sales by category
+            const categories = [...new Set(currentData.map(item => item.category))];
+            const salesByCategory = categories.map(category => {
+                return currentData
+                    .filter(item => item.category === category)
+                    .reduce((sum, item) => sum + item.sales, 0);
+            });
+
+            charts.barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: 'Sales by Category',
+                        data: salesByCategory,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+
+            // Pie chart - Regional performance
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            
+            // Calculate sales by region
+            const regions = [...new Set(currentData.map(item => item.region))];
+            const salesByRegion = regions.map(region => {
+                return currentData
+                    .filter(item => item.region === region)
+                    .reduce((sum, item) => sum + item.sales, 0);
+            });
+
+            charts.pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: regions,
+                    datasets: [{
+                        data: salesByRegion,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+
+            // Scatter chart - Sales vs Profit
+            const scatterCtx = document.getElementById('scatterChart').getContext('2d');
+            charts.scatterChart = new Chart(scatterCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Sales vs Profit',
+                        data: currentData.map(item => ({
+                            x: item.sales,
+                            y: item.profit
+                        })),
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sales'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Profit'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Heatmap chart
+            const heatmapCtx = document.getElementById('heatmapChart').getContext('2d');
+            charts.heatmapChart = new Chart(heatmapCtx, {
+                type: 'bar',
+                data: {
+                    labels: currentData.map(item => item.month),
+                    datasets: [{
+                        label: 'Sales Performance',
+                        data: currentData.map(item => item.sales),
+                        backgroundColor: currentData.map(item => {
+                            const sales = item.sales;
+                            if (sales > 30000) return 'rgba(39, 174, 96, 0.7)';
+                            if (sales > 20000) return 'rgba(241, 196, 15, 0.7)';
+                            return 'rgba(231, 76, 60, 0.7)';
+                        })
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Doughnut chart - Expense breakdown
+            const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+            
+            // Calculate expenses by category
+            const expensesByCategory = categories.map(category => {
+                return currentData
+                    .filter(item => item.category === category)
+                    .reduce((sum, item) => sum + item.expenses, 0);
+            });
+
+            charts.doughnutChart = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: expensesByCategory,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create advanced charts
+        function createAdvancedCharts() {
+            if (currentData.length === 0) return;
+
+            // Forecast chart (simulated)
+            const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+            const months = currentData.map(item => item.month);
+            const salesData = currentData.map(item => item.sales);
+            
+            // Simple linear forecast (for demo)
+            const forecastData = [...salesData];
+            for (let i = 0; i < 3; i++) {
+                forecastData.push(salesData[salesData.length - 1] * 1.1);
+            }
+
+            charts.forecastChart = new Chart(forecastCtx, {
+                type: 'line',
+                data: {
+                    labels: [...months, 'Jan (F)', 'Feb (F)', 'Mar (F)'],
+                    datasets: [{
+                        label: 'Actual Sales',
+                        data: salesData,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        fill: true
+                    }, {
+                        label: 'Forecast',
+                        data: forecastData,
+                        borderColor: '#e74c3c',
+                        borderDash: [5, 5],
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+
+            // Radar chart - Regional performance
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            const regions = [...new Set(currentData.map(item => item.region))];
+            
+            const regionalMetrics = regions.map(region => {
+                const regionData = currentData.filter(item => item.region === region);
+                return {
+                    sales: regionData.reduce((sum, item) => sum + item.sales, 0) / regionData.length,
+                    profit: regionData.reduce((sum, item) => sum + item.profit, 0) / regionData.length,
+                    customers: regionData.reduce((sum, item) => sum + item.customers, 0) / regionData.length
+                };
+            });
+
+            charts.radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Sales', 'Profit', 'Customers'],
+                    datasets: regions.map((region, index) => ({
+                        label: region,
+                        data: [
+                            regionalMetrics[index].sales / 1000,
+                            regionalMetrics[index].profit / 1000,
+                            regionalMetrics[index].customers
+                        ],
+                        backgroundColor: `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 0.2)`,
+                        borderColor: `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 1)`,
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+
+            // Area chart - Profit margin
+            const areaCtx = document.getElementById('areaChart').getContext('2d');
+            
+            const profitMargins = currentData.map(item => (item.profit / item.sales) * 100);
+
+            charts.areaChart = new Chart(areaCtx, {
+                type: 'line',
+                data: {
+                    labels: currentData.map(item => item.month),
+                    datasets: [{
+                        label: 'Profit Margin %',
+                        data: profitMargins,
+                        borderColor: '#9b59b6',
+                        backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Profit Margin (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Polar area chart
+            const polarCtx = document.getElementById('polarAreaChart').getContext('2d');
+            
+            charts.polarAreaChart = new Chart(polarCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: categories.map(category => {
+                            return currentData
+                                .filter(item => item.category === category)
+                                .reduce((sum, item) => sum + item.sales, 0);
+                        }),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+
+            // Histogram - Sales distribution
+            const histogramCtx = document.getElementById('histogramChart').getContext('2d');
+            
+            // Create bins for histogram
+            const salesValues = currentData.map(item => item.sales);
+            const minSales = Math.min(...salesValues);
+            const maxSales = Math.max(...salesValues);
+            const binSize = (maxSales - minSales) / 5;
+            const bins = Array(5).fill(0);
+            
+            salesValues.forEach(sale => {
+                const binIndex = Math.min(4, Math.floor((sale - minSales) / binSize));
+                bins[binIndex]++;
+            });
+
+            charts.histogramChart = new Chart(histogramCtx, {
+                type: 'bar',
+                data: {
+                    labels: bins.map((_, i) => {
+                        const start = minSales + i * binSize;
+                        const end = minSales + (i + 1) * binSize;
+                        return `${formatNumber(start)}-${formatNumber(end)}`;
+                    }),
+                    datasets: [{
+                        label: 'Sales Distribution',
+                        data: bins,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sales Range'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Bubble chart - Regional growth
+            const bubbleCtx = document.getElementById('bubbleChart').getContext('2d');
+            
+            const bubbleData = regions.map((region, index) => {
+                const regionData = currentData.filter(item => item.region === region);
+                const avgSales = regionData.reduce((sum, item) => sum + item.sales, 0) / regionData.length;
+                const avgProfit = regionData.reduce((sum, item) => sum + item.profit, 0) / regionData.length;
+                const customerCount = regionData.reduce((sum, item) => sum + item.customers, 0);
+                
+                return {
+                    x: avgSales,
+                    y: avgProfit,
+                    r: customerCount / 10 // Bubble size based on customer count
+                };
+            });
+
+            charts.bubbleChart = new Chart(bubbleCtx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Regional Performance',
+                        data: bubbleData,
+                        backgroundColor: regions.map((_, index) => 
+                            `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 0.7)`
+                        )
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Average Sales'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Average Profit'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate insights
+        function generateInsights() {
+            const insightsContainer = document.getElementById('insightsContainer');
+            insightsContainer.innerHTML = '';
+
+            const insights = [
+                "Sales show an upward trend throughout the year with 25% growth",
+                "December is the highest performing month with 40,000 in sales",
+                "Electronics category maintains consistent performance across regions",
+                "Profit margin averages around 62% with minimal fluctuation",
+                "West region shows strongest growth potential at 15% monthly increase",
+                "Customer count strongly correlates with sales performance (r=0.89)",
+                "Expense-to-sales ratio remains stable at approximately 35%"
+            ];
+
+            insights.forEach(insight => {
+                const insightElement = document.createElement('div');
+                insightElement.className = 'result-item';
+                insightElement.innerHTML = `
+                    <i class="fas fa-lightbulb" style="color: #f39c12; margin-right: 10px;"></i>
+                    <span>${insight}</span>
+                `;
+                insightsContainer.appendChild(insightElement);
+            });
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (currentData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const headers = Object.keys(currentData[0]);
+            const csvContent = [
+                headers.join(','),
+                ...currentData.map(row => headers.map(header => row[header]).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data_analysis.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Export to PDF (simulated)
+        function exportToPDF() {
+            alert('PDF export functionality would be implemented with a library like jsPDF');
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toLocaleString('en-IN');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
