@@ -3,1456 +3,1296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Data Analyzer Tool - Professional Data Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Data Analyzer Pro - Stellar Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        :root {
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff00e6;
+            --dark-bg: #1a1a2e;
+            --card-bg: #2a2a4e;
+            --light-text: #e0e0ff;
+            --medium-text: #b0b0cc;
+            --accent-gradient: linear-gradient(45deg, #00f0ff, #ff00e6);
+            --card-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s ease-in-out;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-        }
-        
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
             line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
         }
-        
+
         .container {
-            max-width: 1800px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
             padding: 20px;
         }
-        
-        header {
-            text-align: center;
-            padding: 30px 0;
-            margin-bottom: 30px;
-            color: white;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .logo-icon {
+
+        .header h1 {
             font-size: 2.5rem;
-            color: #ffd54f;
-        }
-        
-        h1 {
-            font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
+
+        .header p {
+            color: var(--medium-text);
+            font-size: 1.1rem;
         }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 25px;
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--primary-neon);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: 1px solid var(--primary-neon);
         }
-        
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            height: fit-content;
-        }
-        
-        .sidebar-section {
-            margin-bottom: 30px;
-        }
-        
-        .sidebar-section h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light);
-            font-size: 1.3rem;
-        }
-        
-        .data-input {
-            margin-bottom: 25px;
-        }
-        
-        .file-upload {
-            border: 2px dashed #bdc3c7;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-        
-        .file-upload:hover {
-            border-color: var(--secondary);
-            background: rgba(52, 152, 219, 0.05);
-        }
-        
-        .file-upload i {
-            font-size: 3rem;
-            color: #bdc3c7;
-            margin-bottom: 15px;
-        }
-        
-        .file-upload p {
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
-        
-        .file-upload small {
-            color: #95a5a6;
-        }
-        
-        #fileInput {
-            display: none;
-        }
-        
-        .sample-data {
-            margin-top: 20px;
-        }
-        
-        .sample-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--success);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-        
-        .sample-btn:hover {
-            background: #219653;
+
+        .back-btn:hover {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
             transform: translateY(-2px);
         }
-        
-        .analysis-options {
-            margin-top: 20px;
-        }
-        
-        .option-group {
-            margin-bottom: 15px;
-        }
-        
-        .option-group label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        
-        .option-group label:hover {
-            background: rgba(52, 152, 219, 0.1);
-        }
-        
-        .option-group input {
-            width: auto;
-        }
-        
-        .content-area {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
+
+        .upload-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            min-height: 600px;
-        }
-        
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light);
-        }
-        
-        .content-header h2 {
-            font-size: 1.8rem;
-            color: var(--primary);
-        }
-        
-        .view-controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .view-btn {
-            padding: 8px 15px;
-            background: var(--light);
-            border: none;
-            border-radius: 5px;
-            color: var(--dark);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .view-btn.active {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .data-table-container {
-            overflow-x: auto;
             margin-bottom: 30px;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
         }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .data-table th, .data-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .data-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-        
-        .data-table tr:hover {
-            background: rgba(52, 152, 219, 0.05);
-        }
-        
-        .charts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .charts-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .chart-box {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e0e0;
-        }
-        
-        .chart-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--primary);
+
+        .upload-area {
+            border: 2px dashed var(--primary-neon);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
             text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
         }
-        
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+
+        .upload-area:hover {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: var(--secondary-neon);
         }
-        
-        .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-        
-        .analysis-results {
-            margin-top: 30px;
-        }
-        
-        .result-section {
-            margin-bottom: 25px;
-        }
-        
-        .result-section h3 {
-            color: var(--primary);
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-neon);
             margin-bottom: 15px;
-            font-size: 1.3rem;
         }
-        
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+
+        .upload-text {
+            margin-bottom: 15px;
         }
-        
-        .result-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--success);
+
+        .file-input {
+            display: none;
         }
-        
-        .result-item.warning {
-            border-left-color: var(--warning);
-        }
-        
-        .result-item.danger {
-            border-left-color: var(--accent);
-        }
-        
+
         .btn {
             display: inline-block;
-            padding: 12px 25px;
-            background: var(--secondary);
+            padding: 12px 24px;
+            background: var(--accent-gradient);
             color: white;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
             text-align: center;
         }
-        
+
         .btn:hover {
-            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--hover-shadow);
         }
-        
-        .btn-success {
-            background: var(--success);
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-neon);
+            color: var(--primary-neon);
         }
-        
-        .btn-success:hover {
-            background: #219653;
+
+        .btn-outline:hover {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
         }
-        
-        .btn-block {
-            display: block;
-            width: 100%;
+
+        .sample-data-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid var(--medium-text);
+            color: var(--medium-text);
         }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
+
+        .sample-data-btn:hover {
+            background: var(--medium-text);
+            color: var(--dark-bg);
         }
-        
-        .hidden {
+
+        .data-preview {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
             display: none;
         }
-        
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .data-preview {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2rem;
-            color: #7f8c8d;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #7f8c8d;
-        }
-        
-        .empty-state i {
-            font-size: 4rem;
+
+        .section-title {
+            font-size: 1.5rem;
             margin-bottom: 20px;
-            color: #bdc3c7;
-        }
-        
-        .chart-controls {
+            color: var(--primary-neon);
             display: flex;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
+        }
+
+        .section-title i {
+            font-size: 1.3rem;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .preview-table th, .preview-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .preview-table th {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--primary-neon);
+            font-weight: 600;
+        }
+
+        .preview-table tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .analysis-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
-        
-        .chart-type-btn {
-            padding: 5px 10px;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
         }
-        
-        .chart-type-btn.active {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
+
+        .control-group label {
+            font-weight: 600;
+            color: var(--medium-text);
+        }
+
+        .control-group select, .control-group input {
+            padding: 12px;
+            border: 2px solid var(--primary-neon);
+            border-radius: 8px;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        .control-group select:focus, .control-group input:focus {
+            outline: none;
+            border-color: var(--secondary-neon);
+            box-shadow: 0 0 0 3px rgba(255, 0, 230, 0.2);
+        }
+
+        .stats-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--primary-neon);
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-neon);
+        }
+
+        .charts-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: none;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            height: 350px;
+            position: relative;
+        }
+
+        .export-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: none;
+            text-align: center;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 240, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-neon);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .analysis-controls {
+                flex-direction: column;
+            }
+            
+            .control-group {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-chart-bar logo-icon"></i>
-                <h1>Advanced Data Analyzer</h1>
-            </div>
-            <p class="tagline">Comprehensive data analysis with multiple visualization options</p>
-        </header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
         
-        <div class="main-content">
-            <div class="sidebar">
-                <div class="sidebar-section">
-                    <h3>Data Input</h3>
-                    <div class="data-input">
-                        <div class="file-upload" id="fileUploadArea">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Upload CSV or Excel File</p>
-                            <small>Click or drag & drop your file here</small>
-                            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
-                        </div>
-                        
-                        <div class="sample-data">
-                            <button class="sample-btn" id="loadSampleData">
-                                <i class="fas fa-database"></i> Load Sample Data
-                            </button>
-                            <small>Try with sample sales data</small>
-                        </div>
-                    </div>
-                    
-                    <div class="analysis-options">
-                        <h3>Analysis Options</h3>
-                        <div class="option-group">
-                            <label>
-                                <input type="checkbox" id="showStats" checked>
-                                <span>Basic Statistics</span>
-                            </label>
-                        </div>
-                        <div class="option-group">
-                            <label>
-                                <input type="checkbox" id="showCharts" checked>
-                                <span>Data Visualization</span>
-                            </label>
-                        </div>
-                        <div class="option-group">
-                            <label>
-                                <input type="checkbox" id="detectTrends">
-                                <span>Trend Detection</span>
-                            </label>
-                        </div>
-                        <div class="option-group">
-                            <label>
-                                <input type="checkbox" id="findCorrelations">
-                                <span>Correlation Analysis</span>
-                            </label>
-                        </div>
-                        <div class="option-group">
-                            <label>
-                                <input type="checkbox" id="detectOutliers">
-                                <span>Outlier Detection</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-success btn-block" id="analyzeBtn">
-                        <i class="fas fa-chart-line"></i> Analyze Data
-                    </button>
+        <div class="header">
+            <h1><i class="fas fa-chart-bar"></i> Data Analyzer Pro</h1>
+            <p>Upload your CSV or Excel files for advanced data analysis and visualization</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    <h3>Upload Your Data File</h3>
+                    <p>Drag & drop your CSV or Excel file here, or click to browse</p>
+                </div>
+                <p class="file-types">Supported formats: CSV, XLS, XLSX</p>
+                <input type="file" id="fileInput" class="file-input" accept=".csv,.xls,.xlsx">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-folder-open"></i> Choose File
+                </button>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn sample-data-btn" id="loadSampleData">
+                    <i class="fas fa-vial"></i> Load Sample Data
+                </button>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Analyzing your data...</p>
+        </div>
+
+        <div class="data-preview" id="dataPreview">
+            <h2 class="section-title"><i class="fas fa-table"></i> Data Preview</h2>
+            <div class="preview-table-container">
+                <table class="preview-table" id="previewTable">
+                    <!-- Table content will be populated by JavaScript -->
+                </table>
+            </div>
+            
+            <div class="analysis-controls">
+                <div class="control-group">
+                    <label for="chartType">Chart Type</label>
+                    <select id="chartType">
+                        <option value="bar">Bar Chart</option>
+                        <option value="line">Line Chart</option>
+                        <option value="pie">Pie Chart</option>
+                        <option value="doughnut">Doughnut Chart</option>
+                        <option value="scatter">Scatter Plot</option>
+                    </select>
                 </div>
                 
-                <div class="sidebar-section">
-                    <h3>Export Results</h3>
-                    <div class="action-buttons">
-                        <button class="btn" id="exportCSV">
-                            <i class="fas fa-file-csv"></i> Export CSV
-                        </button>
-                        <button class="btn" id="exportPDF">
-                            <i class="fas fa-file-pdf"></i> Export PDF
-                        </button>
-                    </div>
+                <div class="control-group">
+                    <label for="xAxis">X-Axis Column</label>
+                    <select id="xAxis">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="yAxis">Y-Axis Column</label>
+                    <select id="yAxis">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="aggregation">Aggregation</label>
+                    <select id="aggregation">
+                        <option value="sum">Sum</option>
+                        <option value="average">Average</option>
+                        <option value="count">Count</option>
+                        <option value="min">Minimum</option>
+                        <option value="max">Maximum</option>
+                    </select>
                 </div>
             </div>
             
-            <div class="content-area">
-                <div class="content-header">
-                    <h2>Data Analysis Results</h2>
-                    <div class="view-controls">
-                        <button class="view-btn active" id="tableViewBtn">
-                            <i class="fas fa-table"></i> Table
-                        </button>
-                        <button class="view-btn" id="chartViewBtn">
-                            <i class="fas fa-chart-bar"></i> Charts
-                        </button>
-                        <button class="view-btn" id="statsViewBtn">
-                            <i class="fas fa-chart-pie"></i> Stats
-                        </button>
-                        <button class="view-btn" id="advancedViewBtn">
-                            <i class="fas fa-chart-line"></i> Advanced
-                        </button>
-                    </div>
+            <button class="btn" id="analyzeBtn">
+                <i class="fas fa-chart-line"></i> Analyze Data
+            </button>
+        </div>
+
+        <div class="stats-section" id="statsSection">
+            <h2 class="section-title"><i class="fas fa-chart-pie"></i> Statistical Summary</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats cards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="charts-section" id="chartsSection">
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> Data Visualizations</h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
                 </div>
-                
-                <div id="emptyState" class="empty-state">
-                    <i class="fas fa-chart-bar"></i>
-                    <h3>No Data Loaded</h3>
-                    <p>Upload a CSV file or load sample data to start analysis</p>
-                </div>
-                
-                <div id="dataTableView" class="hidden">
-                    <div class="data-table-container">
-                        <table class="data-table" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <!-- Table headers will be generated by JavaScript -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Table rows will be generated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div id="chartsView" class="hidden">
-                    <div class="charts-container">
-                        <div class="chart-box">
-                            <div class="chart-title">Sales Trend Over Time</div>
-                            <canvas id="lineChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Category Performance</div>
-                            <canvas id="barChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Regional Distribution</div>
-                            <canvas id="pieChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Sales vs Profit Correlation</div>
-                            <canvas id="scatterChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Monthly Performance Heatmap</div>
-                            <canvas id="heatmapChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Expense Breakdown</div>
-                            <canvas id="doughnutChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="statsView" class="hidden">
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalRecords">0</div>
-                            <div class="stat-label">Total Records</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="avgValue">0</div>
-                            <div class="stat-label">Average Value</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="maxValue">0</div>
-                            <div class="stat-label">Maximum Value</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="minValue">0</div>
-                            <div class="stat-label">Minimum Value</div>
-                        </div>
-                    </div>
-                    
-                    <div class="analysis-results">
-                        <div class="result-section">
-                            <h3>Data Quality Report</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="stat-value" id="missingData">0%</div>
-                                    <div class="stat-label">Missing Data</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="stat-value" id="duplicateRows">0</div>
-                                    <div class="stat-label">Duplicate Rows</div>
-                                </div>
-                                <div class="result-item warning" id="outliersItem">
-                                    <div class="stat-value" id="outliersCount">0</div>
-                                    <div class="stat-label">Potential Outliers</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="result-section">
-                            <h3>Key Insights</h3>
-                            <div class="result-grid" id="insightsContainer">
-                                <!-- Insights will be added by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="advancedView" class="hidden">
-                    <div class="charts-container">
-                        <div class="chart-box">
-                            <div class="chart-title">Sales Forecast</div>
-                            <canvas id="forecastChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Performance Radar</div>
-                            <canvas id="radarChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Profit Margin Trend</div>
-                            <canvas id="areaChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Category Comparison</div>
-                            <canvas id="polarAreaChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Sales Distribution</div>
-                            <canvas id="histogramChart"></canvas>
-                        </div>
-                        <div class="chart-box">
-                            <div class="chart-title">Regional Growth</div>
-                            <canvas id="bubbleChart"></canvas>
-                        </div>
-                    </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>Advanced Data Analyzer Tool &copy; 2023 | Professional Data Analysis</p>
-        </footer>
+
+        <div class="export-section" id="exportSection">
+            <h2 class="section-title"><i class="fas fa-download"></i> Export Results</h2>
+            <p>Download your analysis results in various formats</p>
+            <div class="export-options">
+                <button class="btn btn-outline" id="exportPDF">
+                    <i class="fas fa-file-pdf"></i> Export as PDF
+                </button>
+                <button class="btn btn-outline" id="exportCSV">
+                    <i class="fas fa-file-csv"></i> Export Stats as CSV
+                </button>
+                <button class="btn btn-outline" id="exportCharts">
+                    <i class="fas fa-image"></i> Export Charts as PNG
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Enhanced sample data with more metrics
-        const sampleData = [
-            { month: 'January', sales: 15000, expenses: 8000, profit: 7000, region: 'North', category: 'Electronics', customers: 120, returns: 5 },
-            { month: 'February', sales: 18000, expenses: 8500, profit: 9500, region: 'North', category: 'Electronics', customers: 145, returns: 3 },
-            { month: 'March', sales: 22000, expenses: 9000, profit: 13000, region: 'North', category: 'Furniture', customers: 160, returns: 8 },
-            { month: 'April', sales: 19000, expenses: 8200, profit: 10800, region: 'South', category: 'Electronics', customers: 135, returns: 6 },
-            { month: 'May', sales: 25000, expenses: 9500, profit: 15500, region: 'South', category: 'Clothing', customers: 180, returns: 4 },
-            { month: 'June', sales: 28000, expenses: 10000, profit: 18000, region: 'East', category: 'Clothing', customers: 195, returns: 7 },
-            { month: 'July', sales: 26000, expenses: 9800, profit: 16200, region: 'East', category: 'Furniture', customers: 175, returns: 5 },
-            { month: 'August', sales: 30000, expenses: 11000, profit: 19000, region: 'West', category: 'Electronics', customers: 210, returns: 9 },
-            { month: 'September', sales: 27000, expenses: 10500, profit: 16500, region: 'West', category: 'Clothing', customers: 185, returns: 6 },
-            { month: 'October', sales: 32000, expenses: 11500, profit: 20500, region: 'North', category: 'Furniture', customers: 225, returns: 8 },
-            { month: 'November', sales: 35000, expenses: 12000, profit: 23000, region: 'South', category: 'Electronics', customers: 240, returns: 10 },
-            { month: 'December', sales: 40000, expenses: 13000, profit: 27000, region: 'East', category: 'Clothing', customers: 260, returns: 12 }
-        ];
-
-        // Global variables
+        // Global variables to store data and charts
         let currentData = [];
-        let charts = {};
+        let columnNames = [];
+        let mainChart = null;
+        let distributionChart = null;
 
         // DOM elements
-        const fileUploadArea = document.getElementById('fileUploadArea');
+        const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
-        const loadSampleData = document.getElementById('loadSampleData');
+        const dataPreview = document.getElementById('dataPreview');
+        const previewTable = document.getElementById('previewTable');
+        const statsSection = document.getElementById('statsSection');
+        const chartsSection = document.getElementById('chartsSection');
+        const exportSection = document.getElementById('exportSection');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
         const analyzeBtn = document.getElementById('analyzeBtn');
-        const tableViewBtn = document.getElementById('tableViewBtn');
-        const chartViewBtn = document.getElementById('chartViewBtn');
-        const statsViewBtn = document.getElementById('statsViewBtn');
-        const advancedViewBtn = document.getElementById('advancedViewBtn');
-        const dataTableView = document.getElementById('dataTableView');
-        const chartsView = document.getElementById('chartsView');
-        const statsView = document.getElementById('statsView');
-        const advancedView = document.getElementById('advancedView');
-        const emptyState = document.getElementById('emptyState');
-        const dataTable = document.getElementById('dataTable');
-        const exportCSV = document.getElementById('exportCSV');
-        const exportPDF = document.getElementById('exportPDF');
+        const loadSampleDataBtn = document.getElementById('loadSampleData');
 
-        // Initialize the application
-        function init() {
-            setupEventListeners();
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // File upload
-            fileUploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
-
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input change event
             fileInput.addEventListener('change', handleFileUpload);
-
-            // Drag and drop
-            fileUploadArea.addEventListener('dragover', (e) => {
+            
+            // Drag and drop events
+            uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                fileUploadArea.style.borderColor = '#3498db';
-                fileUploadArea.style.background = 'rgba(52, 152, 219, 0.1)';
+                uploadArea.style.borderColor = 'var(--secondary-neon)';
+                uploadArea.style.background = 'rgba(0, 240, 255, 0.05)';
             });
-
-            fileUploadArea.addEventListener('dragleave', () => {
-                fileUploadArea.style.borderColor = '#bdc3c7';
-                fileUploadArea.style.background = '';
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.style.borderColor = 'var(--primary-neon)';
+                uploadArea.style.background = '';
             });
-
-            fileUploadArea.addEventListener('drop', (e) => {
+            
+            uploadArea.addEventListener('drop', function(e) {
                 e.preventDefault();
-                fileUploadArea.style.borderColor = '#bdc3c7';
-                fileUploadArea.style.background = '';
+                uploadArea.style.borderColor = 'var(--primary-neon)';
+                uploadArea.style.background = '';
                 
                 if (e.dataTransfer.files.length) {
                     fileInput.files = e.dataTransfer.files;
                     handleFileUpload();
                 }
             });
-
-            // Sample data
-            loadSampleData.addEventListener('click', () => {
-                currentData = [...sampleData];
-                displayData(currentData);
-                showView('table');
-            });
-
-            // Analyze button
+            
+            // Analyze button click
             analyzeBtn.addEventListener('click', analyzeData);
-
-            // View controls
-            tableViewBtn.addEventListener('click', () => showView('table'));
-            chartViewBtn.addEventListener('click', () => showView('charts'));
-            statsViewBtn.addEventListener('click', () => showView('stats'));
-            advancedViewBtn.addEventListener('click', () => showView('advanced'));
-
+            
+            // Load sample data
+            loadSampleDataBtn.addEventListener('click', loadSampleData);
+            
             // Export buttons
-            exportCSV.addEventListener('click', exportToCSV);
-            exportPDF.addEventListener('click', exportToPDF);
-        }
+            document.getElementById('exportPDF').addEventListener('click', exportPDF);
+            document.getElementById('exportCSV').addEventListener('click', exportCSV);
+            document.getElementById('exportCharts').addEventListener('click', exportCharts);
+        });
 
         // Handle file upload
         function handleFileUpload() {
             const file = fileInput.files[0];
             if (!file) return;
+            
+            showLoading();
+            hideError();
+            
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileExtension === 'csv') {
+                parseCSV(file);
+            } else if (fileExtension === 'xls' || fileExtension === 'xlsx') {
+                parseExcel(file);
+            } else {
+                showError('Unsupported file format. Please upload a CSV or Excel file.');
+                hideLoading();
+            }
+        }
 
+        // Parse CSV file
+        function parseCSV(file) {
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.errors.length) {
+                        showError('Error parsing CSV: ' + results.errors[0].message);
+                        hideLoading();
+                        return;
+                    }
+                    
+                    processData(results.data, results.meta.fields);
+                },
+                error: function(error) {
+                    showError('Error reading CSV file: ' + error.message);
+                    hideLoading();
+                }
+            });
+        }
+
+        // Parse Excel file
+        function parseExcel(file) {
             const reader = new FileReader();
             
             reader.onload = function(e) {
                 try {
-                    const content = e.target.result;
-                    // For demo purposes, we'll use sample data
-                    currentData = [...sampleData];
-                    displayData(currentData);
-                    showView('table');
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    if (jsonData.length < 2) {
+                        showError('Excel file does not contain enough data.');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    // Extract headers and data
+                    const headers = jsonData[0];
+                    const rows = jsonData.slice(1);
+                    
+                    // Convert to array of objects
+                    const dataObjects = rows.map(row => {
+                        const obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header] = row[index] !== undefined ? row[index] : null;
+                        });
+                        return obj;
+                    });
+                    
+                    processData(dataObjects, headers);
                 } catch (error) {
-                    alert('Error reading file: ' + error.message);
+                    showError('Error parsing Excel file: ' + error.message);
+                    hideLoading();
                 }
             };
             
-            reader.readAsText(file);
+            reader.onerror = function() {
+                showError('Error reading Excel file');
+                hideLoading();
+            };
+            
+            reader.readAsArrayBuffer(file);
         }
 
-        // Display data in table
-        function displayData(data) {
-            if (data.length === 0) {
-                emptyState.classList.remove('hidden');
-                dataTableView.classList.add('hidden');
+        // Process the loaded data
+        function processData(data, headers) {
+            if (!data || data.length === 0) {
+                showError('No data found in the file.');
+                hideLoading();
                 return;
             }
+            
+            currentData = data;
+            columnNames = headers;
+            
+            // Show data preview
+            showDataPreview();
+            hideLoading();
+        }
 
-            emptyState.classList.add('hidden');
-            dataTableView.classList.remove('hidden');
-
-            // Clear existing table
-            dataTable.querySelector('thead tr').innerHTML = '';
-            dataTable.querySelector('tbody').innerHTML = '';
-
-            // Get column names
-            const columns = Object.keys(data[0]);
-
-            // Create table headers
-            columns.forEach(col => {
+        // Show data preview table
+        function showDataPreview() {
+            // Clear previous table
+            previewTable.innerHTML = '';
+            
+            // Create header row
+            const headerRow = document.createElement('tr');
+            columnNames.forEach(column => {
                 const th = document.createElement('th');
-                th.textContent = col.charAt(0).toUpperCase() + col.slice(1);
-                dataTable.querySelector('thead tr').appendChild(th);
+                th.textContent = column;
+                headerRow.appendChild(th);
             });
-
-            // Create table rows
-            data.forEach(row => {
-                const tr = document.createElement('tr');
-                columns.forEach(col => {
+            previewTable.appendChild(headerRow);
+            
+            // Create data rows (show first 10 rows)
+            const rowsToShow = Math.min(10, currentData.length);
+            for (let i = 0; i < rowsToShow; i++) {
+                const row = document.createElement('tr');
+                columnNames.forEach(column => {
                     const td = document.createElement('td');
-                    td.textContent = row[col];
-                    tr.appendChild(td);
+                    td.textContent = currentData[i][column] !== null ? currentData[i][column] : 'N/A';
+                    row.appendChild(td);
                 });
-                dataTable.querySelector('tbody').appendChild(tr);
-            });
+                previewTable.appendChild(row);
+            }
+            
+            // Show more rows message if applicable
+            if (currentData.length > 10) {
+                const messageRow = document.createElement('tr');
+                const messageCell = document.createElement('td');
+                messageCell.colSpan = columnNames.length;
+                messageCell.textContent = `... and ${currentData.length - 10} more rows`;
+                messageCell.style.textAlign = 'center';
+                messageCell.style.fontStyle = 'italic';
+                messageCell.style.color = 'var(--medium-text)';
+                messageRow.appendChild(messageCell);
+                previewTable.appendChild(messageRow);
+            }
+            
+            // Populate column selectors
+            populateColumnSelectors();
+            
+            // Show data preview section
+            dataPreview.style.display = 'block';
         }
 
-        // Show specific view
-        function showView(view) {
-            // Update active button
-            tableViewBtn.classList.remove('active');
-            chartViewBtn.classList.remove('active');
-            statsViewBtn.classList.remove('active');
-            advancedViewBtn.classList.remove('active');
-
-            // Hide all views
-            dataTableView.classList.add('hidden');
-            chartsView.classList.add('hidden');
-            statsView.classList.add('hidden');
-            advancedView.classList.add('hidden');
-
-            // Show selected view
-            if (view === 'table') {
-                tableViewBtn.classList.add('active');
-                dataTableView.classList.remove('hidden');
-            } else if (view === 'charts') {
-                chartViewBtn.classList.add('active');
-                chartsView.classList.remove('hidden');
-                createBasicCharts();
-            } else if (view === 'stats') {
-                statsViewBtn.classList.add('active');
-                statsView.classList.remove('hidden');
-                calculateStatistics();
-            } else if (view === 'advanced') {
-                advancedViewBtn.classList.add('active');
-                advancedView.classList.remove('hidden');
-                createAdvancedCharts();
+        // Populate column selectors for analysis
+        function populateColumnSelectors() {
+            const xAxisSelect = document.getElementById('xAxis');
+            const yAxisSelect = document.getElementById('yAxis');
+            
+            // Clear previous options
+            xAxisSelect.innerHTML = '';
+            yAxisSelect.innerHTML = '';
+            
+            // Add options for each column
+            columnNames.forEach(column => {
+                const xOption = document.createElement('option');
+                xOption.value = column;
+                xOption.textContent = column;
+                xAxisSelect.appendChild(xOption);
+                
+                const yOption = document.createElement('option');
+                yOption.value = column;
+                yOption.textContent = column;
+                yAxisSelect.appendChild(yOption);
+            });
+            
+            // Set default selections
+            if (columnNames.length >= 2) {
+                xAxisSelect.value = columnNames[0];
+                yAxisSelect.value = columnNames[1];
             }
         }
 
-        // Analyze data
+        // Analyze the data
         function analyzeData() {
-            if (currentData.length === 0) {
-                alert('Please load data first');
+            showLoading();
+            
+            // Get selected columns and options
+            const xAxisColumn = document.getElementById('xAxis').value;
+            const yAxisColumn = document.getElementById('yAxis').value;
+            const chartType = document.getElementById('chartType').value;
+            const aggregation = document.getElementById('aggregation').value;
+            
+            // Calculate statistics
+            calculateStatistics();
+            
+            // Create visualizations
+            createVisualizations(xAxisColumn, yAxisColumn, chartType, aggregation);
+            
+            // Show results sections
+            statsSection.style.display = 'block';
+            chartsSection.style.display = 'block';
+            exportSection.style.display = 'block';
+            
+            hideLoading();
+        }
+
+        // Calculate statistics for numeric columns
+        function calculateStatistics() {
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = '';
+            
+            // Find numeric columns
+            const numericColumns = columnNames.filter(column => {
+                return currentData.some(row => !isNaN(parseFloat(row[column])) && row[column] !== null);
+            });
+            
+            if (numericColumns.length === 0) {
+                const noStatsMsg = document.createElement('div');
+                noStatsMsg.textContent = 'No numeric columns found for statistical analysis.';
+                noStatsMsg.style.gridColumn = '1 / -1';
+                noStatsMsg.style.textAlign = 'center';
+                noStatsMsg.style.padding = '20px';
+                noStatsMsg.style.color = 'var(--medium-text)';
+                statsGrid.appendChild(noStatsMsg);
                 return;
             }
-
-            showView('stats');
-            calculateStatistics();
-            createBasicCharts();
-            createAdvancedCharts();
-            generateInsights();
-        }
-
-        // Calculate statistics
-        function calculateStatistics() {
-            if (currentData.length === 0) return;
-
-            // Basic stats
-            document.getElementById('totalRecords').textContent = currentData.length;
-
-            // Calculate numeric stats (using sales as example)
-            const salesValues = currentData.map(item => item.sales);
-            const totalSales = salesValues.reduce((sum, value) => sum + value, 0);
-            const avgSales = totalSales / salesValues.length;
-            const maxSales = Math.max(...salesValues);
-            const minSales = Math.min(...salesValues);
-
-            document.getElementById('avgValue').textContent = formatNumber(avgSales);
-            document.getElementById('maxValue').textContent = formatNumber(maxSales);
-            document.getElementById('minValue').textContent = formatNumber(minSales);
-
-            // Data quality
-            document.getElementById('missingData').textContent = '0%';
-            document.getElementById('duplicateRows').textContent = '0';
-            document.getElementById('outliersCount').textContent = '2';
-        }
-
-        // Create basic charts
-        function createBasicCharts() {
-            if (currentData.length === 0) return;
-
-            // Destroy existing charts
-            Object.values(charts).forEach(chart => {
-                if (chart) chart.destroy();
+            
+            // Calculate stats for each numeric column
+            numericColumns.forEach(column => {
+                const values = currentData
+                    .map(row => parseFloat(row[column]))
+                    .filter(val => !isNaN(val));
+                
+                if (values.length === 0) return;
+                
+                // Basic statistics
+                const count = values.length;
+                const sum = values.reduce((a, b) => a + b, 0);
+                const mean = sum / count;
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                
+                // Standard deviation
+                const squaredDiffs = values.map(value => Math.pow(value - mean, 2));
+                const variance = squaredDiffs.reduce((a, b) => a + b, 0) / count;
+                const stdDev = Math.sqrt(variance);
+                
+                // Create stat cards
+                const statCards = [
+                    { title: 'Count', value: count.toLocaleString() },
+                    { title: 'Sum', value: sum.toFixed(2) },
+                    { title: 'Mean', value: mean.toFixed(2) },
+                    { title: 'Min', value: min.toFixed(2) },
+                    { title: 'Max', value: max.toFixed(2) },
+                    { title: 'Std Dev', value: stdDev.toFixed(2) }
+                ];
+                
+                // Add column header
+                const columnHeader = document.createElement('div');
+                columnHeader.className = 'stat-card';
+                columnHeader.style.gridColumn = '1 / -1';
+                columnHeader.style.background = 'rgba(255, 0, 230, 0.1)';
+                columnHeader.style.borderLeftColor = 'var(--secondary-neon)';
+                columnHeader.innerHTML = `
+                    <div class="stat-title">Column: ${column}</div>
+                    <div class="stat-value" style="font-size: 1.4rem;">Statistics</div>
+                `;
+                statsGrid.appendChild(columnHeader);
+                
+                // Add stat cards for this column
+                statCards.forEach(stat => {
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.innerHTML = `
+                        <div class="stat-title">${stat.title}</div>
+                        <div class="stat-value">${stat.value}</div>
+                    `;
+                    statsGrid.appendChild(card);
+                });
             });
+        }
 
-            // Line chart - Sales trend
-            const lineCtx = document.getElementById('lineChart').getContext('2d');
-            charts.lineChart = new Chart(lineCtx, {
-                type: 'line',
-                data: {
-                    labels: currentData.map(item => item.month),
+        // Create data visualizations
+        function createVisualizations(xColumn, yColumn, chartType, aggregation) {
+            // Destroy existing charts
+            if (mainChart) {
+                mainChart.destroy();
+            }
+            if (distributionChart) {
+                distributionChart.destroy();
+            }
+            
+            // Prepare data for main chart
+            let chartData = {};
+            
+            if (chartType === 'scatter') {
+                // For scatter plot, we need pairs of x and y values
+                const xValues = currentData.map(row => row[xColumn]);
+                const yValues = currentData.map(row => row[yColumn]);
+                
+                chartData = {
                     datasets: [{
-                        label: 'Sales',
-                        data: currentData.map(item => item.sales),
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }, {
-                        label: 'Profit',
-                        data: currentData.map(item => item.profit),
-                        borderColor: '#27ae60',
-                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
-                        tension: 0.3,
-                        fill: true
+                        label: `${yColumn} vs ${xColumn}`,
+                        data: xValues.map((x, i) => ({x: x, y: yValues[i]})),
+                        backgroundColor: 'rgba(0, 240, 255, 0.7)',
+                        borderColor: 'rgba(0, 240, 255, 1)',
+                        borderWidth: 1
                     }]
-                },
+                };
+            } else {
+                // For other chart types, aggregate data if needed
+                if (aggregation !== 'none') {
+                    const aggregated = {};
+                    
+                    currentData.forEach(row => {
+                        const xValue = row[xColumn];
+                        const yValue = parseFloat(row[yColumn]);
+                        
+                        if (isNaN(yValue)) return;
+                        
+                        if (!aggregated[xValue]) {
+                            aggregated[xValue] = [];
+                        }
+                        
+                        aggregated[xValue].push(yValue);
+                    });
+                    
+                    const labels = Object.keys(aggregated);
+                    const data = labels.map(label => {
+                        const values = aggregated[label];
+                        
+                        switch (aggregation) {
+                            case 'sum':
+                                return values.reduce((a, b) => a + b, 0);
+                            case 'average':
+                                return values.reduce((a, b) => a + b, 0) / values.length;
+                            case 'count':
+                                return values.length;
+                            case 'min':
+                                return Math.min(...values);
+                            case 'max':
+                                return Math.max(...values);
+                            default:
+                                return values.reduce((a, b) => a + b, 0);
+                        }
+                    });
+                    
+                    chartData = {
+                        labels: labels,
+                        datasets: [{
+                            label: `${aggregation} of ${yColumn}`,
+                            data: data,
+                            backgroundColor: getChartColors(chartType, data.length),
+                            borderColor: 'rgba(0, 240, 255, 1)',
+                            borderWidth: 2
+                        }]
+                    };
+                } else {
+                    // No aggregation - use raw data
+                    const labels = currentData.map(row => row[xColumn]);
+                    const data = currentData.map(row => parseFloat(row[yColumn]));
+                    
+                    chartData = {
+                        labels: labels,
+                        datasets: [{
+                            label: yColumn,
+                            data: data,
+                            backgroundColor: getChartColors(chartType, data.length),
+                            borderColor: 'rgba(0, 240, 255, 1)',
+                            borderWidth: 2
+                        }]
+                    };
+                }
+            }
+            
+            // Create main chart with DARK THEME FIXES
+            const mainCtx = document.getElementById('mainChart').getContext('2d');
+            mainChart = new Chart(mainCtx, {
+                type: chartType,
+                data: chartData,
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'top',
-                        },
                         title: {
                             display: true,
-                            text: 'Monthly Sales & Profit Trend'
-                        }
-                    }
-                }
-            });
-
-            // Bar chart - Category distribution
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            
-            // Calculate sales by category
-            const categories = [...new Set(currentData.map(item => item.category))];
-            const salesByCategory = categories.map(category => {
-                return currentData
-                    .filter(item => item.category === category)
-                    .reduce((sum, item) => sum + item.sales, 0);
-            });
-
-            charts.barChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        label: 'Sales by Category',
-                        data: salesByCategory,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
+                            text: `${yColumn} by ${xColumn}`,
+                            color: '#e0e0ff', // Light text color for dark background
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
                         legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Pie chart - Regional performance
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            
-            // Calculate sales by region
-            const regions = [...new Set(currentData.map(item => item.region))];
-            const salesByRegion = regions.map(region => {
-                return currentData
-                    .filter(item => item.region === region)
-                    .reduce((sum, item) => sum + item.sales, 0);
-            });
-
-            charts.pieChart = new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: regions,
-                    datasets: [{
-                        data: salesByRegion,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(75, 192, 192, 0.7)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Scatter chart - Sales vs Profit
-            const scatterCtx = document.getElementById('scatterChart').getContext('2d');
-            charts.scatterChart = new Chart(scatterCtx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Sales vs Profit',
-                        data: currentData.map(item => ({
-                            x: item.sales,
-                            y: item.profit
-                        })),
-                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
+                            labels: {
+                                color: '#e0e0ff', // Light text color
+                                font: {
+                                    size: 12
+                                }
+                            }
                         }
                     },
-                    scales: {
+                    scales: chartType === 'scatter' ? {
                         x: {
                             title: {
                                 display: true,
-                                text: 'Sales'
+                                text: xColumn,
+                                color: '#e0e0ff' // Light text color
+                            },
+                            ticks: {
+                                color: '#b0b0cc', // Medium text color
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 240, 255, 0.1)'
                             }
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: 'Profit'
+                                text: yColumn,
+                                color: '#e0e0ff' // Light text color
+                            },
+                            ticks: {
+                                color: '#b0b0cc', // Medium text color
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 240, 255, 0.1)'
                             }
                         }
-                    }
-                }
-            });
-
-            // Heatmap chart
-            const heatmapCtx = document.getElementById('heatmapChart').getContext('2d');
-            charts.heatmapChart = new Chart(heatmapCtx, {
-                type: 'bar',
-                data: {
-                    labels: currentData.map(item => item.month),
-                    datasets: [{
-                        label: 'Sales Performance',
-                        data: currentData.map(item => item.sales),
-                        backgroundColor: currentData.map(item => {
-                            const sales = item.sales;
-                            if (sales > 30000) return 'rgba(39, 174, 96, 0.7)';
-                            if (sales > 20000) return 'rgba(241, 196, 15, 0.7)';
-                            return 'rgba(231, 76, 60, 0.7)';
-                        })
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-
-            // Doughnut chart - Expense breakdown
-            const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
-            
-            // Calculate expenses by category
-            const expensesByCategory = categories.map(category => {
-                return currentData
-                    .filter(item => item.category === category)
-                    .reduce((sum, item) => sum + item.expenses, 0);
-            });
-
-            charts.doughnutChart = new Chart(doughnutCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        data: expensesByCategory,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-        }
-
-        // Create advanced charts
-        function createAdvancedCharts() {
-            if (currentData.length === 0) return;
-
-            // Forecast chart (simulated)
-            const forecastCtx = document.getElementById('forecastChart').getContext('2d');
-            const months = currentData.map(item => item.month);
-            const salesData = currentData.map(item => item.sales);
-            
-            // Simple linear forecast (for demo)
-            const forecastData = [...salesData];
-            for (let i = 0; i < 3; i++) {
-                forecastData.push(salesData[salesData.length - 1] * 1.1);
-            }
-
-            charts.forecastChart = new Chart(forecastCtx, {
-                type: 'line',
-                data: {
-                    labels: [...months, 'Jan (F)', 'Feb (F)', 'Mar (F)'],
-                    datasets: [{
-                        label: 'Actual Sales',
-                        data: salesData,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                        fill: true
-                    }, {
-                        label: 'Forecast',
-                        data: forecastData,
-                        borderColor: '#e74c3c',
-                        borderDash: [5, 5],
-                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Radar chart - Regional performance
-            const radarCtx = document.getElementById('radarChart').getContext('2d');
-            const regions = [...new Set(currentData.map(item => item.region))];
-            
-            const regionalMetrics = regions.map(region => {
-                const regionData = currentData.filter(item => item.region === region);
-                return {
-                    sales: regionData.reduce((sum, item) => sum + item.sales, 0) / regionData.length,
-                    profit: regionData.reduce((sum, item) => sum + item.profit, 0) / regionData.length,
-                    customers: regionData.reduce((sum, item) => sum + item.customers, 0) / regionData.length
-                };
-            });
-
-            charts.radarChart = new Chart(radarCtx, {
-                type: 'radar',
-                data: {
-                    labels: ['Sales', 'Profit', 'Customers'],
-                    datasets: regions.map((region, index) => ({
-                        label: region,
-                        data: [
-                            regionalMetrics[index].sales / 1000,
-                            regionalMetrics[index].profit / 1000,
-                            regionalMetrics[index].customers
-                        ],
-                        backgroundColor: `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 0.2)`,
-                        borderColor: `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 1)`,
-                        borderWidth: 1
-                    }))
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Area chart - Profit margin
-            const areaCtx = document.getElementById('areaChart').getContext('2d');
-            
-            const profitMargins = currentData.map(item => (item.profit / item.sales) * 100);
-
-            charts.areaChart = new Chart(areaCtx, {
-                type: 'line',
-                data: {
-                    labels: currentData.map(item => item.month),
-                    datasets: [{
-                        label: 'Profit Margin %',
-                        data: profitMargins,
-                        borderColor: '#9b59b6',
-                        backgroundColor: 'rgba(155, 89, 182, 0.2)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Profit Margin (%)'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Polar area chart
-            const polarCtx = document.getElementById('polarAreaChart').getContext('2d');
-            
-            charts.polarAreaChart = new Chart(polarCtx, {
-                type: 'polarArea',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        data: categories.map(category => {
-                            return currentData
-                                .filter(item => item.category === category)
-                                .reduce((sum, item) => sum + item.sales, 0);
-                        }),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Histogram - Sales distribution
-            const histogramCtx = document.getElementById('histogramChart').getContext('2d');
-            
-            // Create bins for histogram
-            const salesValues = currentData.map(item => item.sales);
-            const minSales = Math.min(...salesValues);
-            const maxSales = Math.max(...salesValues);
-            const binSize = (maxSales - minSales) / 5;
-            const bins = Array(5).fill(0);
-            
-            salesValues.forEach(sale => {
-                const binIndex = Math.min(4, Math.floor((sale - minSales) / binSize));
-                bins[binIndex]++;
-            });
-
-            charts.histogramChart = new Chart(histogramCtx, {
-                type: 'bar',
-                data: {
-                    labels: bins.map((_, i) => {
-                        const start = minSales + i * binSize;
-                        const end = minSales + (i + 1) * binSize;
-                        return `${formatNumber(start)}-${formatNumber(end)}`;
-                    }),
-                    datasets: [{
-                        label: 'Sales Distribution',
-                        data: bins,
-                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                        borderColor: 'rgba(52, 152, 219, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Frequency'
+                    } : {
+                        x: {
+                            ticks: {
+                                color: '#b0b0cc', // Medium text color
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 240, 255, 0.1)'
                             }
                         },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Sales Range'
+                        y: {
+                            ticks: {
+                                color: '#b0b0cc', // Medium text color
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 240, 255, 0.1)'
                             }
                         }
                     }
                 }
             });
-
-            // Bubble chart - Regional growth
-            const bubbleCtx = document.getElementById('bubbleChart').getContext('2d');
             
-            const bubbleData = regions.map((region, index) => {
-                const regionData = currentData.filter(item => item.region === region);
-                const avgSales = regionData.reduce((sum, item) => sum + item.sales, 0) / regionData.length;
-                const avgProfit = regionData.reduce((sum, item) => sum + item.profit, 0) / regionData.length;
-                const customerCount = regionData.reduce((sum, item) => sum + item.customers, 0);
+            // Create distribution chart for first numeric column with DARK THEME FIXES
+            const numericColumns = columnNames.filter(column => {
+                return currentData.some(row => !isNaN(parseFloat(row[column])) && row[column] !== null);
+            });
+            
+            if (numericColumns.length > 0) {
+                const distColumn = numericColumns[0];
+                const distValues = currentData
+                    .map(row => parseFloat(row[distColumn]))
+                    .filter(val => !isNaN(val));
                 
-                return {
-                    x: avgSales,
-                    y: avgProfit,
-                    r: customerCount / 10 // Bubble size based on customer count
-                };
-            });
-
-            charts.bubbleChart = new Chart(bubbleCtx, {
-                type: 'bubble',
-                data: {
-                    datasets: [{
-                        label: 'Regional Performance',
-                        data: bubbleData,
-                        backgroundColor: regions.map((_, index) => 
-                            `rgba(${50 + index * 70}, ${100 + index * 50}, ${150 + index * 30}, 0.7)`
-                        )
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
+                // Create histogram data
+                const minVal = Math.min(...distValues);
+                const maxVal = Math.max(...distValues);
+                const range = maxVal - minVal;
+                const binCount = Math.min(10, Math.ceil(Math.sqrt(distValues.length)));
+                const binSize = range / binCount;
+                
+                const histogram = new Array(binCount).fill(0);
+                distValues.forEach(value => {
+                    const binIndex = Math.min(
+                        binCount - 1, 
+                        Math.floor((value - minVal) / binSize)
+                    );
+                    histogram[binIndex]++;
+                });
+                
+                const distLabels = [];
+                for (let i = 0; i < binCount; i++) {
+                    const binStart = minVal + i * binSize;
+                    const binEnd = binStart + binSize;
+                    distLabels.push(`${binStart.toFixed(1)} - ${binEnd.toFixed(1)}`);
+                }
+                
+                // Create distribution chart
+                const distCtx = document.getElementById('distributionChart').getContext('2d');
+                distributionChart = new Chart(distCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: distLabels,
+                        datasets: [{
+                            label: `Distribution of ${distColumn}`,
+                            data: histogram,
+                            backgroundColor: 'rgba(255, 0, 230, 0.7)',
+                            borderColor: 'rgba(255, 0, 230, 1)',
+                            borderWidth: 1
+                        }]
                     },
-                    scales: {
-                        x: {
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
                             title: {
                                 display: true,
-                                text: 'Average Sales'
+                                text: `Distribution of ${distColumn}`,
+                                color: '#e0e0ff', // Light text color
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                labels: {
+                                    color: '#e0e0ff', // Light text color
+                                    font: {
+                                        size: 12
+                                    }
+                                }
                             }
                         },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Average Profit'
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#b0b0cc', // Medium text color
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 0, 230, 0.1)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Frequency',
+                                    color: '#e0e0ff' // Light text color
+                                },
+                                ticks: {
+                                    color: '#b0b0cc', // Medium text color
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 0, 230, 0.1)'
+                                }
                             }
                         }
                     }
-                }
-            });
-        }
-
-        // Generate insights
-        function generateInsights() {
-            const insightsContainer = document.getElementById('insightsContainer');
-            insightsContainer.innerHTML = '';
-
-            const insights = [
-                "Sales show an upward trend throughout the year with 25% growth",
-                "December is the highest performing month with 40,000 in sales",
-                "Electronics category maintains consistent performance across regions",
-                "Profit margin averages around 62% with minimal fluctuation",
-                "West region shows strongest growth potential at 15% monthly increase",
-                "Customer count strongly correlates with sales performance (r=0.89)",
-                "Expense-to-sales ratio remains stable at approximately 35%"
-            ];
-
-            insights.forEach(insight => {
-                const insightElement = document.createElement('div');
-                insightElement.className = 'result-item';
-                insightElement.innerHTML = `
-                    <i class="fas fa-lightbulb" style="color: #f39c12; margin-right: 10px;"></i>
-                    <span>${insight}</span>
-                `;
-                insightsContainer.appendChild(insightElement);
-            });
-        }
-
-        // Export to CSV
-        function exportToCSV() {
-            if (currentData.length === 0) {
-                alert('No data to export');
-                return;
+                });
             }
+        }
 
-            const headers = Object.keys(currentData[0]);
-            const csvContent = [
-                headers.join(','),
-                ...currentData.map(row => headers.map(header => row[header]).join(','))
-            ].join('\n');
+        // Generate colors for charts
+        function getChartColors(chartType, count) {
+            if (chartType === 'pie' || chartType === 'doughnut') {
+                // Generate distinct colors for pie/doughnut charts
+                const colors = [];
+                const baseColors = [
+                    'rgba(0, 240, 255, 0.7)',
+                    'rgba(255, 0, 230, 0.7)',
+                    'rgba(0, 255, 150, 0.7)',
+                    'rgba(255, 200, 0, 0.7)',
+                    'rgba(150, 0, 255, 0.7)',
+                    'rgba(255, 100, 0, 0.7)',
+                    'rgba(0, 150, 255, 0.7)',
+                    'rgba(255, 0, 100, 0.7)'
+                ];
+                
+                for (let i = 0; i < count; i++) {
+                    colors.push(baseColors[i % baseColors.length]);
+                }
+                return colors;
+            } else {
+                // Use gradient for bar/line charts
+                return ['rgba(0, 240, 255, 0.7)'];
+            }
+        }
 
+        // Load sample data
+        function loadSampleData() {
+            showLoading();
+            
+            // Sample sales data
+            const sampleData = [
+                { Month: 'January', Sales: 15000, Expenses: 8000, Profit: 7000, Customers: 120 },
+                { Month: 'February', Sales: 18000, Expenses: 8500, Profit: 9500, Customers: 140 },
+                { Month: 'March', Sales: 22000, Expenses: 9000, Profit: 13000, Customers: 160 },
+                { Month: 'April', Sales: 19000, Expenses: 8200, Profit: 10800, Customers: 150 },
+                { Month: 'May', Sales: 25000, Expenses: 9500, Profit: 15500, Customers: 180 },
+                { Month: 'June', Sales: 28000, Expenses: 10000, Profit: 18000, Customers: 200 },
+                { Month: 'July', Sales: 26000, Expenses: 9800, Profit: 16200, Customers: 190 },
+                { Month: 'August', Sales: 30000, Expenses: 11000, Profit: 19000, Customers: 220 },
+                { Month: 'September', Sales: 27000, Expenses: 10500, Profit: 16500, Customers: 210 },
+                { Month: 'October', Sales: 32000, Expenses: 11500, Profit: 20500, Customers: 240 },
+                { Month: 'November', Sales: 35000, Expenses: 12000, Profit: 23000, Customers: 260 },
+                { Month: 'December', Sales: 40000, Expenses: 13000, Profit: 27000, Customers: 300 }
+            ];
+            
+            currentData = sampleData;
+            columnNames = ['Month', 'Sales', 'Expenses', 'Profit', 'Customers'];
+            
+            // Show data preview
+            showDataPreview();
+            
+            // Auto-analyze the sample data
+            setTimeout(() => {
+                analyzeData();
+            }, 500);
+            
+            hideLoading();
+        }
+
+        // Export functions
+        function exportPDF() {
+            alert('PDF export functionality would be implemented here. In a real application, this would generate a PDF report with all analysis results.');
+        }
+
+        function exportCSV() {
+            // Create CSV content with statistics
+            let csvContent = "Statistical Summary\n\n";
+            
+            // Find numeric columns
+            const numericColumns = columnNames.filter(column => {
+                return currentData.some(row => !isNaN(parseFloat(row[column])) && row[column] !== null);
+            });
+            
+            // Add statistics for each numeric column
+            numericColumns.forEach(column => {
+                const values = currentData
+                    .map(row => parseFloat(row[column]))
+                    .filter(val => !isNaN(val));
+                
+                if (values.length === 0) return;
+                
+                const count = values.length;
+                const sum = values.reduce((a, b) => a + b, 0);
+                const mean = sum / count;
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                const squaredDiffs = values.map(value => Math.pow(value - mean, 2));
+                const variance = squaredDiffs.reduce((a, b) => a + b, 0) / count;
+                const stdDev = Math.sqrt(variance);
+                
+                csvContent += `Column: ${column}\n`;
+                csvContent += `Count,${count}\n`;
+                csvContent += `Sum,${sum.toFixed(2)}\n`;
+                csvContent += `Mean,${mean.toFixed(2)}\n`;
+                csvContent += `Min,${min.toFixed(2)}\n`;
+                csvContent += `Max,${max.toFixed(2)}\n`;
+                csvContent += `Standard Deviation,${stdDev.toFixed(2)}\n\n`;
+            });
+            
+            // Create and download the CSV file
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'data_analysis.csv';
+            a.download = 'data_analysis_stats.csv';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
-        // Export to PDF (simulated)
-        function exportToPDF() {
-            alert('PDF export functionality would be implemented with a library like jsPDF');
+        function exportCharts() {
+            if (mainChart) {
+                const mainChartImage = mainChart.toBase64Image();
+                downloadImage(mainChartImage, 'main_chart.png');
+            }
+            
+            if (distributionChart) {
+                const distChartImage = distributionChart.toBase64Image();
+                downloadImage(distChartImage, 'distribution_chart.png');
+            }
+            
+            alert('Charts exported as PNG images!');
         }
 
-        // Format number with commas
-        function formatNumber(num) {
-            return num.toLocaleString('en-IN');
+        function downloadImage(dataUrl, filename) {
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', init);
+        // Utility functions
+        function showLoading() {
+            loadingIndicator.style.display = 'block';
+        }
+
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
     </script>
 </body>
 </html>
