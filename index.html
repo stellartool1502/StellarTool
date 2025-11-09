@@ -145,6 +145,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
         }
 
         .btn {
@@ -205,7 +206,7 @@
             box-shadow: 0 2px 10px rgba(0, 240, 255, 0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             transition: var(--transition);
         }
 
@@ -425,6 +426,7 @@
 
         .tools-section {
             padding: 60px 0;
+            position: relative;
         }
 
         .section-header {
@@ -448,6 +450,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
+            position: relative;
+            z-index: 1;
         }
 
         .tool-card {
@@ -533,6 +537,55 @@
             align-self: flex-start;
             padding: 8px 16px;
             font-size: 0.9rem;
+        }
+
+        /* Ad Container Styles - Fixed Positioning */
+        .ad-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            text-align: center;
+            z-index: 10;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .ad-container iframe,
+        .ad-container div {
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Fixed ad containers that won't affect layout */
+        .ad-fixed-top {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: var(--dark-bg);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--primary-neon);
+        }
+
+        .ad-fixed-side {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            z-index: 999;
+        }
+
+        /* Adsterra specific fixes */
+        #container-35a64ab1615db732cc9c10f28fe0f636,
+        [id*="container-"] {
+            position: relative !important;
+            display: block !important;
+            margin: 10px auto !important;
+            overflow: hidden !important;
         }
 
         /* New Tool Cards with Special Animations */
@@ -943,6 +996,11 @@
             .specialties-grid {
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
+
+            /* Hide fixed side ads on tablet */
+            .ad-fixed-side {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1060,6 +1118,12 @@
                 gap: 30px;
             }
 
+            /* Hide fixed ads on mobile */
+            .ad-fixed-top,
+            .ad-fixed-side {
+                display: none;
+            }
+
             /* Reduce hover effects on mobile for better performance */
             .tool-card:hover {
                 transform: translateY(-3px);
@@ -1172,6 +1236,25 @@
     </style>
 </head>
 <body>
+    <!-- Fixed Ad Containers - These won't affect layout -->
+    <div class="ad-fixed-top" id="fixedTopAd">
+        <!-- Adsterra Top Ad -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'f7b18c73a8f42791ff9348b5265ad846',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    </div>
+
+    <div class="ad-fixed-side" id="fixedSideAd">
+        <!-- Side ad content can go here -->
+    </div>
+
     <!-- Header Section -->
     <header>
         <div class="container">
@@ -1278,6 +1361,14 @@
             </div>
         </div>
     </section>
+
+    <!-- In-content Ad Container -->
+    <div class="container">
+        <div class="ad-container">
+            <!-- Adsterra In-content Ad -->
+            <div id="container-35a64ab1615db732cc9c10f28fe0f636"></div>
+        </div>
+    </div>
 
     <!-- Tools Sections -->
     <section id="tools" class="tools-section">
@@ -2037,6 +2128,33 @@
                 });
             });
 
+            // Adsterra Ads Layout Protection
+            function protectLayoutFromAds() {
+                // Ensure ads don't break layout
+                const adContainers = document.querySelectorAll('[id*="container-"], .ad-container, iframe');
+                adContainers.forEach(container => {
+                    container.style.position = 'relative';
+                    container.style.display = 'block';
+                    container.style.margin = '10px auto';
+                    container.style.overflow = 'hidden';
+                    container.style.zIndex = '10';
+                });
+                
+                // Protect tool cards from ad interference
+                const toolCards = document.querySelectorAll('.tool-card');
+                toolCards.forEach(card => {
+                    card.style.position = 'relative';
+                    card.style.zIndex = '1';
+                });
+            }
+            
+            // Run layout protection
+            protectLayoutFromAds();
+            
+            // Re-run after a delay to catch dynamically loaded ads
+            setTimeout(protectLayoutFromAds, 1000);
+            setTimeout(protectLayoutFromAds, 3000);
+
             // Touch device detection and optimizations
             if ('ontouchstart' in window) {
                 document.body.classList.add('touch-device');
@@ -2178,19 +2296,8 @@
         });
     </script>
     
-    <!-- Ad scripts remain the same -->
-    <script type="text/javascript">
-    atOptions = {
-    'key' : 'f7b18c73a8f42791ff9348b5265ad846',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-    };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js"></script>
+    <!-- Ad scripts -->
     <script async="async" data-cfasync="false" src="//pl27743391.revenuecpmgate.com/35a64ab1615db732cc9c10f28fe0f636/invoke.js"></script>
-    <div id="container-35a64ab1615db732cc9c10f28fe0f636"></div>
     <script type='text/javascript' src='//pl27890836.effectivegatecpm.com/18/00/d4/1800d445f19ef79195d2b2f16048d2c6.js'></script>
 </body>
 </html>
