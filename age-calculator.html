@@ -103,6 +103,11 @@
       font-weight: 600;
     }
 
+    .date-input-container {
+      position: relative;
+      width: 100%;
+    }
+
     input[type="date"] {
       padding: 15px;
       width: 100%;
@@ -112,12 +117,78 @@
       background: #333854;
       color: #e0e6f0;
       transition: all 0.3s ease;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    /* Custom calendar icon */
+    .date-input-container::after {
+      content: "📅";
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 1.2rem;
     }
 
     input[type="date"]:focus {
       outline: none;
       border-color: #00c4ff;
       box-shadow: 0 0 0 3px rgba(0, 196, 255, 0.2);
+    }
+
+    /* For Webkit browsers */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      background: transparent;
+      color: transparent;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    /* Manual date input fallback */
+    .manual-input {
+      display: none;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .manual-input.active {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .manual-input select,
+    .manual-input input {
+      padding: 12px;
+      border: 2px solid #40445a;
+      border-radius: 8px;
+      background: #333854;
+      color: #e0e6f0;
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .toggle-input {
+      background: transparent;
+      border: 1px solid #8e2de2;
+      color: #8e2de2;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-input:hover {
+      background: rgba(142, 45, 226, 0.1);
     }
 
     button {
@@ -198,7 +269,6 @@
       overflow: hidden;
     }
 
-    /* Hide the ad configuration text */
     .ad-container script[type="text/javascript"] {
       display: none !important;
     }
@@ -232,6 +302,15 @@
       input[type="date"] {
         padding: 12px;
         font-size: 0.95rem;
+      }
+      
+      .manual-input {
+        flex-direction: column;
+      }
+      
+      .manual-input select,
+      .manual-input input {
+        width: 100%;
       }
       
       button {
@@ -282,20 +361,6 @@
         min-height: 60px;
       }
     }
-
-    @media (max-width: 360px) {
-      body {
-        padding: 10px;
-      }
-      
-      .container {
-        padding: 15px 12px;
-      }
-      
-      h1 {
-        font-size: 1.3rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -314,7 +379,28 @@
     
     <div class="input-group">
       <label for="dob">Select Your Date of Birth:</label>
-      <input type="date" id="dob" />
+      <div class="date-input-container">
+        <input type="date" id="dob" min="1900-01-01" max="" />
+      </div>
+      
+      <button type="button" class="toggle-input" onclick="toggleManualInput()">
+        📝 Manual Date Entry (100+ Years)
+      </button>
+      
+      <div class="manual-input" id="manualInput">
+        <select id="day">
+          <option value="">Day</option>
+        </select>
+        <select id="month">
+          <option value="">Month</option>
+        </select>
+        <select id="year">
+          <option value="">Year</option>
+        </select>
+        <button type="button" onclick="setManualDate()" style="margin-top: 10px; padding: 10px;">
+          Set Date
+        </button>
+      </div>
     </div>
     
     <button onclick="calculateAge()">Calculate My Age</button>
@@ -343,6 +429,112 @@
   </div>
 
   <script>
+    // Initialize date dropdowns with 100+ years range
+    function initializeDateDropdowns() {
+      const daySelect = document.getElementById('day');
+      const monthSelect = document.getElementById('month');
+      const yearSelect = document.getElementById('year');
+      
+      // Clear existing options
+      daySelect.innerHTML = '<option value="">Day</option>';
+      monthSelect.innerHTML = '<option value="">Month</option>';
+      yearSelect.innerHTML = '<option value="">Year</option>';
+      
+      // Populate days (1-31)
+      for (let i = 1; i <= 31; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        daySelect.appendChild(option);
+      }
+      
+      // Populate months
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      months.forEach((month, index) => {
+        const option = document.createElement('option');
+        option.value = index + 1;
+        option.textContent = month;
+        monthSelect.appendChild(option);
+      });
+      
+      // Populate years (Current year - 150 years back)
+      const currentYear = new Date().getFullYear();
+      const startYear = currentYear - 150; // 150 years back
+      
+      for (let i = currentYear; i >= startYear; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        yearSelect.appendChild(option);
+      }
+    }
+    
+    // Set proper date range for calendar
+    function setCalendarDateRange() {
+      const dobInput = document.getElementById('dob');
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      
+      // Set max date to today
+      dobInput.max = currentDate.toISOString().split('T')[0];
+      
+      // Set min date to 150 years ago
+      const minDate = new Date(currentYear - 150, 0, 1);
+      dobInput.min = minDate.toISOString().split('T')[0];
+      
+      console.log('Calendar date range:', dobInput.min, 'to', dobInput.max);
+    }
+    
+    // Toggle manual date input
+    function toggleManualInput() {
+      const manualInput = document.getElementById('manualInput');
+      const toggleBtn = document.querySelector('.toggle-input');
+      
+      if (manualInput.classList.contains('active')) {
+        manualInput.classList.remove('active');
+        toggleBtn.textContent = '📝 Manual Date Entry (100+ Years)';
+      } else {
+        manualInput.classList.add('active');
+        toggleBtn.textContent = '📅 Use Calendar';
+      }
+    }
+    
+    // Set date from manual input
+    function setManualDate() {
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      const year = document.getElementById('year').value;
+      
+      if (!day || !month || !year) {
+        alert('Please select day, month, and year');
+        return;
+      }
+      
+      // Validate date
+      const date = new Date(year, month - 1, day);
+      if (date.getDate() != day || date.getMonth() != month - 1 || date.getFullYear() != year) {
+        alert('Invalid date selected. Please check the day, month, and year combination.');
+        return;
+      }
+      
+      // Format date as YYYY-MM-DD
+      const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      document.getElementById('dob').value = formattedDate;
+      
+      // Hide manual input
+      document.getElementById('manualInput').classList.remove('active');
+      document.querySelector('.toggle-input').textContent = '📝 Manual Date Entry (100+ Years)';
+      
+      // Show success message
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `✅ Date set to: ${day}/${month}/${year}`;
+      resultDiv.style.color = '#00c4ff';
+    }
+    
+    // Main age calculation function
     function calculateAge() {
       const dob = document.getElementById("dob").value;
       const resultDiv = document.getElementById("result");
@@ -359,6 +551,15 @@
       // Check if birth date is in the future
       if (birthDate > today) {
         resultDiv.innerHTML = "❌ Date of birth cannot be in the future!";
+        resultDiv.style.color = "#ff6b6b";
+        return;
+      }
+
+      // Check if birth date is too old (more than 150 years)
+      const maxAge = 150;
+      const ageInYears = today.getFullYear() - birthDate.getFullYear();
+      if (ageInYears > maxAge) {
+        resultDiv.innerHTML = `❌ Age cannot be more than ${maxAge} years.`;
         resultDiv.style.color = "#ff6b6b";
         return;
       }
@@ -390,19 +591,22 @@
       }
     }
 
-    // Set max date to today
-    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
-    
-    // Add enter key support
-    document.getElementById('dob').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        calculateAge();
-      }
-    });
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set proper calendar date range
+      setCalendarDateRange();
+      
+      // Initialize date dropdowns with 150 years range
+      initializeDateDropdowns();
+      
+      // Add enter key support
+      document.getElementById('dob').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          calculateAge();
+        }
+      });
 
-    // Load ads after page load (hidden configuration)
-    window.addEventListener('load', function() {
-      // Adsterra ad configuration (hidden from view)
+      // Load ads after page load (hidden configuration)
       const atOptions = {
         'key' : 'f7b18c73a8f42791ff9348b5265ad846',
         'format' : 'iframe',
@@ -416,6 +620,11 @@
       adScript.type = 'text/javascript';
       adScript.src = '//www.highperformanceformat.com/f7b18c73a8f42791ff9348b5265ad846/invoke.js';
       document.querySelector('.ad-container').appendChild(adScript);
+    });
+
+    // Additional fix for mobile calendar
+    document.getElementById('dob').addEventListener('focus', function() {
+      this.showPicker && this.showPicker();
     });
   </script>
   
