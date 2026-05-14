@@ -1,1 +1,660 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Digit Formatter | Extract Numbers from Any Text</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* modern glassmorphic card */
+        .formatter-card {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(18, 24, 38, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(72, 187, 255, 0.15);
+            padding: 2rem 1.8rem;
+            transition: transform 0.25s ease;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+        }
+
+        .formatter-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 30px 55px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 212, 255, 0.4);
+        }
+
+        /* heading style */
+        .brand {
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .brand h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #C0F2FF, #7C9BFF, #A855F7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .badge-desc {
+            text-align: center;
+            color: #a3c2e0;
+            font-weight: 450;
+            border-bottom: 1px dashed rgba(100, 150, 255, 0.4);
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 1rem;
+            padding-bottom: 0.5rem;
+            font-size: 0.95rem;
+            background: rgba(0, 20, 40, 0.5);
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #bbd4ff;
+            font-weight: 400;
+            background: rgba(0, 30, 60, 0.4);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(2px);
+        }
+
+        /* input area */
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .input-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.6rem;
+            color: #cbd5ff;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+        }
+
+        .input-label span:first-child {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            background: rgba(72, 187, 255, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .char-count {
+            font-size: 0.8rem;
+            background: #0f172f;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-family: monospace;
+            color: #8bbdff;
+        }
+
+        textarea {
+            width: 100%;
+            background: #0b1120;
+            border: 1.5px solid #2d3a5e;
+            border-radius: 1.6rem;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+            color: #f0f3ff;
+            resize: vertical;
+            transition: all 0.2s ease;
+            outline: none;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        textarea:focus {
+            border-color: #5f9eff;
+            box-shadow: 0 0 0 3px rgba(79, 139, 255, 0.4), inset 0 1px 3px #00000055;
+        }
+
+        /* output section */
+        .output-section {
+            background: #070c18;
+            border-radius: 1.5rem;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid #283457;
+            transition: 0.2s;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .output-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #b9d0ff;
+            letter-spacing: -0.2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .output-header h3 i {
+            font-size: 1rem;
+            color: #6ea8fe;
+        }
+
+        .digit-length {
+            background: #00000055;
+            padding: 0.2rem 0.8rem;
+            border-radius: 36px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #90caf9;
+        }
+
+        .result-box {
+            background: #03070f;
+            border-radius: 1.2rem;
+            padding: 1rem 1.2rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            font-weight: 500;
+            word-break: break-all;
+            letter-spacing: 0.5px;
+            color: #e2eaff;
+            margin-bottom: 1rem;
+            min-height: 80px;
+            border: 1px solid #1f2b48;
+            transition: all 0.2s;
+        }
+
+        .result-placeholder {
+            opacity: 0.6;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        /* button row */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            border: none;
+            background: #111827;
+            padding: 0.75rem 1.6rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            backdrop-filter: blur(4px);
+            color: #eef4ff;
+            border: 1px solid #2f3e6e;
+        }
+
+        .btn-primary {
+            background: linear-gradient(105deg, #2b3b6e, #16213e);
+            border: 1px solid #4c7eff;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 100, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(105deg, #3e55a5, #1f2b5c);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 120, 255, 0.3);
+            border-color: #809eff;
+        }
+
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #293654;
+            transform: translateY(-2px);
+            border-color: #5f7eb0;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* toast notification */
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2c46e6;
+            backdrop-filter: blur(12px);
+            color: #e6f0ff;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 1px solid #628eff;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+            font-family: monospace;
+        }
+
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* example hint */
+        .example-hint {
+            margin-top: 1.8rem;
+            background: #0a0f1c80;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #9bb5e6;
+            border-left: 3px solid #4f7eff;
+        }
+
+        .example-hint strong {
+            color: #ffe1a0;
+            font-weight: 600;
+        }
+
+        /* responsive tweaks */
+        @media (max-width: 550px) {
+            .formatter-card {
+                padding: 1.5rem;
+            }
+            .brand h1 {
+                font-size: 1.9rem;
+            }
+            .result-box {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            .action-buttons {
+                justify-content: stretch;
+            }
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .formatter-card {
+                border-radius: 1.8rem;
+            }
+            .brand h1 {
+                font-size: 1.7rem;
+            }
+        }
+
+        /* custom scroll */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0f1c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2f4680;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="formatter-card">
+    <div class="brand">
+        <h1>🔢 Digit Formatter</h1>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <div class="badge-desc">📱 extract · clean · numeric</div>
+    </div>
+    <div class="description">
+        ✨ Extract only numeric digits from messy text, phone numbers, symbols, or codes.
+    </div>
+
+    <!-- INPUT AREA -->
+    <div class="input-group">
+        <div class="input-label">
+            <span><i class="fas fa-pencil-alt" style="margin-right: 6px;"></i> Raw Input</span>
+            <span class="char-count" id="rawCharCount">0 characters</span>
+        </div>
+        <textarea id="rawInput" rows="3" placeholder="Paste or type anything...&#10;Examples: (986)-235-0008 9  |  +1 (800) 123-HELLO  |  Invoice #A12-34B56"></textarea>
+    </div>
+
+    <!-- OUTPUT SECTION with live extracted digits -->
+    <div class="output-section">
+        <div class="output-header">
+            <h3>
+                <i class="fas fa-filter"></i> 
+                🧹 Clean Digits Only
+            </h3>
+            <span class="digit-length" id="digitLengthDisplay">0 digits</span>
+        </div>
+        <div class="result-box" id="resultBox">
+            <span id="cleanOutput" class="result-placeholder">— no digits extracted yet —</span>
+        </div>
+
+        <!-- BUTTONS GROUP -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="copyBtn">
+                <i class="fas fa-copy"></i> Copy Digits
+            </button>
+            <button class="btn btn-secondary" id="clearBtn">
+                <i class="fas fa-trash-alt"></i> Clear All
+            </button>
+        </div>
+    </div>
+
+    <!-- interactive example to show conversion -->
+    <div class="example-hint">
+        💡 <strong>Example:</strong> Input: <span style="font-family: monospace;">(986)-235-0008 9</span> → 
+        <strong style="color: #ffd966;">Output: 98623500089</strong>
+        <br>
+        <span style="font-size: 0.7rem;">⚡ Removes letters, spaces, punctuation, emojis, etc. — only digits survive.</span>
+    </div>
+</div>
+
+<!-- toast container -->
+<div id="toastNotif" class="toast-msg">📋 Copied to clipboard!</div>
+
+<!-- Fontawesome 6 (free icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+    (function() {
+        // DOM elements
+        const textarea = document.getElementById('rawInput');
+        const cleanOutputSpan = document.getElementById('cleanOutput');
+        const digitLengthSpan = document.getElementById('digitLengthDisplay');
+        const rawCharCountSpan = document.getElementById('rawCharCount');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const toastEl = document.getElementById('toastNotif');
+
+        // core extraction regex: remove all non-digit characters
+        function extractOnlyDigits(inputText) {
+            if (!inputText) return '';
+            // \D matches any character that is NOT a digit (0-9)
+            return inputText.replace(/\D/g, '');
+        }
+
+        // update UI: show clean output, update digit count & live raw length
+        function updateFormatter() {
+            const rawValue = textarea.value;
+            // update raw character counter (shows total characters, including anything)
+            const rawLength = rawValue.length;
+            rawCharCountSpan.textContent = `${rawLength} character${rawLength !== 1 ? 's' : ''}`;
+            
+            // extract numeric digits
+            const digitsOnly = extractOnlyDigits(rawValue);
+            const digitCount = digitsOnly.length;
+            
+            // update clean output display with placeholder if empty
+            if (digitCount === 0) {
+                cleanOutputSpan.textContent = '— no digits extracted yet —';
+                cleanOutputSpan.classList.add('result-placeholder');
+                // also if digitsOnly empty string, we show placeholder
+            } else {
+                cleanOutputSpan.textContent = digitsOnly;
+                cleanOutputSpan.classList.remove('result-placeholder');
+            }
+            
+            // update digit length indicator
+            digitLengthSpan.textContent = `${digitCount} digit${digitCount !== 1 ? 's' : ''}`;
+            
+            // store extracted digits in a data attribute for copy operation (handy)
+            textarea.setAttribute('data-clean-digits', digitsOnly);
+        }
+        
+        // show toast with custom message (fade effect)
+        function showToast(message = '📋 Copied to clipboard!') {
+            // change text if needed
+            toastEl.textContent = message;
+            toastEl.classList.add('show');
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 2000);
+        }
+        
+        // copy the extracted digits to clipboard
+        async function copyDigitsToClipboard() {
+            const rawValue = textarea.value;
+            const digitsOnly = extractOnlyDigits(rawValue);
+            
+            if (!digitsOnly) {
+                // no digits to copy, show warning toast
+                showToast('⚠️ No digits to copy!');
+                return;
+            }
+            
+            try {
+                await navigator.clipboard.writeText(digitsOnly);
+                showToast(`✅ Copied ${digitsOnly.length} digit${digitsOnly.length !== 1 ? 's' : ''}!`);
+                // add subtle animation on copy button (feedback)
+                copyBtn.style.transform = 'scale(0.97)';
+                setTimeout(() => { copyBtn.style.transform = ''; }, 150);
+            } catch (err) {
+                console.error('Copy failed:', err);
+                // fallback for older browsers / permission issues
+                if (document.execCommand) {
+                    const tempInput = document.createElement('textarea');
+                    tempInput.value = digitsOnly;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    showToast('📋 Copied (fallback)');
+                } else {
+                    showToast('❌ Copy failed, manual copy needed');
+                }
+            }
+        }
+        
+        // clear input and reset everything
+        function clearAllFields() {
+            textarea.value = '';
+            updateFormatter();   // reset all displays to empty state
+            // focus back to input
+            textarea.focus();
+            // optional extra animation on clear btn
+            clearBtn.style.transform = 'scale(0.97)';
+            setTimeout(() => { clearBtn.style.transform = ''; }, 150);
+            showToast('🧹 All fields cleared');
+        }
+        
+        // event listeners: live update on input, paste, keyup
+        textarea.addEventListener('input', updateFormatter);
+        textarea.addEventListener('paste', () => {
+            // slight delay to ensure paste content is captured, but input event handles it perfectly
+            // we still call updateFormatter after tiny delay to be safe, but input is enough.
+            setTimeout(updateFormatter, 5);
+        });
+        
+        // copy button listener
+        copyBtn.addEventListener('click', copyDigitsToClipboard);
+        
+        // clear button listener
+        clearBtn.addEventListener('click', clearAllFields);
+        
+        // prevent accidental form reloads (no forms but still safe)
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+            });
+        });
+        
+        // initial call to set placeholder and empty state + demo example text according to modern UX.
+        // to match example from requirement, we set a default example that showcases phone number format.
+        // but we don't force any content; we can set initial example so that user sees the tool working immediately.
+        // (but we should not auto-fill without user? but it's a demo to show functionality - good practice)
+        // however to be user friendly and match given example, we preset placeholder but actual value empty?
+        // Instead, we will provide an initial example that can be deleted. It shows the power.
+        // set example text that matches the shown example "(986)-235-0008 9"
+        const DEMO_EXAMPLE = "(986)-235-0008 9";
+        // check if there is already value? generally empty. setting demo but user can modify instantly.
+        if (textarea.value === "") {
+            textarea.value = DEMO_EXAMPLE;
+            updateFormatter();   // updates UI with digits: 98623500089
+            // also display length
+            // additionally keep focus border but no cursor jump? but it's fine.
+        } else {
+            updateFormatter();
+        }
+        
+        // Add enhancement: live sync for better accessibility
+        window.addEventListener('load', () => {
+            updateFormatter();
+            // set cursor at end optionally
+            if (textarea.value === DEMO_EXAMPLE) {
+                // set cursor at end for easy deletion
+                textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+            }
+        });
+        
+        // also update on any other changes ( cut etc )
+        document.addEventListener('selectionchange', () => {
+            // not needed but ensures smoothness, but input covers all edits
+        });
+        
+        // Optional: live character count also updates when raw input is cleared via external means.
+        // extra: simple theme force background consistency.
+        // disable any right-click context menu on buttons? no needed.
+        
+        // implement keyboard shortcut hint: Ctrl+C inside result area? not required, but copy button is enough.
+        // Additional responsiveness: update resultBox display style
+        // the cleanOutputSpan inner text will be updated accordingly.
+        
+        // perfect: also handle if someone pastes with emojis, digits-only extraction works.
+        // Add safety for very long strings: browser handles fine.
+        
+        // Add copy button alternative double-check to avoid empty spaces
+        // data-clean-digits we used for convenience inside updateFormatter sets attribute.
+        function getCleanDigitsFromData() {
+            return extractOnlyDigits(textarea.value);
+        }
+        
+        // Override copy function safety
+        window.copyDigitsToClipboard = copyDigitsToClipboard;  // debug no effect
+        
+        // show valid initial digit count for example
+        // also we can attach styles for result placeholder removal when digits appear.
+        
+        // ensure toast is correctly hidden at start
+        toastEl.classList.remove('show');
+        
+        // add accessibility and additional polish: when resultBox digits are long, wrap is handled by word-break.
+        // also we will add one little feature: the digit length shows count with proper plural.
+        // Also adds a 'copy' icon via gradient animation on hover
+        
+        // prevents page reload if any form submission (but we have no form)
+        document.querySelectorAll('form').length === 0; // safe
+        
+        // additional: live updating for paste via context menu? input event covers all changes.
+        // finally, also adds a custom dynamic background to result based on digit count (soft glow if digits >0)
+        function updateResultGlow() {
+            const digitsRaw = extractOnlyDigits(textarea.value);
+            const resultContainer = document.getElementById('resultBox');
+            if (digitsRaw.length > 0) {
+                resultContainer.style.border = '1px solid #5f9eff';
+                resultContainer.style.boxShadow = '0 0 6px rgba(79, 139, 255, 0.3)';
+            } else {
+                resultContainer.style.border = '1px solid #1f2b48';
+                resultContainer.style.boxShadow = 'none';
+            }
+        }
+        
+        // extend updateFormatter to also apply glow
+        const originalUpdate = updateFormatter;
+        window.updateFormatter = updateFormatter;
+        updateFormatter = function() {
+            originalUpdate();
+            updateResultGlow();
+        }.bind(this);
+        
+        // replace the global function and re-run
+        // reassign event listeners indirectly by overriding
+        // but simpler: monkey patch
+        const superUpdate = updateFormatter;
+        textarea.addEventListener('input', () => {
+            updateFormatter();
+        });
+        // replace existing references
+        window.updateFormatter = updateFormatter;
+        // override the stored variable but not needed, just rebind to fresh.
+        // safe
+        updateFormatter();
+        
+        // final extra tweak: add event listener for any modifications 
+        // also display proper placeholder for output when digits empty
+        // Also ensure the example requirement "Input: (986)-235-0008 9 -> Output: 98623500089" is visible via demo text.
+        // the demo example makes it perfect.
+        // Done: all core features live update, copy button, clear, toast, modern.
+        // Dark theme, rounded corners, smooth animations on hover and buttons, icons.
+        // plus character count for extracted digits already shown on top of output section (digitLengthDisplay)
+        // plus raw character count upper right.
+        // plus clean modern UI.
+        // Prevent page reloads (no buttons cause reloads)
+        // Pure vanilla HTML/CSS/JS.
+        // regex used: replace(/\D/g, '')
+        
+        // final check: copy even if digits are huge.
+        // adjust result placeholder improvement:
+        const finalCleanSpan = document.getElementById('cleanOutput');
+        const observer = new MutationObserver(() => {});
+        // all good.
+    })();
+</script>
+</body>
+</html>
