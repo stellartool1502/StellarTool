@@ -199,28 +199,32 @@
             margin-bottom: 0;
         }
 
+        /* MINI CALENDAR - CHHOTA SIZE */
         .mini-calendar {
             background: var(--dark-bg);
             border-radius: var(--border-radius);
-            padding: 15px;
+            padding: 12px;
             border: 1px solid rgba(0, 240, 255, 0.2);
             margin-top: 10px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .calendar-nav {
             background: transparent;
             border: none;
             color: var(--primary-neon);
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 8px;
             transition: var(--transition);
         }
@@ -232,25 +236,26 @@
         .calendar-month-year {
             font-weight: 600;
             color: var(--light-text);
+            font-size: 0.85rem;
         }
 
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .calendar-weekdays div {
-            font-size: 0.8rem;
+            font-size: 0.65rem;
             color: var(--medium-text);
-            padding: 5px;
+            padding: 4px;
         }
 
         .calendar-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 3px;
         }
 
         .calendar-day {
@@ -258,11 +263,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             cursor: pointer;
             border-radius: 50%;
             transition: var(--transition);
             color: var(--light-text);
+            width: 32px;
+            height: 32px;
+            margin: 0 auto;
         }
 
         .calendar-day:hover {
@@ -279,13 +287,13 @@
         .calendar-day.result-highlight {
             background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
             animation: resultPulse 0.6s ease;
         }
 
         @keyframes resultPulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
@@ -530,7 +538,7 @@
             border-radius: 10px;
             margin-top: 15px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
 
@@ -543,7 +551,8 @@
             .today-date { font-size: 1.5rem; }
             .date-picker-row { flex-direction: column; }
             .date-range { flex-direction: column; }
-            .calendar-day { font-size: 0.7rem; }
+            .calendar-day { width: 28px; height: 28px; font-size: 0.65rem; }
+            .mini-calendar { max-width: 260px; }
         }
     </style>
 </head>
@@ -588,6 +597,7 @@
                     </div>
                 </div>
                 
+                <!-- CHHOTA CALENDAR -->
                 <div class="mini-calendar">
                     <div class="calendar-header">
                         <button class="calendar-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
@@ -660,7 +670,7 @@
                 <strong><i class="fas fa-lightbulb"></i> Example:</strong> 
                 <span id="demoText">Loading...</span>
                 <br>
-                <span style="font-size: 0.75rem;">✨ <strong>Accurate Calculation:</strong> The result date is highlighted in ORANGE on the calendar</span>
+                <span style="font-size: 0.75rem;">✨ Click on any date in the calendar to select it!</span>
             </div>
 
             <div class="test-result" id="testResult">
@@ -682,7 +692,6 @@
 
 <script>
     (function() {
-        // DOM Elements
         const todayDateSpan = document.getElementById('todayDate');
         const baseDateInput = document.getElementById('baseDate');
         const daysAmount = document.getElementById('daysAmount');
@@ -717,7 +726,6 @@
         let selectedDate = new Date();
         let currentResultDate = null;
 
-        // Simple date formatter (no timezone issues)
         function formatDateSimple(year, month, day) {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -729,7 +737,6 @@
             };
         }
 
-        // Get today's date as {year, month, day}
         function getTodayParts() {
             const now = new Date();
             return {
@@ -744,14 +751,12 @@
             const { formatted, dayName } = formatDateSimple(year, month, day);
             todayDateSpan.textContent = `${formatted} (${dayName})`;
             
-            // Update demo text
             const after2Days = addDaysToDate(year, month, day, 2);
             const { formatted: todayFormatted } = formatDateSimple(year, month, day);
             const { formatted: afterFormatted } = formatDateSimple(after2Days.year, after2Days.month, after2Days.day);
             demoTextSpan.innerHTML = `Today (${todayFormatted}) + 2 days = <strong style="color:#ff8e53;">${afterFormatted}</strong>`;
         }
 
-        // Add days to a date (returns new date parts)
         function addDaysToDate(year, month, day, daysToAdd) {
             const date = new Date(year, month, day);
             date.setDate(date.getDate() + daysToAdd);
@@ -762,7 +767,6 @@
             };
         }
 
-        // Parse date input (YYYY-MM-DD) to parts
         function parseDateInput(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('-');
@@ -795,7 +799,6 @@
             const selectedISO = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth()+1).padStart(2,'0')}-${String(selectedDate.getDate()).padStart(2,'0')}`;
             const resultISO = currentResultDate ? `${currentResultDate.getFullYear()}-${String(currentResultDate.getMonth()+1).padStart(2,'0')}-${String(currentResultDate.getDate()).padStart(2,'0')}` : null;
             
-            // Previous month days
             for (let i = startingDayOfWeek - 1; i >= 0; i--) {
                 const day = prevMonthLastDay - i;
                 const dayDiv = document.createElement('div');
@@ -805,7 +808,6 @@
                 calendarDaysDiv.appendChild(dayDiv);
             }
             
-            // Current month days
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDiv = document.createElement('div');
                 dayDiv.classList.add('calendar-day');
@@ -813,23 +815,14 @@
                 
                 const currentISO = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
                 
-                if (currentISO === selectedISO) {
-                    dayDiv.classList.add('selected');
-                }
-                
-                if (resultISO && currentISO === resultISO) {
-                    dayDiv.classList.add('result-highlight');
-                }
-                
-                if (year === todayParts.year && month === todayParts.month && day === todayParts.day) {
-                    dayDiv.classList.add('today');
-                }
+                if (currentISO === selectedISO) dayDiv.classList.add('selected');
+                if (resultISO && currentISO === resultISO) dayDiv.classList.add('result-highlight');
+                if (year === todayParts.year && month === todayParts.month && day === todayParts.day) dayDiv.classList.add('today');
                 
                 dayDiv.addEventListener('click', () => selectDateFromCalendar(year, month, day));
                 calendarDaysDiv.appendChild(dayDiv);
             }
             
-            // Next month days
             const totalCells = 42;
             const cellsUsed = startingDayOfWeek + daysInMonth;
             const remainingCells = totalCells - cellsUsed;
@@ -882,9 +875,7 @@
             }, 2000);
         }
 
-        // ACCURATE date calculation - FIXED!
         function calculateAddSubtract() {
-            // Get base date
             let baseParts;
             if (baseDateInput.value) {
                 baseParts = parseDateInput(baseDateInput.value);
@@ -901,13 +892,10 @@
             const isSubtract = direction.value === 'subtract';
             const finalDays = isSubtract ? -days : days;
             
-            // Calculate final date
             const finalParts = addDaysToDate(baseParts.year, baseParts.month, baseParts.day, finalDays);
             
-            // Store result for calendar highlight
             currentResultDate = new Date(finalParts.year, finalParts.month, finalParts.day);
             
-            // Display result
             const { formatted, dayName } = formatDateSimple(finalParts.year, finalParts.month, finalParts.day);
             const { formatted: baseFormatted } = formatDateSimple(baseParts.year, baseParts.month, baseParts.day);
             
@@ -917,8 +905,7 @@
             resultLabel.innerHTML = `📅 ${days} Days ${operation} ${baseFormatted}`;
             differenceExtra.style.display = 'none';
             
-            // Update verification
-            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> ${baseFormatted} + ${days} days = <strong style="color:#ff8e53; font-size:1.1rem;">${formatted} (${dayName})</strong> ✅`;
+            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> ${baseFormatted} + ${days} days = <strong style="color:#ff8e53; font-size:1rem;">${formatted} (${dayName})</strong> ✅`;
             
             renderCalendar();
             highlightResult();
@@ -943,7 +930,6 @@
             
             currentResultDate = new Date(endParts.year, endParts.month, endParts.day);
             
-            // Calculate difference in days
             const startDate = new Date(startParts.year, startParts.month, startParts.day);
             const endDate = new Date(endParts.year, endParts.month, endParts.day);
             const diffTime = Math.abs(endDate - startDate);
@@ -970,7 +956,7 @@
             diffWeeksSpan.textContent = `📆 ${weeksText}`;
             differenceExtra.style.display = 'block';
             
-            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> Difference = <strong style="color:#ff8e53; font-size:1.1rem;">${diffDays} days</strong> (${weeksText}) ✅`;
+            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> Difference = <strong style="color:#ff8e53; font-size:1rem;">${diffDays} days</strong> (${weeksText}) ✅`;
             
             renderCalendar();
             highlightResult();
@@ -1066,7 +1052,6 @@
         setInputsToToday();
         calculate();
 
-        // Theme Toggle
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = themeToggleBtn.querySelector('i');
         const currentTheme = localStorage.getItem('theme') || 'dark';
