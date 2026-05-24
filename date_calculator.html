@@ -1,484 +1,1096 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Date Calculator - Highlight N Consecutive Days After Any Selected Date </title>
+    <title>Date Calculator | Add/Subtract Days, Find Future/Past Dates - Stellar Tools</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff00e6;
+            --dark-bg: #1a1a2e;
+            --card-bg: #2a2a4e;
+            --light-text: #e0e0ff;
+            --medium-text: #b0b0cc;
+            --accent-gradient: linear-gradient(45deg, #00f0ff, #ff00e6);
+            --card-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s ease-in-out;
+            --highlight-glow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+
+        :root[data-theme="light"] {
+            --primary-neon: #0077cc;
+            --secondary-neon: #cc0066;
+            --dark-bg: #f5f7ff;
+            --card-bg: #ffffff;
+            --light-text: #333366;
+            --medium-text: #666699;
+            --accent-gradient: linear-gradient(45deg, #0077cc, #cc0066);
+            --card-shadow: 0 4px 20px rgba(0, 119, 204, 0.15);
+            --hover-shadow: 0 8px 30px rgba(0, 119, 204, 0.25);
+        }
+
         * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            padding: 40px 20px;
+            transition: var(--transition);
+        }
+
         .container {
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            max-width: 600px;
-            width: 100%;
-            padding: 24px 20px 32px 20px;
-            transition: all 0.3s ease;
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        h1 {
-            font-size: 1.7rem;
-            color: #2d3748;
+
+        .tools-header {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 40px;
         }
-        .sub {
-            text-align: center;
-            color: #4a5568;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 12px;
+
+        .tools-header h1 {
+            font-size: 2.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 30px;
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 28px;
+
+        .tools-header p {
+            color: var(--medium-text);
+            font-size: 1.1rem;
         }
-        .date-box {
-            background: white;
-            border-radius: 28px;
-            padding: 5px 15px;
+
+        .back-home {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary-neon);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .back-home:hover {
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        .tool-card-main {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .tool-card-main:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: var(--primary-neon);
+        }
+
+        .tool-header {
+            padding: 25px 30px 0 30px;
             display: flex;
             align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tool-icon-large {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-neon);
+            font-size: 1.8rem;
+        }
+
+        .tool-title h2 {
+            font-size: 1.5rem;
+            color: var(--light-text);
+        }
+
+        .tool-title p {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+
+        .tool-body {
+            padding: 25px 30px;
+        }
+
+        .today-banner {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 230, 0.05));
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .today-banner span {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+
+        .today-date {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 5px;
+        }
+
+        .mode-tabs {
+            display: flex;
             gap: 10px;
-            border: 1px solid #cbd5e0;
+            margin-bottom: 30px;
+            background: var(--dark-bg);
+            padding: 5px;
+            border-radius: 50px;
+        }
+
+        .mode-btn {
             flex: 1;
-            min-width: 200px;
-        }
-        .date-box label {
-            font-weight: 600;
-            color: #2c5282;
-        }
-        input[type="date"] {
+            padding: 12px;
             border: none;
             background: transparent;
-            font-size: 1rem;
-            padding: 10px 5px;
-            font-weight: 500;
-            color: #1a202c;
-            outline: none;
+            color: var(--medium-text);
+            font-weight: 600;
             cursor: pointer;
-            flex: 1;
-        }
-        .days-slider {
-            flex: 1;
-            min-width: 200px;
-            background: white;
             border-radius: 40px;
-            padding: 5px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid #cbd5e0;
+            transition: var(--transition);
+            font-size: 0.95rem;
         }
-        .days-slider span {
-            font-weight: bold;
-            color: #2b6cb0;
-        }
-        input[type="range"] {
-            flex: 1;
-            cursor: pointer;
-            accent-color: #764ba2;
-        }
-        .days-value {
-            background: #764ba2;
+
+        .mode-btn.active {
+            background: var(--accent-gradient);
             color: white;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-weight: bold;
-            min-width: 65px;
-            text-align: center;
+            box-shadow: var(--card-shadow);
         }
-        .calendar {
-            background: #ffffff;
-            border-radius: 28px;
-            border: 1px solid #e9ecef;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            margin-top: 15px;
+
+        .mode-btn:hover:not(.active) {
+            color: var(--primary-neon);
         }
+
+        .date-picker-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .date-picker-row .input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .mini-calendar {
+            background: var(--dark-bg);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            margin-top: 10px;
+        }
+
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 15px;
         }
-        .calendar-header button {
-            background: #e2e8f0;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .calendar-header button:hover {
-            background: #cbd5e0;
-        }
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            background: #f1f5f9;
-            text-align: center;
-            font-weight: 700;
-            color: #334155;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .dates-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            padding: 16px 12px;
-            background: white;
-        }
-        .date-cell {
-            text-align: center;
-            padding: 10px 4px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.1s linear;
-            color: #1e293b;
-            cursor: default;
-        }
-        .date-cell.other-month {
-            color: #94a3b8;
+
+        .calendar-nav {
             background: transparent;
+            border: none;
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: var(--transition);
         }
-        .date-cell.highlight {
-            background: #fbbf24;
-            color: #1e293b;
-            font-weight: 800;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+        .calendar-nav:hover {
+            background: rgba(0, 240, 255, 0.1);
         }
-        .date-cell.base-date {
-            border: 3px solid #3b82f6;
-            background: #eff6ff;
-            font-weight: 800;
+
+        .calendar-month-year {
+            font-weight: 600;
+            color: var(--light-text);
         }
-        .info-bar {
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-weekdays div {
+            font-size: 0.8rem;
+            color: var(--medium-text);
+            padding: 5px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: var(--transition);
+            color: var(--light-text);
+        }
+
+        .calendar-day:hover {
+            background: rgba(0, 240, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--card-shadow);
+        }
+
+        .calendar-day.result-highlight {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+            animation: resultPulse 0.6s ease;
+        }
+
+        @keyframes resultPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--primary-neon);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            flex-wrap: wrap;
-            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+
+        .input-label i {
+            color: var(--primary-neon);
+            margin-right: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--dark-bg);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: var(--border-radius);
             padding: 12px 15px;
-            background: #f8fafc;
-            border-radius: 28px;
+            font-size: 1rem;
+            color: var(--light-text);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+        }
+
+        .days-input-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .days-input-wrapper input {
+            flex: 2;
+        }
+
+        .days-input-wrapper select {
+            flex: 1;
+        }
+
+        .result-section {
+            background: var(--dark-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .result-section.highlight {
+            border-color: #ff6b6b;
+            box-shadow: var(--highlight-glow);
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+            margin-bottom: 10px;
+        }
+
+        .result-date {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .result-day {
+            font-size: 1.1rem;
+            color: var(--primary-neon);
+        }
+
+        .difference-result {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0, 240, 255, 0.2);
+        }
+
+        .difference-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-neon);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
             font-size: 0.9rem;
         }
-        .highlight-count {
-            background: #fbbf24;
-            padding: 5px 14px;
-            border-radius: 26px;
-            font-weight: bold;
-            color: #2d3748;
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
         }
-        .base-date-info {
-            font-weight: 600;
-            color: #0f172a;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
-        footer {
-            font-size: 11px;
-            text-align: center;
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary-neon);
+            color: var(--primary-neon);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+        }
+
+        .date-range {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .date-range .input-group {
+            flex: 1;
+        }
+
+        .example-hint {
             margin-top: 20px;
-            color: #718096;
+            padding: 15px;
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-neon);
+            font-size: 0.85rem;
+            color: var(--medium-text);
         }
-        @media (max-width: 480px) {
-            .container { padding: 18px; }
-            .date-cell { font-size: 0.75rem; padding: 8px 2px; }
-            .weekdays { font-size: 0.7rem; }
-            .input-group { flex-direction: column; }
+
+        .example-hint strong {
+            color: var(--primary-neon);
+        }
+
+        .theme-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-neon);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
+            transform: rotate(30deg);
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            color: var(--light-text);
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--primary-neon);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--medium-text);
+            font-size: 0.8rem;
+        }
+
+        .test-result {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 20px 15px; }
+            .tool-header { padding: 20px 20px 0 20px; }
+            .tool-body { padding: 20px; }
+            .tools-header h1 { font-size: 1.8rem; }
+            .result-date { font-size: 1.8rem; }
+            .today-date { font-size: 1.5rem; }
+            .date-picker-row { flex-direction: column; }
+            .date-range { flex-direction: column; }
+            .calendar-day { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>
-        📅 डेट कैलकुलेटर
-    </h1>
-    <div class="sub">✅ कोई भी तारीख (Past/Future) चुनें → अगले N दिन हाइलाइट होंगे</div>
+    <div class="tools-header">
+        <h1>📅 Date Calculator</h1>
+        <p>Calculate future/past dates, add or subtract days, find date difference</p>
+        <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to All Tools</a>
+    </div>
 
-    <div class="input-group">
-        <div class="date-box">
-            <label>📌 आधार तारीख:</label>
-            <input type="date" id="startDateInput">
+    <div class="tool-card-main">
+        <div class="tool-header">
+            <div class="tool-icon-large">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="tool-title">
+                <h2>Date Calculator</h2>
+                <p>Add or subtract days from any date</p>
+            </div>
         </div>
-        <div class="days-slider">
-            <span>⏩ आगे के दिन:</span>
-            <input type="range" id="daysRange" min="1" max="60" value="10" step="1">
-            <div class="days-value" id="daysValueDisplay">10 दिन</div>
+
+        <div class="tool-body">
+            <div class="today-banner">
+                <span><i class="fas fa-calendar-day"></i> Today's Date</span>
+                <div class="today-date" id="todayDate">--</div>
+            </div>
+
+            <div class="mode-tabs">
+                <button class="mode-btn active" data-mode="add">➕ Add/Subtract Days</button>
+                <button class="mode-btn" data-mode="diff">📊 Date Difference</button>
+            </div>
+
+            <div id="addMode">
+                <div class="date-picker-row">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <span><i class="fas fa-calendar"></i> Select Date</span>
+                        </div>
+                        <input type="date" id="baseDate">
+                    </div>
+                </div>
+                
+                <div class="mini-calendar">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                        <span class="calendar-month-year" id="calendarMonthYear">May 2025</span>
+                        <button class="calendar-nav" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays"></div>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <div class="input-label">
+                        <span><i class="fas fa-plus-minus"></i> Days to Add/Subtract</span>
+                    </div>
+                    <div class="days-input-wrapper">
+                        <input type="number" id="daysAmount" value="2" min="-9999" max="9999">
+                        <select id="direction">
+                            <option value="add">➕ Add Days (Future)</option>
+                            <option value="subtract">➖ Subtract Days (Past)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="diffMode" style="display: none;">
+                <div class="date-range">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <span><i class="fas fa-calendar"></i> Start Date</span>
+                        </div>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">
+                            <span><i class="fas fa-calendar-check"></i> End Date</span>
+                        </div>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-label" id="resultLabel">🎯 Calculated Date</div>
+                <div class="result-date" id="resultDate">--</div>
+                <div class="result-day" id="resultDay">--</div>
+                <div id="differenceExtra" style="display: none;">
+                    <div class="difference-result">
+                        <div class="result-label">📆 Total Difference</div>
+                        <div class="difference-number" id="diffDays">--</div>
+                        <div id="diffWeeks" style="font-size: 0.9rem; margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="calculateBtn">
+                    <i class="fas fa-calculator"></i> Calculate
+                </button>
+                <button class="btn btn-secondary" id="copyBtn">
+                    <i class="fas fa-copy"></i> Copy Result
+                </button>
+                <button class="btn btn-secondary" id="resetBtn">
+                    <i class="fas fa-calendar-day"></i> Go to Today
+                </button>
+            </div>
+
+            <div class="example-hint">
+                <strong><i class="fas fa-lightbulb"></i> Example:</strong> 
+                <span id="demoText">Loading...</span>
+                <br>
+                <span style="font-size: 0.75rem;">✨ <strong>Accurate Calculation:</strong> The result date is highlighted in ORANGE on the calendar</span>
+            </div>
+
+            <div class="test-result" id="testResult">
+                🔍 <strong>Verification:</strong> Calculating...
+            </div>
         </div>
     </div>
 
-    <div class="calendar">
-        <div class="calendar-header">
-            <button id="prevMonthBtn">◀ पिछला महीना</button>
-            <h3 id="monthYearDisplay" style="margin:0; font-weight:600;">मई 2026</h3>
-            <button id="nextMonthBtn">अगला महीना ▶</button>
-        </div>
-        <div class="weekdays">
-            <div>रवि</div><div>सोम</div><div>मंगल</div><div>बुध</div><div>गुरु</div><div>शुक्र</div><div>शनि</div>
-        </div>
-        <div class="dates-grid" id="datesGrid"></div>
+    <div class="footer-note">
+        <i class="fas fa-shield-alt"></i> Accurate date calculations including leap years and month variations
     </div>
-
-    <div class="info-bar">
-        <div class="base-date-info" id="infoSelectedDate">📌 आधार तिथि: --</div>
-        <div class="highlight-count" id="highlightInfo">✨ हाइलाइटेड दिन: --</div>
-    </div>
-    <footer>💡 नीली बॉर्डर = आपकी चुनी हुई आधार तिथि | 🟡 पीला = उसके अगले N दिन</footer>
 </div>
+
+<div class="theme-toggle-btn" id="themeToggleBtn">
+    <i class="fas fa-moon"></i>
+</div>
+
+<div id="toastNotif" class="toast-msg">📋 Copied to clipboard!</div>
 
 <script>
     (function() {
         // DOM Elements
-        const startDateInput = document.getElementById('startDateInput');
-        const daysRange = document.getElementById('daysRange');
-        const daysValueDisplay = document.getElementById('daysValueDisplay');
-        const datesGrid = document.getElementById('datesGrid');
-        const monthYearDisplay = document.getElementById('monthYearDisplay');
-        const prevMonthBtn = document.getElementById('prevMonthBtn');
-        const nextMonthBtn = document.getElementById('nextMonthBtn');
-        const infoSelectedDate = document.getElementById('infoSelectedDate');
-        const highlightInfo = document.getElementById('highlightInfo');
+        const todayDateSpan = document.getElementById('todayDate');
+        const baseDateInput = document.getElementById('baseDate');
+        const daysAmount = document.getElementById('daysAmount');
+        const direction = document.getElementById('direction');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultDateSpan = document.getElementById('resultDate');
+        const resultDaySpan = document.getElementById('resultDay');
+        const resultLabel = document.getElementById('resultLabel');
+        const differenceExtra = document.getElementById('differenceExtra');
+        const diffDaysSpan = document.getElementById('diffDays');
+        const diffWeeksSpan = document.getElementById('diffWeeks');
+        const resultSection = document.getElementById('resultSection');
+        const toastEl = document.getElementById('toastNotif');
+        const demoTextSpan = document.getElementById('demoText');
+        const testResultDiv = document.getElementById('testResult');
 
-        // State
-        let currentDisplayDate = new Date();  // calendar view ka month/year
-        let baseDate = new Date();             // user ne jo date select ki (past/future dono possible)
-        let daysOffset = 10;                   // kitne aage ke days highlight karne hain
+        const calendarDaysDiv = document.getElementById('calendarDays');
+        const calendarMonthYearSpan = document.getElementById('calendarMonthYear');
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
 
-        // Helper: YYYY-MM-DD format
-        function formatDateToYMD(date) {
-            let year = date.getFullYear();
-            let month = String(date.getMonth() + 1).padStart(2, '0');
-            let day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        const addMode = document.getElementById('addMode');
+        const diffMode = document.getElementById('diffMode');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+
+        let currentMode = 'add';
+        let currentCalendarDate = new Date();
+        let selectedDate = new Date();
+        let currentResultDate = null;
+
+        // Simple date formatter (no timezone issues)
+        function formatDateSimple(year, month, day) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dateObj = new Date(year, month, day);
+            return {
+                formatted: `${day} ${months[month]} ${year}`,
+                dayName: days[dateObj.getDay()],
+                iso: `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
+            };
         }
 
-        // Base date set karna (kisi bhi date ke liye)
-        function setBaseDateFromInput() {
-            let dateVal = startDateInput.value;
-            if (dateVal) {
-                let parts = dateVal.split('-');
-                if(parts.length === 3) {
-                    let newBase = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-                    if(!isNaN(newBase.getTime())) {
-                        baseDate = newBase;
-                    } else {
-                        baseDate = new Date();
-                    }
-                } else {
-                    baseDate = new Date();
-                }
-            } else {
-                baseDate = new Date();
-            }
-            baseDate.setHours(0,0,0,0);
-            if(startDateInput.value !== formatDateToYMD(baseDate)) {
-                startDateInput.value = formatDateToYMD(baseDate);
-            }
+        // Get today's date as {year, month, day}
+        function getTodayParts() {
+            const now = new Date();
+            return {
+                year: now.getFullYear(),
+                month: now.getMonth(),
+                day: now.getDate()
+            };
         }
 
-        // Check karo ki koi date highlight range me hai ya nahi (baseDate ke exactly next daysOffset days tak)
-        function isDateInHighlightRange(checkDate) {
-            let check = new Date(checkDate);
-            check.setHours(0,0,0,0);
-            let base = new Date(baseDate);
-            base.setHours(0,0,0,0);
+        function updateTodayDisplay() {
+            const { year, month, day } = getTodayParts();
+            const { formatted, dayName } = formatDateSimple(year, month, day);
+            todayDateSpan.textContent = `${formatted} (${dayName})`;
             
-            let diffTime = check.getTime() - base.getTime();
-            let diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-            // Highlight sirf agar diffDays >= 1 aur diffDays <= daysOffset
-            return (diffDays >= 1 && diffDays <= daysOffset);
+            // Update demo text
+            const after2Days = addDaysToDate(year, month, day, 2);
+            const { formatted: todayFormatted } = formatDateSimple(year, month, day);
+            const { formatted: afterFormatted } = formatDateSimple(after2Days.year, after2Days.month, after2Days.day);
+            demoTextSpan.innerHTML = `Today (${todayFormatted}) + 2 days = <strong style="color:#ff8e53;">${afterFormatted}</strong>`;
         }
 
-        // Kya ye date exactly baseDate hai?
-        function isBaseDate(checkDate) {
-            let check = new Date(checkDate);
-            let base = new Date(baseDate);
-            return check.toDateString() === base.toDateString();
+        // Add days to a date (returns new date parts)
+        function addDaysToDate(year, month, day, daysToAdd) {
+            const date = new Date(year, month, day);
+            date.setDate(date.getDate() + daysToAdd);
+            return {
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate()
+            };
         }
 
-        // Calendar render karna
+        // Parse date input (YYYY-MM-DD) to parts
+        function parseDateInput(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return {
+                    year: parseInt(parts[0]),
+                    month: parseInt(parts[1]) - 1,
+                    day: parseInt(parts[2])
+                };
+            }
+            return null;
+        }
+
         function renderCalendar() {
-            const year = currentDisplayDate.getFullYear();
-            const month = currentDisplayDate.getMonth();
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
             
             const firstDayOfMonth = new Date(year, month, 1);
-            const startWeekday = firstDayOfMonth.getDay(); // 0 = Sunday
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+            const startingDayOfWeek = firstDayOfMonth.getDay();
+            const daysInMonth = lastDayOfMonth.getDate();
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
             
-            const prevMonthDate = new Date(year, month, 0);
-            const daysInPrevMonth = prevMonthDate.getDate();
+            calendarDaysDiv.innerHTML = '';
             
-            let gridCells = [];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            calendarMonthYearSpan.textContent = `${monthNames[month]} ${year}`;
+            
+            const todayParts = getTodayParts();
+            const selectedISO = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth()+1).padStart(2,'0')}-${String(selectedDate.getDate()).padStart(2,'0')}`;
+            const resultISO = currentResultDate ? `${currentResultDate.getFullYear()}-${String(currentResultDate.getMonth()+1).padStart(2,'0')}-${String(currentResultDate.getDate()).padStart(2,'0')}` : null;
+            
+            // Previous month days
+            for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+                const day = prevMonthLastDay - i;
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('calendar-day', 'other-month');
+                dayDiv.textContent = day;
+                dayDiv.addEventListener('click', () => selectDateFromCalendar(year, month - 1, day));
+                calendarDaysDiv.appendChild(dayDiv);
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('calendar-day');
+                dayDiv.textContent = day;
+                
+                const currentISO = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                
+                if (currentISO === selectedISO) {
+                    dayDiv.classList.add('selected');
+                }
+                
+                if (resultISO && currentISO === resultISO) {
+                    dayDiv.classList.add('result-highlight');
+                }
+                
+                if (year === todayParts.year && month === todayParts.month && day === todayParts.day) {
+                    dayDiv.classList.add('today');
+                }
+                
+                dayDiv.addEventListener('click', () => selectDateFromCalendar(year, month, day));
+                calendarDaysDiv.appendChild(dayDiv);
+            }
+            
+            // Next month days
             const totalCells = 42;
+            const cellsUsed = startingDayOfWeek + daysInMonth;
+            const remainingCells = totalCells - cellsUsed;
             
-            for(let i = 0; i < totalCells; i++) {
-                let cellDateObj;
-                let isCurrentMonth = true;
-                let dayNumber;
-                
-                if(i < startWeekday) {
-                    // Previous month ka cell
-                    let prevDay = daysInPrevMonth - (startWeekday - i) + 1;
-                    dayNumber = prevDay;
-                    let prevYear = (month === 0) ? year - 1 : year;
-                    let prevMonth = (month === 0) ? 11 : month - 1;
-                    cellDateObj = new Date(prevYear, prevMonth, dayNumber);
-                    isCurrentMonth = false;
-                } 
-                else if(i >= startWeekday + daysInMonth) {
-                    // Next month ka cell
-                    let nextDay = i - (startWeekday + daysInMonth) + 1;
-                    dayNumber = nextDay;
-                    let nextYear = (month === 11) ? year + 1 : year;
-                    let nextMonth = (month === 11) ? 0 : month + 1;
-                    cellDateObj = new Date(nextYear, nextMonth, dayNumber);
-                    isCurrentMonth = false;
-                }
-                else {
-                    // Current month ka cell
-                    dayNumber = i - startWeekday + 1;
-                    cellDateObj = new Date(year, month, dayNumber);
-                    isCurrentMonth = true;
-                }
-                
-                // CSS classes assign karna
-                let cellClasses = ['date-cell'];
-                if(!isCurrentMonth) cellClasses.push('other-month');
-                
-                if(isDateInHighlightRange(cellDateObj)) {
-                    cellClasses.push('highlight');
-                }
-                if(isBaseDate(cellDateObj)) {
-                    cellClasses.push('base-date');
-                }
-                
-                let dateNumber = cellDateObj.getDate();
-                let cellHtml = `<div class="${cellClasses.join(' ')}">${dateNumber}</div>`;
-                gridCells.push(cellHtml);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('calendar-day', 'other-month');
+                dayDiv.textContent = day;
+                dayDiv.addEventListener('click', () => selectDateFromCalendar(year, month + 1, day));
+                calendarDaysDiv.appendChild(dayDiv);
             }
-            
-            // Month/Year display update
-            const monthNames = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
-            monthYearDisplay.innerHTML = `${monthNames[month]} ${year}`;
-            datesGrid.innerHTML = gridCells.join('');
         }
-
-        // Poori UI refresh karna (info bar + calendar)
-        function refreshUI() {
-            // Info bar update
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            let baseDateStr = baseDate.toLocaleDateString('hi-IN', options);
-            infoSelectedDate.innerHTML = `📌 आधार तिथि: ${baseDateStr}`;
-            highlightInfo.innerHTML = `✨ अगले ${daysOffset} दिन हाइलाइटेड (आधार तिथि के बाद)`;
-            
+        
+        function selectDateFromCalendar(year, month, day) {
+            selectedDate = new Date(year, month, day);
+            const isoDate = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            baseDateInput.value = isoDate;
+            currentCalendarDate = new Date(year, month, 1);
+            renderCalendar();
+            calculate();
+        }
+        
+        function setInputsToToday() {
+            const { year, month, day } = getTodayParts();
+            const todayISO = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            if (baseDateInput) baseDateInput.value = todayISO;
+            if (startDateInput) startDateInput.value = todayISO;
+            if (endDateInput) {
+                const tomorrow = addDaysToDate(year, month, day, 1);
+                const tomorrowISO = `${tomorrow.year}-${String(tomorrow.month+1).padStart(2,'0')}-${String(tomorrow.day).padStart(2,'0')}`;
+                endDateInput.value = tomorrowISO;
+            }
+            selectedDate = new Date(year, month, day);
+            currentCalendarDate = new Date(year, month, 1);
             renderCalendar();
         }
 
-        // Days offset change hone par
-        function updateDaysOffset() {
-            daysOffset = parseInt(daysRange.value, 10);
-            daysValueDisplay.innerText = `${daysOffset} दिन`;
-            refreshUI();
+        function highlightResult() {
+            resultSection.classList.add('highlight');
+            setTimeout(() => {
+                resultSection.classList.remove('highlight');
+            }, 600);
         }
 
-        // Base date change hone par (user ne date picker se koi bhi date select ki - past ya future)
-        function onBaseDateChange() {
-            let newDateStr = startDateInput.value;
-            if(newDateStr) {
-                let parsed = new Date(newDateStr);
-                if(!isNaN(parsed.getTime())) {
-                    baseDate = parsed;
-                    baseDate.setHours(0,0,0,0);
-                } else {
-                    baseDate = new Date();
-                    baseDate.setHours(0,0,0,0);
-                    startDateInput.value = formatDateToYMD(baseDate);
-                }
+        function showToast(message) {
+            toastEl.textContent = message;
+            toastEl.classList.add('show');
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 2000);
+        }
+
+        // ACCURATE date calculation - FIXED!
+        function calculateAddSubtract() {
+            // Get base date
+            let baseParts;
+            if (baseDateInput.value) {
+                baseParts = parseDateInput(baseDateInput.value);
+            }
+            if (!baseParts) {
+                baseParts = getTodayParts();
+                const isoDate = `${baseParts.year}-${String(baseParts.month+1).padStart(2,'0')}-${String(baseParts.day).padStart(2,'0')}`;
+                baseDateInput.value = isoDate;
+            }
+            
+            let days = parseInt(daysAmount.value);
+            if (isNaN(days)) days = 0;
+            
+            const isSubtract = direction.value === 'subtract';
+            const finalDays = isSubtract ? -days : days;
+            
+            // Calculate final date
+            const finalParts = addDaysToDate(baseParts.year, baseParts.month, baseParts.day, finalDays);
+            
+            // Store result for calendar highlight
+            currentResultDate = new Date(finalParts.year, finalParts.month, finalParts.day);
+            
+            // Display result
+            const { formatted, dayName } = formatDateSimple(finalParts.year, finalParts.month, finalParts.day);
+            const { formatted: baseFormatted } = formatDateSimple(baseParts.year, baseParts.month, baseParts.day);
+            
+            resultDateSpan.textContent = formatted;
+            resultDaySpan.textContent = dayName;
+            const operation = isSubtract ? 'Before' : 'After';
+            resultLabel.innerHTML = `📅 ${days} Days ${operation} ${baseFormatted}`;
+            differenceExtra.style.display = 'none';
+            
+            // Update verification
+            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> ${baseFormatted} + ${days} days = <strong style="color:#ff8e53; font-size:1.1rem;">${formatted} (${dayName})</strong> ✅`;
+            
+            renderCalendar();
+            highlightResult();
+        }
+
+        function calculateDifference() {
+            let startParts = startDateInput.value ? parseDateInput(startDateInput.value) : null;
+            let endParts = endDateInput.value ? parseDateInput(endDateInput.value) : null;
+            
+            if (!startParts) {
+                startParts = getTodayParts();
+                const isoDate = `${startParts.year}-${String(startParts.month+1).padStart(2,'0')}-${String(startParts.day).padStart(2,'0')}`;
+                startDateInput.value = isoDate;
+            }
+            if (!endParts) {
+                endParts = getTodayParts();
+                const tomorrow = addDaysToDate(endParts.year, endParts.month, endParts.day, 1);
+                const tomorrowISO = `${tomorrow.year}-${String(tomorrow.month+1).padStart(2,'0')}-${String(tomorrow.day).padStart(2,'0')}`;
+                endDateInput.value = tomorrowISO;
+                endParts = tomorrow;
+            }
+            
+            currentResultDate = new Date(endParts.year, endParts.month, endParts.day);
+            
+            // Calculate difference in days
+            const startDate = new Date(startParts.year, startParts.month, startParts.day);
+            const endDate = new Date(endParts.year, endParts.month, endParts.day);
+            const diffTime = Math.abs(endDate - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const weeks = Math.floor(diffDays / 7);
+            const remainingDays = diffDays % 7;
+            
+            let weeksText = '';
+            if (weeks > 0) {
+                weeksText = `${weeks} week${weeks > 1 ? 's' : ''}`;
+                if (remainingDays > 0) weeksText += ` and ${remainingDays} day${remainingDays > 1 ? 's' : ''}`;
             } else {
-                baseDate = new Date();
-                baseDate.setHours(0,0,0,0);
-                startDateInput.value = formatDateToYMD(baseDate);
+                weeksText = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
             }
-            // Calendar view ko base date ke month pe le jaate hain better UX ke liye
-            currentDisplayDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
-            refreshUI();
-        }
-        
-        // Previous month button
-        function goPrevMonth() {
-            let newMonth = currentDisplayDate.getMonth() - 1;
-            let newYear = currentDisplayDate.getFullYear();
-            if(newMonth < 0) {
-                newMonth = 11;
-                newYear--;
-            }
-            currentDisplayDate = new Date(newYear, newMonth, 1);
-            renderCalendar();
-        }
-        
-        // Next month button
-        function goNextMonth() {
-            let newMonth = currentDisplayDate.getMonth() + 1;
-            let newYear = currentDisplayDate.getFullYear();
-            if(newMonth > 11) {
-                newMonth = 0;
-                newYear++;
-            }
-            currentDisplayDate = new Date(newYear, newMonth, 1);
-            renderCalendar();
-        }
-        
-        // Initialize tool
-        function init() {
-            // Default: Aaj ki date lete hain, but user kuch bhi select kar sakta hai
-            // Sirf example ke liye nahi, real current date set karte hain
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            baseDate = new Date(today);
-            currentDisplayDate = new Date(today.getFullYear(), today.getMonth(), 1);
-            daysOffset = 10;
-            daysRange.value = 10;
-            daysValueDisplay.innerText = "10 दिन";
-            startDateInput.value = formatDateToYMD(baseDate);
             
-            // Event listeners
-            startDateInput.addEventListener('change', onBaseDateChange);
-            daysRange.addEventListener('input', function(e) {
-                daysOffset = parseInt(e.target.value, 10);
-                daysValueDisplay.innerText = `${daysOffset} दिन`;
-                refreshUI();
+            const { formatted: startFormatted } = formatDateSimple(startParts.year, startParts.month, startParts.day);
+            const { formatted: endFormatted, dayName } = formatDateSimple(endParts.year, endParts.month, endParts.day);
+            
+            resultDateSpan.textContent = endFormatted;
+            resultDaySpan.textContent = dayName;
+            resultLabel.innerHTML = `📊 From ${startFormatted} to ${endFormatted}`;
+            diffDaysSpan.textContent = `${diffDays} days`;
+            diffWeeksSpan.textContent = `📆 ${weeksText}`;
+            differenceExtra.style.display = 'block';
+            
+            testResultDiv.innerHTML = `🔍 <strong>Verification:</strong> Difference = <strong style="color:#ff8e53; font-size:1.1rem;">${diffDays} days</strong> (${weeksText}) ✅`;
+            
+            renderCalendar();
+            highlightResult();
+        }
+
+        function calculate() {
+            if (currentMode === 'add') {
+                calculateAddSubtract();
+            } else {
+                calculateDifference();
+            }
+        }
+
+        function copyResult() {
+            let textToCopy = '';
+            if (currentMode === 'add') {
+                const resultText = resultDateSpan.textContent;
+                const dayText = resultDaySpan.textContent;
+                textToCopy = `${resultText} (${dayText})`;
+            } else {
+                const diffDays = diffDaysSpan.textContent;
+                textToCopy = `Date difference: ${diffDays}`;
+            }
+            
+            if (textToCopy && textToCopy !== '--') {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showToast(`✅ Copied: ${textToCopy}`);
+                }).catch(() => {
+                    showToast('❌ Copy failed');
+                });
+            } else {
+                showToast('⚠️ Nothing to copy. Calculate first!');
+            }
+        }
+
+        function resetToToday() {
+            setInputsToToday();
+            calculate();
+            showToast('📅 Reset to today\'s date');
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            if (mode === 'add') {
+                addMode.style.display = 'block';
+                diffMode.style.display = 'none';
+                differenceExtra.style.display = 'none';
+            } else {
+                addMode.style.display = 'none';
+                diffMode.style.display = 'block';
+            }
+            calculate();
+        }
+
+        calculateBtn.addEventListener('click', calculate);
+        copyBtn.addEventListener('click', copyResult);
+        resetBtn.addEventListener('click', resetToToday);
+        
+        daysAmount.addEventListener('input', calculate);
+        direction.addEventListener('change', calculate);
+        baseDateInput.addEventListener('change', () => {
+            const parts = parseDateInput(baseDateInput.value);
+            if (parts) {
+                selectedDate = new Date(parts.year, parts.month, parts.day);
+                currentCalendarDate = new Date(parts.year, parts.month, 1);
+                renderCalendar();
+            }
+            calculate();
+        });
+        startDateInput.addEventListener('change', calculate);
+        endDateInput.addEventListener('change', calculate);
+        
+        prevMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar();
+        });
+        
+        nextMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const mode = btn.getAttribute('data-mode');
+                switchMode(mode);
             });
-            prevMonthBtn.addEventListener('click', goPrevMonth);
-            nextMonthBtn.addEventListener('click', goNextMonth);
-            
-            // Final render
-            refreshUI();
+        });
+
+        updateTodayDisplay();
+        setInputsToToday();
+        calculate();
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        
+        if (currentTheme === 'light') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
         }
         
-        init();
+        themeToggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
     })();
 </script>
 </body>
