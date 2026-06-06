@@ -6,13 +6,17 @@
     <title>Email Refiner | Smart Email Formatter - Stellar Tools</title>
     
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y6M1CYS2L"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
+        gtag('config', 'G-8Y6M1CYS2L');
     </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9512844386742996"
+        crossorigin="anonymous"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -180,7 +184,6 @@
             word-wrap: break-word;
         }
 
-        /* Paragraph spacing inside output */
         .output-box p {
             margin-bottom: 6px;
         }
@@ -215,7 +218,6 @@
             font-size: 0.8rem;
         }
 
-        /* ========== ATTRACTIVE BUTTON STYLES ========== */
         .action-buttons {
             display: flex;
             gap: 18px;
@@ -241,7 +243,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Format Button - Primary Gradient */
         .btn-format {
             background: linear-gradient(135deg, #00f0ff 0%, #0088ff 50%, #00f0ff 100%);
             background-size: 200% auto;
@@ -259,7 +260,6 @@
             transform: translateY(1px);
         }
 
-        /* Copy Button - Success Green */
         .btn-copy {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
@@ -275,7 +275,6 @@
             transform: translateY(1px);
         }
 
-        /* Clear Button - Danger Red */
         .btn-clear {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
@@ -291,7 +290,6 @@
             transform: translateY(1px);
         }
 
-        /* Sample Button - Purple */
         .btn-sample {
             background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
             color: white;
@@ -307,7 +305,6 @@
             transform: translateY(1px);
         }
 
-        /* Button Icons Animation */
         .btn i {
             transition: transform 0.2s ease;
             font-size: 1rem;
@@ -317,7 +314,6 @@
             transform: scale(1.1);
         }
 
-        /* Button Ripple Effect */
         .btn::before {
             content: '';
             position: absolute;
@@ -336,7 +332,6 @@
             height: 200px;
         }
 
-        /* Quick Action Bar */
         .quick-actions {
             display: flex;
             gap: 10px;
@@ -448,7 +443,6 @@
     </div>
 
     <div class="main-grid">
-        <!-- Left Panel - Input -->
         <div class="tool-card">
             <div class="tool-header">
                 <div class="tool-icon">
@@ -475,7 +469,6 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             </div>
         </div>
 
-        <!-- Right Panel - Output -->
         <div class="tool-card">
             <div class="tool-header">
                 <div class="tool-icon">
@@ -494,7 +487,6 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
         </div>
     </div>
 
-    <!-- ATTRACTIVE BUTTONS SECTION -->
     <div class="action-buttons">
         <button id="formatBtn" class="btn btn-format">
             <i class="fas fa-magic"></i> Format Now
@@ -662,7 +654,6 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             }
             
             let formatted = smartFormatEmail(inputText);
-            // Replace double newlines with single for tighter spacing
             formatted = formatted.replace(/\n\n/g, '\n');
             formattedOutputDiv.innerHTML = formatted.replace(/\n/g, '<br>');
             formattedOutputDiv.setAttribute('data-raw-text', formatted);
@@ -739,7 +730,6 @@ thanks and regards`;
         
         updateStats();
 
-        // Theme Toggle
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = themeToggleBtn.querySelector('i');
         const currentTheme = localStorage.getItem('theme') || 'dark';
