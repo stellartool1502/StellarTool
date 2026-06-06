@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Email Refiner | Smart Email Formatter - Stellar Tools</title>
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -19,7 +28,6 @@
             --hover-shadow: 0 8px 30px rgba(0, 240, 255, 0.3);
             --border-radius: 16px;
             --transition: all 0.3s ease-in-out;
-            --highlight-glow: 0 0 20px rgba(0, 240, 255, 0.4);
         }
 
         :root[data-theme="light"] {
@@ -50,7 +58,7 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -69,7 +77,7 @@
 
         .tools-header p {
             color: var(--medium-text);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .back-home {
@@ -97,7 +105,6 @@
             border: 1px solid rgba(0, 240, 255, 0.1);
             overflow: hidden;
             transition: var(--transition);
-            height: fit-content;
         }
 
         .tool-card:hover {
@@ -114,15 +121,15 @@
         }
 
         .tool-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: rgba(0, 240, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary-neon);
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .tool-title h3 {
@@ -141,14 +148,14 @@
 
         textarea {
             width: 100%;
-            height: 300px;
+            height: 320px;
             background: var(--dark-bg);
             border: 2px solid rgba(0, 240, 255, 0.2);
             border-radius: var(--border-radius);
             padding: 15px;
             color: var(--light-text);
             font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.5;
             resize: vertical;
             outline: none;
             transition: var(--transition);
@@ -161,68 +168,37 @@
         }
 
         .output-box {
-            min-height: 300px;
+            min-height: 320px;
             background: var(--dark-bg);
             border: 2px solid rgba(0, 240, 255, 0.2);
             border-radius: var(--border-radius);
             padding: 15px;
             color: var(--light-text);
             font-size: 0.95rem;
-            line-height: 1.7;
+            line-height: 1.4;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
 
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+        /* Paragraph spacing inside output */
+        .output-box p {
+            margin-bottom: 6px;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-size: 0.85rem;
-        }
-
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid var(--primary-neon);
-            color: var(--primary-neon);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-neon);
-            color: var(--dark-bg);
-            transform: translateY(-2px);
+        .output-box br {
+            display: block;
+            content: "";
+            margin: 4px 0;
         }
 
         .stats-bar {
             display: flex;
             gap: 20px;
             margin-top: 15px;
-            padding: 12px;
+            padding: 10px 12px;
             background: rgba(0, 240, 255, 0.05);
             border-radius: var(--border-radius);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             justify-content: space-between;
             flex-wrap: wrap;
         }
@@ -230,56 +206,169 @@
         .stat {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: var(--medium-text);
         }
 
         .stat i {
             color: var(--primary-neon);
+            font-size: 0.8rem;
         }
 
-        .format-options {
+        /* ========== ATTRACTIVE BUTTON STYLES ========== */
+        .action-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 30px;
             flex-wrap: wrap;
         }
 
-        .format-badge {
-            background: rgba(0, 240, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            color: var(--primary-neon);
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
         }
 
-        .format-badge:hover {
+        /* Format Button - Primary Gradient */
+        .btn-format {
+            background: linear-gradient(135deg, #00f0ff 0%, #0088ff 50%, #00f0ff 100%);
+            background-size: 200% auto;
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-format:hover {
+            background-position: right center;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-format:active {
+            transform: translateY(1px);
+        }
+
+        /* Copy Button - Success Green */
+        .btn-copy {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-copy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-copy:active {
+            transform: translateY(1px);
+        }
+
+        /* Clear Button - Danger Red */
+        .btn-clear {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-clear:active {
+            transform: translateY(1px);
+        }
+
+        /* Sample Button - Purple */
+        .btn-sample {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-sample:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-sample:active {
+            transform: translateY(1px);
+        }
+
+        /* Button Icons Animation */
+        .btn i {
+            transition: transform 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .btn:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Button Ripple Effect */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .btn:active::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Quick Action Bar */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .quick-btn {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--primary-neon);
+        }
+
+        .quick-btn:hover {
             background: var(--primary-neon);
             color: var(--dark-bg);
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
         .example-hint {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 25px;
+            padding: 12px 18px;
             background: rgba(0, 240, 255, 0.05);
             border-radius: var(--border-radius);
-            border-left: 4px solid var(--primary-neon);
-            font-size: 0.85rem;
+            border-left: 3px solid var(--primary-neon);
+            font-size: 0.8rem;
             color: var(--medium-text);
-        }
-
-        .example-hint strong {
-            color: var(--primary-neon);
+            text-align: center;
         }
 
         .theme-toggle-btn {
@@ -314,9 +403,9 @@
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             color: var(--light-text);
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--primary-neon);
             z-index: 1000;
@@ -335,7 +424,7 @@
             text-align: center;
             margin-top: 30px;
             color: var(--medium-text);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         @media (max-width: 900px) {
@@ -345,6 +434,7 @@
             }
             body { padding: 20px 15px; }
             .tools-header h1 { font-size: 1.8rem; }
+            .btn { padding: 10px 20px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -365,30 +455,22 @@
                     <i class="fas fa-pen-fancy"></i>
                 </div>
                 <div class="tool-title">
-                    <h3>📝 Write Your Message</h3>
-                    <p>Type naturally without worrying about punctuation</p>
+                    <h3>Write Your Message</h3>
+                    <p>Type naturally without punctuation</p>
                 </div>
             </div>
             <div class="tool-body">
+                <div class="quick-actions">
+                    <span class="quick-btn" id="quickClearBtn"><i class="fas fa-eraser"></i> Clear</span>
+                    <span class="quick-btn" id="quickSampleBtn"><i class="fas fa-file-alt"></i> Example</span>
+                </div>
                 <textarea id="rawInput" placeholder="Example:
-hello sir i am writing this email about the meeting can we schedule it for tomorrow please let me know your availability thanks and regards"></textarea>
+hello sir i am writing this email about the meeting can we schedule it for tomorrow please let me know your availability thanks"></textarea>
                 
-                <div class="format-options">
-                    <span class="format-badge" data-format="business">💼 Business Formal</span>
-                    <span class="format-badge" data-format="casual">😊 Casual Friendly</span>
-                    <span class="format-badge" data-format="professional">🎯 Professional</span>
-                </div>
-
-                <div class="button-group">
-                    <button id="formatBtn" class="btn-primary"><i class="fas fa-magic"></i> Format Now</button>
-                    <button id="clearBtn" class="btn-secondary"><i class="fas fa-trash-alt"></i> Clear</button>
-                    <button id="sampleBtn" class="btn-secondary"><i class="fas fa-file-alt"></i> Load Sample</button>
-                </div>
-
                 <div class="stats-bar">
                     <div class="stat"><i class="fas fa-font"></i> <span id="charCount">Characters: 0</span></div>
                     <div class="stat"><i class="fas fa-paragraph"></i> <span id="wordCount">Words: 0</span></div>
-                    <div class="stat"><i class="fas fa-language"></i> Auto Punctuation</div>
+                    <div class="stat"><i class="fas fa-magic"></i> Auto Punctuation</div>
                 </div>
             </div>
         </div>
@@ -400,37 +482,40 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
                     <i class="fas fa-envelope-open-text"></i>
                 </div>
                 <div class="tool-title">
-                    <h3>✅ Refined Email Body</h3>
+                    <h3>Refined Email</h3>
                     <p>Perfectly formatted & ready to copy</p>
                 </div>
             </div>
             <div class="tool-body">
                 <div class="output-box" id="formattedOutput">
-                    ✨ Your perfectly formatted email will appear here...
-                </div>
-                
-                <div class="button-group">
-                    <button id="copyBtn" class="btn-primary"><i class="fas fa-copy"></i> Copy to Clipboard</button>
-                    <button id="copyRawBtn" class="btn-secondary"><i class="fas fa-code"></i> Copy Raw Text</button>
+                    ✨ Your formatted email will appear here...
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="example-hint">
-        <strong><i class="fas fa-lightbulb"></i> How it works:</strong> 
-        Just type your message without any punctuation. Click "Format Now" and the tool will automatically add:
-        <strong>Full stops (.)</strong> where sentences end, <strong>commas (,)</strong> before conjunctions (but, however, so),
-        <strong>capital letters</strong> at start of sentences, and <strong>proper paragraphs</strong>.
+    <!-- ATTRACTIVE BUTTONS SECTION -->
+    <div class="action-buttons">
+        <button id="formatBtn" class="btn btn-format">
+            <i class="fas fa-magic"></i> Format Now
+        </button>
+        <button id="copyBtn" class="btn btn-copy">
+            <i class="fas fa-copy"></i> Copy
+        </button>
+        <button id="clearBtn" class="btn btn-clear">
+            <i class="fas fa-trash-alt"></i> Clear
+        </button>
+        <button id="sampleBtn" class="btn btn-sample">
+            <i class="fas fa-file-alt"></i> Sample
+        </button>
     </div>
 
-    <div class="action-buttons">
-        <button id="formatAndCopyBtn" class="btn-primary"><i class="fas fa-bolt"></i> Format & Copy</button>
-        <button id="resetBtn" class="btn-secondary"><i class="fas fa-sync-alt"></i> Reset</button>
+    <div class="example-hint">
+        <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> Just type your message without any punctuation, click <strong style="color:#00f0ff;">Format Now</strong> — the tool will automatically add full stops, commas, and proper capitalization.
     </div>
 
     <div class="footer-note">
-        <i class="fas fa-shield-alt"></i> Smart AI-powered punctuation | Perfect for professional emails
+        <i class="fas fa-shield-alt"></i> Smart punctuation | Perfect for professional emails
     </div>
 </div>
 
@@ -438,44 +523,31 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
     <i class="fas fa-moon"></i>
 </div>
 
-<div id="toastNotif" class="toast-msg">📋 Copied to clipboard!</div>
+<div id="toastNotif" class="toast-msg">📋 Copied!</div>
 
 <script>
     (function() {
-        // DOM Elements
         const rawInput = document.getElementById('rawInput');
         const formattedOutputDiv = document.getElementById('formattedOutput');
         const formatBtn = document.getElementById('formatBtn');
+        const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
         const sampleBtn = document.getElementById('sampleBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyRawBtn = document.getElementById('copyRawBtn');
-        const formatAndCopyBtn = document.getElementById('formatAndCopyBtn');
-        const resetBtn = document.getElementById('resetBtn');
+        const quickClearBtn = document.getElementById('quickClearBtn');
+        const quickSampleBtn = document.getElementById('quickSampleBtn');
         const charCountSpan = document.getElementById('charCount');
         const wordCountSpan = document.getElementById('wordCount');
         const toastEl = document.getElementById('toastNotif');
 
-        let currentFormatStyle = 'professional';
-
-        // Format badges
-        document.querySelectorAll('.format-badge').forEach(badge => {
-            badge.addEventListener('click', () => {
-                document.querySelectorAll('.format-badge').forEach(b => b.style.opacity = '0.6');
-                badge.style.opacity = '1';
-                currentFormatStyle = badge.getAttribute('data-format');
-                if (rawInput.value.trim()) {
-                    performFormat();
-                }
-                showToast(`✨ ${badge.textContent} mode selected`);
-            });
-            if (badge.getAttribute('data-format') === 'professional') {
-                badge.style.opacity = '1';
-            }
-        });
-
-        function showToast(message) {
+        function showToast(message, type = 'success') {
             toastEl.textContent = message;
+            if (type === 'error') {
+                toastEl.style.background = '#ef4444';
+                toastEl.style.borderColor = '#ef4444';
+            } else {
+                toastEl.style.background = 'var(--card-bg)';
+                toastEl.style.borderColor = 'var(--primary-neon)';
+            }
             toastEl.classList.add('show');
             setTimeout(() => {
                 toastEl.classList.remove('show');
@@ -490,16 +562,10 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             wordCountSpan.textContent = `Words: ${words}`;
         }
 
-        // Smart formatting function
-        function smartFormatEmail(text, style = 'professional') {
+        function smartFormatEmail(text) {
             if (!text || text.trim() === "") return "";
 
-            // Step 1: Basic cleaning
-            let cleaned = text
-                .replace(/\r\n/g, '\n')
-                .replace(/\n{3,}/g, '\n\n');
-
-            // Step 2: Process line by line
+            let cleaned = text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n');
             let lines = cleaned.split('\n');
             let processedLines = [];
             
@@ -509,7 +575,6 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
                     continue;
                 }
                 
-                // Split into sentences
                 let sentences = splitIntoSentences(line);
                 let formattedSentences = [];
                 
@@ -517,18 +582,14 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
                     let sent = sentences[i].trim();
                     if(sent.length === 0) continue;
                     
-                    // Capitalize first letter
                     sent = sent.charAt(0).toUpperCase() + sent.slice(1).toLowerCase();
                     
-                    // Add period at end if missing
                     let lastChar = sent.charAt(sent.length - 1);
                     if(!['.', ',', '!', '?', ';', ':'].includes(lastChar)) {
                         sent = sent + '.';
                     }
                     
-                    // Smart comma addition based on style
-                    sent = addSmartCommas(sent, style);
-                    
+                    sent = addSmartCommas(sent);
                     formattedSentences.push(sent);
                 }
                 
@@ -536,35 +597,16 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
                 processedLines.push(finalLine);
             }
             
-            // Rebuild paragraphs
             let result = processedLines.join('\n\n');
-            
-            // Clean up
             result = result.replace(/[ ]+/g, ' ');
             result = result.replace(/\.\.+/g, '.');
             result = result.replace(/\,\,+/g, ',');
             result = result.replace(/\s+([.,!?;:])/g, '$1');
             result = result.replace(/([.,!?;:])(\S)/g, '$1 $2');
-            
             result = result.trim();
+            
             if(result.length > 0 && !['.', '!', '?'].includes(result.charAt(result.length-1))) {
                 result = result + '.';
-            }
-
-            // Apply style-specific formatting
-            if (style === 'business') {
-                result = result.replace(/hello/gi, 'Dear');
-                result = result.replace(/hi/gi, 'Dear');
-                result = result.replace(/thanks/gi, 'Thank you');
-                result = result.replace(/\bpls\b/gi, 'please');
-                result = result.replace(/\bthx\b/gi, 'thank you');
-            } else if (style === 'professional') {
-                result = result.replace(/hello/gi, 'Hello');
-                result = result.replace(/pls\b/gi, 'please');
-                result = result.replace(/thx\b/gi, 'thanks');
-            } else if (style === 'casual') {
-                result = result.replace(/dear/gi, 'Hey');
-                result = result.replace(/thank you/gi, 'Thanks');
             }
             
             return result;
@@ -576,7 +618,7 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
                 let words = text.split(' ');
                 let sentences = [];
                 let current = [];
-                let conjunctions = ['and', 'but', 'so', 'because', 'however', 'therefore', 'also', 'then', 'yet', 'or', 'nor', 'for'];
+                let conjunctions = ['and', 'but', 'so', 'because', 'however', 'therefore', 'also', 'then', 'yet', 'or'];
                 
                 for(let i = 0; i < words.length; i++) {
                     current.push(words[i]);
@@ -593,13 +635,12 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             return rawSplits;
         }
         
-        function addSmartCommas(sentence, style) {
+        function addSmartCommas(sentence) {
             let patterns = [
                 { find: /\b(but|however|although|though)\b/gi, replace: ', $1' },
                 { find: /\b(for example|such as|like)\b/gi, replace: ', $1' },
                 { find: /\b(therefore|thus|hence|so)\b/gi, replace: ', $1' },
-                { find: /\b(meanwhile|moreover|furthermore|additionally)\b/gi, replace: ', $1' },
-                { find: /\b(anyway|indeed|finally|meanwhile)\b/gi, replace: ', $1' }
+                { find: /\b(meanwhile|moreover|furthermore)\b/gi, replace: ', $1' }
             ];
             
             let modified = sentence;
@@ -608,8 +649,6 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             }
             
             modified = modified.replace(/\. ,/g, '. ');
-            modified = modified.replace(/\,\s*\,/g, ',');
-            
             return modified;
         }
         
@@ -618,47 +657,55 @@ hello sir i am writing this email about the meeting can we schedule it for tomor
             if(inputText.trim() === "") {
                 formattedOutputDiv.innerHTML = "⚠️ Please write something in the box above!";
                 formattedOutputDiv.setAttribute('data-raw-text', "");
+                showToast("❌ Please write something first", "error");
                 return;
             }
             
-            let formatted = smartFormatEmail(inputText, currentFormatStyle);
+            let formatted = smartFormatEmail(inputText);
+            // Replace double newlines with single for tighter spacing
+            formatted = formatted.replace(/\n\n/g, '\n');
             formattedOutputDiv.innerHTML = formatted.replace(/\n/g, '<br>');
             formattedOutputDiv.setAttribute('data-raw-text', formatted);
-            showToast('✨ Email formatted successfully!');
+            showToast("✨ Formatted successfully!");
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'format_complete', {
+                    'event_category': 'engagement',
+                    'event_label': 'Email Formatted',
+                    'value': inputText.length
+                });
+            }
         }
         
         function copyFormatted() {
             let rawText = formattedOutputDiv.getAttribute('data-raw-text');
-            if(!rawText || rawText === "✨ Your perfectly formatted email will appear here..." || rawText === "⚠️ Please write something in the box above!") {
+            if(!rawText || rawText === "✨ Your formatted email will appear here..." || rawText === "⚠️ Please write something in the box above!") {
                 rawText = formattedOutputDiv.innerText;
             }
-            if(rawText && !rawText.includes("Please write something") && !rawText.includes("Your perfectly formatted")) {
+            if(rawText && !rawText.includes("Please write something") && !rawText.includes("Your formatted email")) {
                 navigator.clipboard.writeText(rawText).then(() => {
-                    showToast("✅ Copied! Now paste in your email");
+                    showToast("✅ Copied to clipboard!");
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'copy_email', {'event_category': 'engagement', 'event_label': 'Copy Button Click'});
+                    }
                 }).catch(() => {
-                    showToast("❌ Copy failed, please copy manually");
+                    showToast("❌ Copy failed", "error");
                 });
             } else {
-                showToast("❌ Please write and format first, then copy");
-            }
-        }
-        
-        function copyRawInput() {
-            let text = rawInput.value;
-            if(text.trim()) {
-                navigator.clipboard.writeText(text);
-                showToast("📋 Raw Text Copied");
-            } else {
-                showToast("Please write something first");
+                showToast("❌ Please write and format first", "error");
             }
         }
         
         function clearAll() {
             rawInput.value = "";
-            formattedOutputDiv.innerHTML = "✨ Your perfectly formatted email will appear here...";
+            formattedOutputDiv.innerHTML = "✨ Your formatted email will appear here...";
             formattedOutputDiv.setAttribute('data-raw-text', "");
             updateStats();
-            showToast("🧹 Cleared! Ready for new message");
+            showToast("🧹 Cleared!");
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'clear_email', {'event_category': 'engagement', 'event_label': 'Clear Button Click'});
+            }
         }
         
         function loadSample() {
@@ -669,36 +716,27 @@ thanks and regards`;
             rawInput.value = sample;
             updateStats();
             performFormat();
-            showToast("📋 Sample email loaded");
-        }
-        
-        function resetToDefault() {
-            clearAll();
-            rawInput.value = "";
-        }
-        
-        function formatAndCopy() {
-            if(rawInput.value.trim()) {
-                performFormat();
-                setTimeout(() => {
-                    copyFormatted();
-                }, 300);
-            } else {
-                showToast("⚠️ Please write something first");
+            showToast("📋 Sample loaded!");
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'sample_load', {'event_category': 'engagement', 'event_label': 'Sample Button Click'});
             }
         }
         
-        // Event Listeners
-        formatBtn.addEventListener('click', performFormat);
+        formatBtn.addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'format_email', {'event_category': 'engagement', 'event_label': 'Format Button Click'});
+            }
+            performFormat();
+        });
+        
+        copyBtn.addEventListener('click', copyFormatted);
         clearBtn.addEventListener('click', clearAll);
         sampleBtn.addEventListener('click', loadSample);
-        copyBtn.addEventListener('click', copyFormatted);
-        copyRawBtn.addEventListener('click', copyRawInput);
-        formatAndCopyBtn.addEventListener('click', formatAndCopy);
-        resetBtn.addEventListener('click', resetToDefault);
+        quickClearBtn.addEventListener('click', clearAll);
+        quickSampleBtn.addEventListener('click', loadSample);
         rawInput.addEventListener('input', updateStats);
         
-        // Initial update
         updateStats();
 
         // Theme Toggle
@@ -724,6 +762,10 @@ thanks and regards`;
                 localStorage.setItem('theme', 'dark');
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
+            }
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'theme_change', {'event_category': 'engagement', 'event_label': theme});
             }
         });
     })();
