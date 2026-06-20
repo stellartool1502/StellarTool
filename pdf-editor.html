@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF Editor Pro - Smart Text Edit</title>
+<title>PDF Editor Pro - Fixed Text Edit</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <style>
@@ -23,157 +23,207 @@
 
   .header{
     background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
-    color:#fff;padding:.7rem 1.2rem;display:flex;align-items:center;justify-content:space-between;
+    color:#fff;padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;
     box-shadow:0 2px 10px rgba(0,0,0,.12);position:relative;z-index:50;
+    flex-shrink:0;
   }
-  .logo{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .logo{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:6px;}
   .header-actions{display:flex;gap:.6rem;align-items:center;}
+  .empty-hint{color:#fff;font-size:.7rem;opacity:.8;}
 
   .btn{
     background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);
-    padding:8px 16px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;
-    display:inline-flex;align-items:center;gap:6px;transition:.15s;
+    padding:5px 12px;border-radius:5px;font-size:.75rem;font-weight:600;cursor:pointer;
+    display:inline-flex;align-items:center;gap:4px;transition:.15s;
   }
   .btn:hover{background:rgba(255,255,255,.28);}
   .btn-solid{background:#fff;color:var(--primary-dark);border:none;}
   .btn-solid:hover{background:#f0f0ff;}
   .btn-icon{
-    width:34px;height:34px;border-radius:7px;border:1px solid var(--line);background:#fff;
-    cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--ink-soft);
+    width:26px;height:26px;border-radius:5px;border:1px solid var(--line);background:#fff;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--ink-soft);
   }
   .btn-icon:hover{border-color:var(--primary);color:var(--primary);}
-  .btn-icon:disabled{opacity:.4;cursor:not-allowed;}
 
   #uploadScreen{
-    height:calc(100% - 60px);display:flex;align-items:center;justify-content:center;
+    height:calc(100% - 52px);display:flex;align-items:center;justify-content:center;
   }
   .upload-area{
-    background:#fff;border:3px dashed var(--primary);border-radius:14px;
-    padding:3.5rem 3rem;text-align:center;max-width:520px;transition:.2s;
+    background:#fff;border:3px dashed var(--primary);border-radius:12px;
+    padding:2.5rem 2rem;text-align:center;max-width:440px;transition:.2s;
   }
   .upload-area.drag{border-color:var(--primary-dark);background:#f8f9ff;}
-  .upload-icon{font-size:3.5rem;margin-bottom:.8rem;}
-  .upload-area h2{margin-bottom:.4rem;font-size:1.35rem;}
-  .upload-area p{color:#666;margin-bottom:1.4rem;font-size:.92rem;}
-  .upload-area small{display:block;margin-top:1.2rem;color:#888;}
+  .upload-icon{font-size:2.8rem;margin-bottom:.5rem;}
+  .upload-area h2{margin-bottom:.3rem;font-size:1.1rem;}
+  .upload-area p{color:#666;margin-bottom:1rem;font-size:.8rem;}
+  .upload-area small{display:block;margin-top:.8rem;color:#888;font-size:.7rem;}
 
   .toolbar{
-    background:#fff;border-bottom:1px solid var(--line);padding:.5rem 1rem;
-    display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;z-index:40;
+    background:#fff;border-bottom:2px solid var(--line);padding:.25rem .5rem;
+    display:flex;align-items:center;gap:.2rem;flex-wrap:wrap;flex-shrink:0;
+    min-height:38px;z-index:40;overflow-x:auto;
   }
   .tool-btn{
     border:1px solid transparent;background:transparent;color:var(--ink-soft);
-    padding:7px 12px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;
-    display:flex;align-items:center;gap:6px;transition:.15s;
+    padding:3px 8px;border-radius:4px;cursor:pointer;font-size:.68rem;font-weight:600;
+    display:flex;align-items:center;gap:3px;transition:.15s;white-space:nowrap;
   }
   .tool-btn:hover{background:#f0f4ff;color:var(--primary);}
   .tool-btn.active{background:var(--primary);color:#fff;}
-  .toolbar-sep{width:1px;height:26px;background:var(--line);margin:0 .35rem;}
-  .context-bar{display:flex;align-items:center;gap:.6rem;padding-left:.4rem;}
-  .context-bar label{font-size:.75rem;color:var(--ink-soft);font-weight:600;}
-  .swatches{display:flex;gap:5px;}
-  .swatch{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
+  .toolbar-sep{width:1px;height:20px;background:var(--line);margin:0 .1rem;flex-shrink:0;}
+  .context-bar{display:flex;align-items:center;gap:.2rem;padding-left:.2rem;flex-wrap:wrap;}
+  .context-bar label{font-size:.6rem;color:var(--ink-soft);font-weight:600;}
+  .swatches{display:flex;gap:3px;}
+  .swatch{width:14px;height:14px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
   .swatch.active{border-color:var(--ink);box-shadow:0 0 0 1px #fff inset;}
   select.mini, input.mini{
-    border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:.8rem;
+    border:1px solid var(--line);border-radius:3px;padding:1px 4px;font-size:.65rem;
   }
-  input[type=range].mini{width:80px;}
+  input[type=range].mini{width:40px;}
 
-  .body-wrap{display:flex;height:calc(100% - 110px);}
+  .body-wrap{
+    display:flex;
+    height:calc(100vh - 90px);
+    overflow:hidden;
+    flex:1;
+  }
 
   .thumbs{
-    width:150px;background:#fafbfc;border-right:1px solid var(--line);overflow-y:auto;padding:.8rem .6rem;
-    flex-shrink:0;
+    width:100px;background:#fafbfc;border-right:1px solid var(--line);
+    overflow-y:auto;overflow-x:hidden;
+    padding:.3rem .2rem;flex-shrink:0;
+    height:100%;
   }
+  .thumbs::-webkit-scrollbar{width:3px;}
+  .thumbs::-webkit-scrollbar-thumb{background:#cbd5e0;border-radius:3px;}
+
   .thumb-card{
-    position:relative;margin-bottom:.9rem;cursor:pointer;border:2px solid transparent;border-radius:8px;
-    overflow:hidden;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);
+    position:relative;margin-bottom:.4rem;cursor:pointer;border:2px solid transparent;border-radius:4px;
+    overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);
   }
   .thumb-card.active{border-color:var(--primary);}
   .thumb-card canvas{width:100%;display:block;}
   .thumb-num{
-    text-align:center;font-size:.7rem;color:var(--ink-soft);padding:3px 0;background:#fff;
+    text-align:center;font-size:.55rem;color:var(--ink-soft);padding:1px 0;background:#fff;
   }
   .thumb-controls{
-    position:absolute;top:4px;right:4px;display:flex;gap:3px;opacity:0;transition:.15s;
+    position:absolute;top:2px;right:2px;display:flex;gap:2px;opacity:0;transition:.15s;
   }
   .thumb-card:hover .thumb-controls{opacity:1;}
   .thumb-mini-btn{
-    width:20px;height:20px;border-radius:5px;background:rgba(0,0,0,.55);color:#fff;border:none;
-    font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    width:14px;height:14px;border-radius:2px;background:rgba(0,0,0,.6);color:#fff;border:none;
+    font-size:.45rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
   }
   .thumb-mini-btn:hover{background:var(--danger);}
 
   .viewer{
-    flex:1;background:#525a6b;overflow:auto;padding:2rem 0;display:flex;flex-direction:column;align-items:center;gap:1.6rem;
+    flex:1;
+    background:#4a5263;
+    overflow-y:auto !important;
+    overflow-x:hidden;
+    padding:1rem 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.8rem;
+    height:100%;
   }
+  .viewer::-webkit-scrollbar{width:5px;}
+  .viewer::-webkit-scrollbar-track{background:#3d4555;}
+  .viewer::-webkit-scrollbar-thumb{background:#7a8395;border-radius:3px;}
+  .viewer::-webkit-scrollbar-thumb:hover{background:#8e99ad;}
+
   .page-wrapper{
-    position:relative;background:#fff;box-shadow:0 8px 26px rgba(0,0,0,.35);
+    position:relative;background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.3);
+    flex-shrink:0;
   }
   .page-wrapper canvas.pdf-canvas{display:block;}
-  .vector-layer{position:absolute;top:0;left:0;}
+  .vector-layer{position:absolute;top:0;left:0;pointer-events:none;}
   .annotation-layer{position:absolute;top:0;left:0;width:100%;height:100%;}
-  .annotation-layer.no-pointer > *{pointer-events:none;}
 
   .text-ann{
-    position:absolute;outline:none;cursor:move;border:1px dashed transparent;min-width:20px;min-height:1em;
-    white-space:pre-wrap;line-height:1.25;padding:2px;pointer-events:all;
+    position:absolute;outline:none;cursor:move;border:1px dashed transparent;
+    min-width:8px;min-height:1em;
+    white-space:pre-wrap;line-height:1.2;padding:1px 2px;pointer-events:all;
+    background:rgba(255,255,255,0.02);
   }
-  .text-ann:hover, .text-ann.selected{border-color:var(--primary);}
-  .text-ann[contenteditable="true"]{cursor:text;background:rgba(255,255,255,.85);}
+  .text-ann:hover, .text-ann.selected{border-color:var(--primary);background:rgba(102,126,234,0.08);}
+  .text-ann[contenteditable="true"]{cursor:text;background:rgba(255,255,255,.9);border-color:var(--primary);}
+  
+  .text-overlay{
+    position:absolute;
+    cursor:pointer;
+    padding:0 1px;
+    border:1px solid transparent;
+    pointer-events:all;
+    background:rgba(255,255,255,0.01);
+    border-radius:1px;
+    white-space:nowrap;
+    z-index:2;
+    line-height:1.1;
+  }
+  .text-overlay:hover{
+    border-color:var(--primary);
+    background:rgba(102,126,234,0.08);
+    z-index:3;
+  }
+  .text-overlay.editing{
+    background:rgba(255,255,255,.95);
+    border-color:var(--primary);
+    cursor:text;
+    z-index:10;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+  }
+  .text-overlay.highlight{
+    background:rgba(255,255,0,0.2);
+    border-color:orange;
+  }
+
   .img-ann{position:absolute;cursor:move;pointer-events:all;}
   .img-ann.selected{outline:2px dashed var(--primary);}
   .ann-del{
-    position:absolute;top:-11px;right:-11px;width:20px;height:20px;border-radius:50%;
-    background:var(--danger);color:#fff;border:none;font-size:.7rem;cursor:pointer;display:none;
-    align-items:center;justify-content:center;z-index:5;
+    position:absolute;top:-8px;right:-8px;width:14px;height:14px;border-radius:50%;
+    background:var(--danger);color:#fff;border:none;font-size:.5rem;cursor:pointer;display:none;
+    align-items:center;justify-content:center;z-index:10;
   }
   .text-ann.selected .ann-del, .img-ann.selected .ann-del{display:flex;}
-  .img-ann .ann-del{top:-11px;right:-11px;}
 
   .zoom-bar{
-    display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--line);
-    border-radius:8px;padding:.3rem .6rem;
+    display:flex;align-items:center;gap:.2rem;background:#fff;border:1px solid var(--line);
+    border-radius:4px;padding:.1rem .25rem;flex-shrink:0;
   }
-  .zoom-bar span{font-size:.8rem;font-weight:600;color:var(--ink-soft);min-width:42px;text-align:center;}
+  .zoom-bar span{font-size:.65rem;font-weight:600;color:var(--ink-soft);min-width:30px;text-align:center;}
 
   .modal-overlay{
     position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:200;
   }
   .modal-overlay.show{display:flex;}
-  .modal{background:#fff;border-radius:12px;padding:1.4rem;width:460px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
-  .modal h3{margin-bottom:.8rem;color:var(--ink);}
-  .sig-pad{border:2px dashed var(--line);border-radius:8px;width:100%;height:180px;touch-action:none;background:#fdfdfd;}
-  .modal-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:1rem;}
-  .modal-actions .btn{background:var(--primary);color:#fff;border:none;}
+  .modal{background:#fff;border-radius:10px;padding:1rem;width:360px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+  .modal h3{margin-bottom:.5rem;color:var(--ink);font-size:1rem;}
+  .sig-pad{border:2px dashed var(--line);border-radius:6px;width:100%;height:130px;touch-action:none;background:#fdfdfd;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:.4rem;margin-top:.6rem;}
+  .modal-actions .btn{background:var(--primary);color:#fff;border:none;padding:4px 12px;font-size:.75rem;}
   .modal-actions .btn.secondary{background:#eee;color:#444;}
 
-  .empty-hint{color:#fff;font-size:.85rem;opacity:.85;}
   .toast{
-    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
-    padding:10px 18px;border-radius:8px;font-size:.85rem;z-index:300;opacity:0;transition:.25s;pointer-events:none;
+    position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:5px 12px;border-radius:4px;font-size:.7rem;z-index:300;opacity:0;transition:.25s;pointer-events:none;
   }
   .toast.show{opacity:1;}
 
-  .text-info-popup{
-    position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,.8);color:#fff;padding:10px 20px;border-radius:8px;
-    font-size:.8rem;z-index:250;display:none;text-align:center;
-  }
-  .text-info-popup.show{display:block;}
-
   @media (max-width:768px){
-    .thumbs{width:90px;}
-    .toolbar{overflow-x:auto;}
+    .thumbs{width:60px;}
+    .toolbar{overflow-x:auto;flex-wrap:nowrap;padding:.2rem .3rem;}
+    .tool-btn{font-size:.6rem;padding:2px 5px;}
   }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="logo">📄 PDF Editor Pro</div>
-  <div class="header-actions" id="headerActions">
-    <span class="empty-hint">Edit text with original font &amp; color matching</span>
+  <div class="logo">📄 PDF Editor</div>
+  <div class="header-actions">
+    <span class="empty-hint">Click any text to edit — original font &amp; color</span>
   </div>
 </div>
 
@@ -181,42 +231,40 @@
   <div class="upload-area" id="uploadArea">
     <div class="upload-icon">📤</div>
     <h2>Upload your PDF</h2>
-    <p>Drag &amp; drop a file here, or click below to choose one</p>
+    <p>Drag &amp; drop a file here, or click below</p>
     <button class="btn btn-solid" style="background:var(--primary);color:#fff;" onclick="document.getElementById('fileInput').click()">
-      📁 Choose PDF File
+      📁 Choose File
     </button>
     <input type="file" id="fileInput" accept="application/pdf" style="display:none;">
-    <small>Everything happens locally — nothing is uploaded to a server.</small>
+    <small>Everything happens locally in your browser.</small>
   </div>
 </div>
 
-<div id="editorScreen" style="display:none;">
+<div id="editorScreen" style="display:none;height:100vh;display:none;flex-direction:column;">
   <div class="toolbar" id="toolbar">
     <button class="tool-btn active" data-tool="select" onclick="setTool('select')">🖱️ Select</button>
-    <button class="tool-btn" data-tool="text" onclick="setTool('text')">📝 Add Text</button>
-    <button class="tool-btn" data-tool="edit" onclick="setTool('edit')">✏️ Edit Text</button>
+    <button class="tool-btn" data-tool="text" onclick="setTool('text')">📝 Add</button>
+    <button class="tool-btn" data-tool="edit" onclick="setTool('edit')">✏️ Edit</button>
     <button class="tool-btn" data-tool="whiteout" onclick="setTool('whiteout')">⬜ Whiteout</button>
     <button class="tool-btn" data-tool="highlight" onclick="setTool('highlight')">🖍️ Highlight</button>
     <button class="tool-btn" data-tool="draw" onclick="setTool('draw')">✏️ Draw</button>
-    <button class="tool-btn" data-tool="rect" onclick="setTool('rect')">▭ Rectangle</button>
+    <button class="tool-btn" data-tool="rect" onclick="setTool('rect')">▭ Rect</button>
     <button class="tool-btn" data-tool="line" onclick="setTool('line')">／ Line</button>
-    <button class="tool-btn" onclick="openSignatureModal()">🖋️ Signature</button>
+    <button class="tool-btn" onclick="openSignatureModal()">🖋️ Sign</button>
     <button class="tool-btn" onclick="document.getElementById('imageInput').click()">🖼️ Image</button>
     <input type="file" id="imageInput" accept="image/*" style="display:none;">
-
     <div class="toolbar-sep"></div>
     <div class="context-bar" id="contextBar"></div>
-
-    <div style="flex:1;"></div>
-    <button class="btn-icon" onclick="undo()" title="Undo">↩️</button>
+    <div style="flex:1;min-width:5px;"></div>
+    <button class="btn-icon" onclick="undo()" title="Undo" style="width:22px;height:22px;font-size:.7rem;">↩️</button>
     <div class="zoom-bar">
-      <button class="btn-icon" onclick="zoomOut()" style="width:26px;height:26px;">−</button>
+      <button class="btn-icon" onclick="zoomOut()" style="width:18px;height:18px;font-size:.7rem;">−</button>
       <span id="zoomLevel">130%</span>
-      <button class="btn-icon" onclick="zoomIn()" style="width:26px;height:26px;">+</button>
+      <button class="btn-icon" onclick="zoomIn()" style="width:18px;height:18px;font-size:.7rem;">+</button>
     </div>
-    <button class="btn" style="background:var(--primary);color:#fff;border:none;" onclick="document.getElementById('fileInput2').click()">📁 New File</button>
+    <button class="btn" style="background:var(--primary);color:#fff;border:none;padding:3px 8px;font-size:.65rem;" onclick="document.getElementById('fileInput2').click()">📁 New</button>
     <input type="file" id="fileInput2" accept="application/pdf" style="display:none;">
-    <button class="btn" style="background:var(--success);color:#fff;border:none;" onclick="downloadPDF()">⬇️ Download PDF</button>
+    <button class="btn" style="background:var(--success);color:#fff;border:none;padding:3px 10px;font-size:.65rem;" onclick="downloadPDF()">⬇️ Download</button>
   </div>
 
   <div class="body-wrap">
@@ -238,12 +286,10 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="text-info-popup" id="textInfoPopup"></div>
 
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-/* ============= Global State ============= */
 let pdfDoc = null;
 let originalBytes = null;
 let fileName = 'document.pdf';
@@ -259,11 +305,13 @@ let undoStack = [];
 let idCounter = 1;
 let drawState = null;
 let selectedAnn = null;
-let textContentItems = []; // Store extracted text items with their styles
+let textContentItems = {};
 
 const COLORS = ['#1a1a1a','#e53e3e','#1a73e8','#38a169','#d69e2e','#805ad5'];
 
-/* ============= Upload Handling ============= */
+document.getElementById('uploadScreen').style.display = 'flex';
+document.getElementById('editorScreen').style.display = 'none';
+
 const uploadArea = document.getElementById('uploadArea');
 ['dragover','dragleave','drop'].forEach(evt=>{
   uploadArea.addEventListener(evt, e=>{
@@ -281,7 +329,6 @@ document.getElementById('fileInput').addEventListener('change', function(e){
   if(this.files[0]) loadFile(this.files[0]);
   this.value = '';
 });
-
 document.getElementById('fileInput2').addEventListener('change', function(e){
   if(this.files[0]) loadFile(this.files[0]);
   this.value = '';
@@ -298,7 +345,7 @@ function loadFile(file){
     originalBytes = e.target.result;
     await openPDF(originalBytes.slice(0));
     document.getElementById('uploadScreen').style.display = 'none';
-    document.getElementById('editorScreen').style.display = 'block';
+    document.getElementById('editorScreen').style.display = 'flex';
   };
   reader.readAsArrayBuffer(file);
 }
@@ -306,29 +353,28 @@ function loadFile(file){
 async function openPDF(bytes){
   pages = [];
   undoStack = [];
-  textContentItems = [];
+  textContentItems = {};
   document.getElementById('thumbs').innerHTML = '';
   document.getElementById('viewer').innerHTML = '';
+  
   pdfDoc = await pdfjsLib.getDocument({data: bytes}).promise;
   
   for(let i = 1; i <= pdfDoc.numPages; i++){
     const page = await pdfDoc.getPage(i);
     const vp0 = page.getViewport({scale:1, rotation:0});
     
-    // Extract text content with styles
     const textContent = await page.getTextContent();
-    const textItems = textContent.items.map(item => ({
+    textContentItems[i] = textContent.items.map(item => ({
       str: item.str,
       transform: item.transform,
       width: item.width,
-      height: item.height,
-      fontName: item.fontName,
-      fontSize: item.fontSize,
+      height: item.height || item.fontSize || 12,
+      fontName: item.fontName || 'Arial',
+      fontSize: item.fontSize || 12,
       x: item.transform[4],
       y: item.transform[5],
       color: item.color || '#000000'
     }));
-    textContentItems[i] = textItems;
     
     pages.push({
       num: i,
@@ -342,16 +388,23 @@ async function openPDF(bytes){
   await renderAll();
 }
 
-/* ============= Rendering ============= */
 async function renderAll(){
   const viewer = document.getElementById('viewer');
   const thumbs = document.getElementById('thumbs');
   viewer.innerHTML = '';
   thumbs.innerHTML = '';
+  
   for(const p of pages){
     if(p.deleted) continue;
     await renderPage(p, viewer, thumbs);
   }
+  
+  if(currentTool === 'edit'){
+    pages.forEach(p => {
+      if(p.wrapperEl && !p.deleted) createTextOverlays(p);
+    });
+  }
+  
   updateZoomLabel();
 }
 
@@ -391,11 +444,6 @@ async function renderPage(p, viewer, thumbs){
 
   await page.render({canvasContext: canvas.getContext('2d'), viewport}).promise;
 
-  // Create clickable text overlays for editing
-  if(currentTool === 'edit'){
-    createTextOverlays(p);
-  }
-
   attachPageEvents(p);
   redrawAnnotations(p);
 
@@ -403,7 +451,7 @@ async function renderPage(p, viewer, thumbs){
   const tCard = document.createElement('div');
   tCard.className = 'thumb-card';
   tCard.dataset.pageNum = p.num;
-  const tScale = 140 / p.nativeW;
+  const tScale = Math.min(80 / p.nativeW, 80 / p.nativeH);
   const tVp = page.getViewport({scale: tScale, rotation: p.rotation});
   const tCanvas = document.createElement('canvas');
   tCanvas.width = tVp.width;
@@ -431,52 +479,57 @@ async function renderPage(p, viewer, thumbs){
   numTag.className = 'thumb-num';
   numTag.textContent = 'Page ' + p.num;
   tCard.appendChild(numTag);
-  tCard.onclick = function(){ p.wrapperEl.scrollIntoView({behavior:'smooth', block:'center'}); };
+  tCard.onclick = function(){ 
+    p.wrapperEl.scrollIntoView({behavior:'smooth', block:'center'}); 
+  };
   thumbs.appendChild(tCard);
 }
 
-/* ============= Create Text Overlays for Editing ============= */
+/* ============= CREATE TEXT OVERLAYS - INDIVIDUAL ITEMS ============= */
 function createTextOverlays(p){
-  // Clear existing overlays
+  // Remove old overlays
   p.annLayerEl.querySelectorAll('.text-overlay').forEach(el => el.remove());
   
   const items = textContentItems[p.num] || [];
   const scale = zoomScale;
   
-  items.forEach(item => {
-    // Skip very small text or empty strings
-    if(!item.str.trim() || item.fontSize < 2) return;
-    
+  // Filter out empty or very small text
+  const validItems = items.filter(item => item.str.trim() && item.fontSize > 1);
+  
+  // Create individual overlay for each text item - NO MERGING
+  validItems.forEach((item, index) => {
     const el = document.createElement('div');
-    el.className = 'text-ann text-overlay';
-    el.style.position = 'absolute';
-    el.style.left = (item.x * scale) + 'px';
-    el.style.top = (item.y * scale - (item.height || item.fontSize) * scale) + 'px';
+    el.className = 'text-overlay';
+    
+    // Calculate position - use transform values directly
+    const xPos = item.x * scale;
+    // Y position: PDF coordinates are from bottom, so we need to flip
+    // The transform[5] is the Y position from bottom
+    // We need to position from top of the page
+    const yPos = (item.y - (item.height || item.fontSize) * 0.8) * scale;
+    
+    el.style.left = xPos + 'px';
+    el.style.top = yPos + 'px';
     el.style.fontSize = (item.fontSize * scale) + 'px';
     el.style.color = item.color || '#000000';
     el.style.fontFamily = item.fontName || 'Arial';
-    el.style.cursor = 'pointer';
-    el.style.padding = '2px 4px';
-    el.style.border = '1px solid transparent';
-    el.style.minWidth = '10px';
-    el.style.minHeight = '10px';
-    el.style.pointerEvents = 'all';
-    el.style.background = 'rgba(255,255,255,0.01)'; // Almost transparent for click detection
     el.textContent = item.str;
+    
+    // Store original data
     el.dataset.originalText = item.str;
     el.dataset.originalFont = item.fontName || 'Arial';
     el.dataset.originalSize = item.fontSize;
     el.dataset.originalColor = item.color || '#000000';
     el.dataset.originalX = item.x;
     el.dataset.originalY = item.y;
+    el.dataset.index = index;
     
-    // Find matching annotation if it exists
+    // Check if this text already has an annotation
     const existingAnn = p.annotations.find(a => 
       a.type === 'text' && 
-      Math.abs(a.x - item.x) < 1 && 
-      Math.abs(a.y - item.y) < 1
+      Math.abs(a.x - item.x) < 0.5 && 
+      Math.abs(a.y - item.y) < 0.5
     );
-    
     if(existingAnn){
       el.textContent = existingAnn.text;
       el.dataset.annId = existingAnn.id;
@@ -486,43 +539,22 @@ function createTextOverlays(p){
     el.addEventListener('click', function(e){
       e.stopPropagation();
       if(currentTool !== 'edit') return;
-      
-      // Select and start editing
-      const ann = p.annotations.find(a => a.id === parseInt(this.dataset.annId));
-      if(ann){
-        selectAnnotation(p, ann, this);
-        startEditingText(p, ann);
-        return;
-      }
-      
-      // Create new annotation if doesn't exist
-      const newAnn = {
-        id: idCounter++,
-        type: 'text',
-        x: parseFloat(this.dataset.originalX),
-        y: parseFloat(this.dataset.originalY),
-        text: this.textContent,
-        fontSize: parseFloat(this.dataset.originalSize),
-        fontFamily: this.dataset.originalFont,
-        color: this.dataset.originalColor,
-        isOriginal: true
-      };
-      p.annotations.push(newAnn);
-      this.dataset.annId = newAnn.id;
-      pushUndo(p, newAnn.id);
-      selectAnnotation(p, newAnn, this);
-      startEditingText(p, newAnn);
+      startEditingOverlay(p, this, item);
     });
     
+    // Hover effect
     el.addEventListener('mouseenter', function(){
-      this.style.borderColor = 'var(--primary)';
-      this.style.background = 'rgba(102, 126, 234, 0.1)';
+      if(!this.classList.contains('editing')){
+        this.style.borderColor = 'var(--primary)';
+        this.style.background = 'rgba(102,126,234,0.08)';
+        this.style.zIndex = '3';
+      }
     });
-    
     el.addEventListener('mouseleave', function(){
-      if(!this.classList.contains('selected')){
+      if(!this.classList.contains('editing') && !this.classList.contains('selected')){
         this.style.borderColor = 'transparent';
         this.style.background = 'rgba(255,255,255,0.01)';
+        this.style.zIndex = '2';
       }
     });
     
@@ -530,7 +562,55 @@ function createTextOverlays(p){
   });
 }
 
-/* ============= Tool Selection & Context Bar ============= */
+function startEditingOverlay(p, el, item){
+  // Find or create annotation
+  let ann = p.annotations.find(a => 
+    a.type === 'text' && 
+    Math.abs(a.x - item.x) < 0.5 && 
+    Math.abs(a.y - item.y) < 0.5
+  );
+  
+  if(!ann){
+    ann = {
+      id: idCounter++,
+      type: 'text',
+      x: item.x,
+      y: item.y,
+      text: item.str,
+      fontSize: item.fontSize,
+      fontFamily: item.fontName || 'Arial',
+      color: item.color || '#000000',
+      isOriginal: true
+    };
+    p.annotations.push(ann);
+    pushUndo(p, ann.id);
+  }
+  
+  // Set editing state
+  el.classList.add('editing');
+  el.contentEditable = true;
+  el.style.zIndex = '10';
+  el.focus();
+  
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  
+  function commit(){
+    el.contentEditable = false;
+    el.classList.remove('editing');
+    el.style.zIndex = '2';
+    ann.text = el.textContent || '';
+    el.removeEventListener('blur', commit);
+    // Update the annotation display
+    renderTextAnnEl(p, ann);
+  }
+  el.addEventListener('blur', commit);
+}
+
 function setTool(tool){
   currentTool = tool;
   document.querySelectorAll('.tool-btn[data-tool]').forEach(function(b){
@@ -539,17 +619,14 @@ function setTool(tool){
   deselectAll();
   renderContextBar();
   
-  // Re-render pages to show/hide text overlays
   if(tool === 'edit'){
     pages.forEach(p => {
-      if(p.wrapperEl && !p.deleted){
-        createTextOverlays(p);
-      }
+      if(p.wrapperEl && !p.deleted) createTextOverlays(p);
     });
-    showToast('Click on any text to edit it - original font & color will be preserved!');
+    showToast('Click any text to edit it');
   } else {
     pages.forEach(p => {
-      if(p.annLayerEl){
+      if(p.annLayerEl) {
         p.annLayerEl.querySelectorAll('.text-overlay').forEach(el => el.remove());
       }
     });
@@ -567,22 +644,18 @@ function renderContextBar(){
     bar.appendChild(makeFontFamilySelect());
   } else if(['draw','rect','line'].includes(currentTool)){
     bar.appendChild(makeColorPicker(strokeColor, function(c){ strokeColor = c; }));
-    bar.appendChild(makeLabel('Width'));
+    bar.appendChild(makeLabel('W'));
     bar.appendChild(makeStrokeWidthRange());
   } else if(currentTool === 'highlight'){
     bar.appendChild(makeColorPicker(highlightColor, function(c){ highlightColor = c; }, ['#ffeb3b','#a3ffac','#a0d8ff','#ffb3e6']));
   } else if(currentTool === 'select'){
-    bar.innerHTML = '<span style="font-size:.8rem;color:#888;">Click to select, drag to move, ✕ to delete</span>';
+    bar.innerHTML = '<span style="font-size:.65rem;color:#888;">Click to select, drag to move</span>';
   } else if(currentTool === 'whiteout'){
-    bar.innerHTML = '<span style="font-size:.8rem;color:#888;">Drag to cover text/area with white</span>';
+    bar.innerHTML = '<span style="font-size:.65rem;color:#888;">Drag to cover with white</span>';
   }
 }
 
-function makeLabel(t){
-  const l = document.createElement('label');
-  l.textContent = t;
-  return l;
-}
+function makeLabel(t){ const l=document.createElement('label'); l.textContent=t; l.style.fontSize='.6rem'; return l; }
 
 function makeColorPicker(active, onPick, palette){
   const wrap = document.createElement('div');
@@ -607,7 +680,7 @@ function makeFontSizeSelect(){
   [8,10,12,14,16,18,20,24,28,32,36,48].forEach(function(v){
     const o = document.createElement('option');
     o.value = v;
-    o.textContent = v + 'px';
+    o.textContent = v;
     if(v === fontSize) o.selected = true;
     sel.appendChild(o);
   });
@@ -624,7 +697,7 @@ function makeFontSizeSelect(){
 function makeFontFamilySelect(){
   const sel = document.createElement('select');
   sel.className = 'mini';
-  ['Arial','Helvetica','Times New Roman','Georgia','Courier New','Verdana','Tahoma','Impact'].forEach(function(v){
+  ['Arial','Helvetica','Times New Roman','Georgia','Courier New','Verdana','Tahoma'].forEach(function(v){
     const o = document.createElement('option');
     o.value = v;
     o.textContent = v;
@@ -652,7 +725,6 @@ function makeStrokeWidthRange(){
   return inp;
 }
 
-/* ============= Page Event Handling ============= */
 function attachPageEvents(p){
   const el = p.wrapperEl;
   el.addEventListener('mousedown', function(e){ onPageMouseDown(p, e); });
@@ -677,7 +749,6 @@ function toNative(p, px, py){
 }
 
 function onPageMouseDown(p, e){
-  // Don't interfere with text overlays or existing annotations
   if(e.target.closest('.text-ann') || e.target.closest('.img-ann') || e.target.closest('.ann-del')) return;
   if(e.target.closest('.text-overlay')) return;
   
@@ -690,7 +761,7 @@ function onPageMouseDown(p, e){
       type: 'text',
       x: n.x,
       y: n.y,
-      text: 'Double-click to edit',
+      text: 'Edit me',
       fontSize: fontSize,
       fontFamily: fontFamily,
       color: strokeColor,
@@ -703,7 +774,7 @@ function onPageMouseDown(p, e){
     setTimeout(function(){
       selectAnnotation(p, ann);
       startEditingText(p, ann);
-    }, 0);
+    }, 50);
     return;
   }
   if(['whiteout','highlight','rect','line'].includes(currentTool)){
@@ -844,10 +915,8 @@ function pointsToPath(points, scale){
   }).join(' ');
 }
 
-/* ============= Annotation Rendering ============= */
 function redrawAnnotations(p){
   p.vectorEl.innerHTML = '';
-  // Don't clear annotation layer completely - keep text overlays
   const overlays = p.annLayerEl.querySelectorAll('.text-overlay');
   p.annLayerEl.innerHTML = '';
   overlays.forEach(el => p.annLayerEl.appendChild(el));
@@ -939,16 +1008,10 @@ function renderTextAnnEl(p, ann){
   }
   el.style.left = (ann.x * zoomScale) + 'px';
   el.style.top = (ann.y * zoomScale) + 'px';
-  el.style.fontSize = (ann.fontSize * zoomScale / 1.0) + 'px';
+  el.style.fontSize = (ann.fontSize * zoomScale) + 'px';
   el.style.color = ann.color || '#000000';
   el.style.fontFamily = ann.fontFamily || 'Arial';
-  
-  if(el.childNodes.length < 2){
-    const span = document.createTextNode(ann.text);
-    el.appendChild(span);
-  } else if(!el.matches(':focus')){
-    el.childNodes[el.childNodes.length - 1].textContent = ann.text;
-  }
+  el.textContent = ann.text || '';
 }
 
 function renderImageAnnEl(p, ann){
@@ -988,12 +1051,6 @@ function startEditingText(p, ann){
   const el = p.annLayerEl.querySelector('[data-ann-id="' + ann.id + '"]');
   if(!el) return;
   
-  // Show popup with info
-  const popup = document.getElementById('textInfoPopup');
-  popup.textContent = '✏️ Editing: Original font & color will be preserved';
-  popup.classList.add('show');
-  setTimeout(() => popup.classList.remove('show'), 3000);
-  
   el.contentEditable = true;
   el.focus();
   const range = document.createRange();
@@ -1006,14 +1063,7 @@ function startEditingText(p, ann){
   function commit(){
     el.contentEditable = false;
     ann.text = el.textContent || '';
-    // Preserve original styling
-    if(ann.isOriginal){
-      ann.fontFamily = el.dataset.originalFont || ann.fontFamily || 'Arial';
-      ann.fontSize = parseFloat(el.dataset.originalSize) || ann.fontSize || 12;
-      ann.color = el.dataset.originalColor || ann.color || '#000000';
-    }
     el.removeEventListener('blur', commit);
-    renderTextAnnEl(p, ann);
   }
   el.addEventListener('blur', commit);
 }
@@ -1063,7 +1113,6 @@ function deleteAnnotation(p, id){
   selectedAnn = null;
 }
 
-/* ============= Undo ============= */
 function pushUndo(p, annId){
   undoStack.push({pageNum: p.num, annId: annId});
   if(undoStack.length > 100) undoStack.shift();
@@ -1076,20 +1125,11 @@ function undo(){
   if(p){ deleteAnnotation(p, last.annId); }
 }
 
-/* ============= Page Management ============= */
 function rotatePage(num){
   const p = pages.find(function(pg){ return pg.num === num; });
   if(p){
     p.rotation = (p.rotation + 90) % 360;
     renderAll();
-    // Recreate text overlays if in edit mode
-    if(currentTool === 'edit'){
-      pages.forEach(pg => {
-        if(pg.wrapperEl && !pg.deleted){
-          createTextOverlays(pg);
-        }
-      });
-    }
   }
 }
 
@@ -1106,40 +1146,22 @@ function deletePage(num){
   }
 }
 
-/* ============= Zoom ============= */
 function zoomIn(){
   if(zoomScale < 3){
     zoomScale = +(zoomScale + 0.15).toFixed(2);
     renderAll();
-    if(currentTool === 'edit'){
-      pages.forEach(p => {
-        if(p.wrapperEl && !p.deleted){
-          createTextOverlays(p);
-        }
-      });
-    }
   }
 }
-
 function zoomOut(){
   if(zoomScale > 0.5){
     zoomScale = +(zoomScale - 0.15).toFixed(2);
     renderAll();
-    if(currentTool === 'edit'){
-      pages.forEach(p => {
-        if(p.wrapperEl && !p.deleted){
-          createTextOverlays(p);
-        }
-      });
-    }
   }
 }
-
 function updateZoomLabel(){
   document.getElementById('zoomLevel').textContent = Math.round((zoomScale / 1.3) * 100) + '%';
 }
 
-/* ============= Image Insert ============= */
 document.getElementById('imageInput').addEventListener('change', function(e){
   const file = this.files[0];
   if(!file) return;
@@ -1187,7 +1209,6 @@ function currentVisiblePage(){
   return best || pages.find(function(p){ return !p.deleted; });
 }
 
-/* ============= Signature Modal ============= */
 const sigModal = document.getElementById('sigModal');
 const sigPad = document.getElementById('sigPad');
 let sigCtx, sigDrawing = false;
@@ -1203,14 +1224,8 @@ function openSignatureModal(){
     sigCtx.strokeStyle = '#1a1a1a';
   });
 }
-
-function closeSignatureModal(){
-  sigModal.classList.remove('show');
-}
-
-function clearSig(){
-  if(sigCtx) sigCtx.clearRect(0, 0, sigPad.width, sigPad.height);
-}
+function closeSignatureModal(){ sigModal.classList.remove('show'); }
+function clearSig(){ if(sigCtx) sigCtx.clearRect(0,0,sigPad.width,sigPad.height); }
 
 sigPad.addEventListener('mousedown', function(e){
   sigDrawing = true;
@@ -1218,14 +1233,12 @@ sigPad.addEventListener('mousedown', function(e){
   sigCtx.beginPath();
   sigCtx.moveTo(e.clientX - r.left, e.clientY - r.top);
 });
-
 sigPad.addEventListener('mousemove', function(e){
   if(!sigDrawing) return;
   const r = sigPad.getBoundingClientRect();
   sigCtx.lineTo(e.clientX - r.left, e.clientY - r.top);
   sigCtx.stroke();
 });
-
 window.addEventListener('mouseup', function(){ sigDrawing = false; });
 
 function insertSignature(){
@@ -1234,7 +1247,6 @@ function insertSignature(){
   insertImageAtCenter(dataUrl);
 }
 
-/* ============= Export (real PDF via pdf-lib) ============= */
 async function downloadPDF(){
   if(!originalBytes){ showToast('Upload a PDF first'); return; }
   showToast('Building your PDF…');
@@ -1343,7 +1355,7 @@ async function downloadPDF(){
     showToast('Downloaded ✓');
   } catch(err){
     console.error(err);
-    showToast('Something went wrong building the PDF');
+    showToast('Error building PDF');
   }
 }
 
@@ -1365,16 +1377,14 @@ function dataURLToBytes(dataUrl){
   return bytes;
 }
 
-/* ============= Toast ============= */
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._timer);
-  t._timer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+  t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
 }
 
-// Initialize
 renderContextBar();
 </script>
 </body>
